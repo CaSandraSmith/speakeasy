@@ -19,6 +19,7 @@ export default function HomeScreen() {
         />
       }>
         <Button title="Go to Signup" onPress={() => router.push('/signup')} />
+        <Button title="Go to Login" onPress={() => router.push('/login')} />
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
