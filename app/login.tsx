@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 50,
     marginBottom: 30, // Adds space between the header and the form
-    color: "#d4af37", // Gold color for the header
+    color: "#a27b5b", // Gold color for the header
     fontWeight: "bold",
     textAlign: "left",
   },
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     borderWidth: 1,
-    borderColor: "#d4af37", // Gold border color for inputs
+    borderColor: "#a27b5b", // Gold border color for inputs
   },
   icon: {
     marginRight: 10,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 150,
-    backgroundColor: "#d4af37",
+    backgroundColor: "#a27b5b",
     borderRadius: 10,
     padding: 10,
   },
