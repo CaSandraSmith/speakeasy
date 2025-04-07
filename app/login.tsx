@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     position: "absolute",
     paddingLeft: 15,
-    fontFamily: 'FontAwesome'
   },
   button: {
     width: 150,
