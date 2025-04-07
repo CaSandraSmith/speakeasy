@@ -9,14 +9,17 @@ import {
 } from "react-native";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 
 type Inputs = {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
 };
 
-export default function Login() {
+export default function Signup() {
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -36,8 +39,66 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Log In</Text>
+      <Text style={styles.header}>Sign up</Text>
       <Animated.View style={[styles.form, { opacity: fadeAnim }]}>
+        <Controller
+          control={control}
+          rules={{
+            required: "First name is required",
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.inputWrapper}>
+              <FontAwesome
+                name="user"
+                size={20}
+                color="white"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="First Name"
+                placeholderTextColor="#a9a9a9"
+              />
+            </View>
+          )}
+          name="firstName"
+        />
+        {errors.firstName && (
+          <Text style={styles.error}>{errors.firstName.message}</Text>
+        )}
+
+        <Controller
+          control={control}
+          rules={{
+            required: "Last name is required",
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.inputWrapper}>
+              <FontAwesome
+                name="user"
+                size={20}
+                color="white"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Last Name"
+                placeholderTextColor="#a9a9a9"
+              />
+            </View>
+          )}
+          name="lastName"
+        />
+        {errors.lastName && (
+          <Text style={styles.error}>{errors.lastName.message}</Text>
+        )}
+
         <Controller
           control={control}
           rules={{
@@ -99,10 +160,47 @@ export default function Login() {
         {errors.password && (
           <Text style={styles.error}>{errors.password.message}</Text>
         )}
+
+        <Controller
+          control={control}
+          rules={{
+            required: "Phone number is required",
+            pattern: {
+              value: /^[0-9]{10}$/, // Simple 10-digit number validation
+              message: "Enter a valid 10-digit phone number",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.inputWrapper}>
+              <FontAwesome
+                name="phone"
+                size={20}
+                color="white"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Phone Number"
+                placeholderTextColor="#a9a9a9"
+                keyboardType="phone-pad"
+              />
+            </View>
+          )}
+          name="phoneNumber"
+        />
+        {errors.phoneNumber && (
+          <Text style={styles.error}>{errors.phoneNumber.message}</Text>
+        )}
+
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           style={styles.button}
-        ><Text style={styles.buttonText}>Log In</Text></TouchableOpacity>
+        >
+          <Text style={styles.buttonText}>Sign up</Text>
+        </TouchableOpacity>
       </Animated.View>
     </View>
   );
@@ -129,7 +227,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5, // Adds shadow for a luxury effect
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   input: {
     height: 50,
@@ -159,6 +257,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     position: "absolute",
     paddingLeft: 15,
+    fontFamily: "FontAwesome",
   },
   button: {
     width: 150,
@@ -170,5 +269,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     textAlign: "center",
-  }
+  },
 });
