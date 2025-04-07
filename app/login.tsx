@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesome } from '@expo/vector-icons';
 
 type Inputs = {
   email: string;
@@ -19,9 +19,7 @@ type Inputs = {
 export default function Login() {
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
-    register,
     handleSubmit,
-    watch,
     control,
     formState: { errors },
   } = useForm<Inputs>();
@@ -51,7 +49,7 @@ export default function Login() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.inputWrapper}>
-              <Icon
+              <FontAwesome
                 name="envelope"
                 size={20}
                 color="white"
@@ -64,6 +62,7 @@ export default function Login() {
                 value={value}
                 placeholder="Email"
                 keyboardType="email-address"
+                placeholderTextColor="#a9a9a9"
               />
             </View>
           )}
@@ -78,7 +77,7 @@ export default function Login() {
           rules={{ required: "Password is required" }}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.inputWrapper}>
-              <Icon
+              <FontAwesome
                 name="lock"
                 size={20}
                 color="white"
@@ -90,6 +89,7 @@ export default function Login() {
                 onChangeText={onChange}
                 value={value}
                 placeholder="Password"
+                placeholderTextColor="#a9a9a9"
                 secureTextEntry
               />
             </View>
@@ -158,10 +158,11 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
     position: "absolute",
-    paddingLeft: 15
+    paddingLeft: 15,
+    fontFamily: 'FontAwesome'
   },
   button: {
-    width: 100,
+    width: 150,
     backgroundColor: "#d4af37",
     borderRadius: 10,
     padding: 10,
