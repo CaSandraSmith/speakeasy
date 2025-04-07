@@ -68,7 +68,6 @@ def login():
         return jsonify({"error": "Invalid credentials"}), 401
 
     try:
-        # Verify password
         ph.verify(USERS[email]["password"], password)
 
         # Generate JWT token
@@ -87,7 +86,7 @@ def login():
     except:
         return jsonify({"error": "Invalid credentials"}), 401
 
-
+# TODO: Set up authorization
 
 # Temporary data - replace with database later
 experiences = [
