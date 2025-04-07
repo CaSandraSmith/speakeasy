@@ -1,0 +1,174 @@
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Text,
+  Animated,
+  Easing,
+  TouchableOpacity,
+} from "react-native";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
+import Icon from "react-native-vector-icons/FontAwesome";
+
+type Inputs = {
+  email: string;
+  password: string;
+};
+
+export default function Login() {
+  const [fadeAnim] = useState(new Animated.Value(0));
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1, // Fade in
+      duration: 1000, // 1 second
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Log In</Text>
+      <Animated.View style={[styles.form, { opacity: fadeAnim }]}>
+        <Controller
+          control={control}
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="envelope"
+                size={20}
+                color="white"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Email"
+                keyboardType="email-address"
+              />
+            </View>
+          )}
+          name="email"
+        />
+        {errors.email && (
+          <Text style={styles.error}>{errors.email.message}</Text>
+        )}
+
+        <Controller
+          control={control}
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.inputWrapper}>
+              <Icon
+                name="lock"
+                size={20}
+                color="white"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Password"
+                secureTextEntry
+              />
+            </View>
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <Text style={styles.error}>{errors.password.message}</Text>
+        )}
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit)}
+          style={styles.button}
+        ><Text style={styles.buttonText}>Log In</Text></TouchableOpacity>
+      </Animated.View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#1a3636", // Dark luxury green background
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    fontSize: 50,
+    marginBottom: 30, // Adds space between the header and the form
+    color: "#d4af37", // Gold color for the header
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  form: {
+    width: "100%",
+    backgroundColor: "#2c4747", // Darker form background for contrast
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5, // Adds shadow for a luxury effect
+    alignItems: "flex-end"
+  },
+  input: {
+    height: 50,
+    paddingHorizontal: 15,
+    backgroundColor: "#3e5959", // Dark input background
+    color: "white", // White text inside the input
+    borderRadius: 5,
+    fontSize: 16,
+    width: "100%",
+    paddingLeft: 50, // Added padding to ensure the text doesn't overlap the icon
+  },
+  error: {
+    color: "red",
+    marginBottom: 18,
+  },
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    backgroundColor: "#3e5959",
+    borderRadius: 5,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#d4af37", // Gold border color for inputs
+  },
+  icon: {
+    marginRight: 10,
+    position: "absolute",
+    paddingLeft: 15
+  },
+  button: {
+    width: 100,
+    backgroundColor: "#d4af37",
+    borderRadius: 10,
+    padding: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+  }
+});
