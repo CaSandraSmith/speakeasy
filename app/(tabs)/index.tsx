@@ -18,7 +18,7 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-        <Button title="Go to Login" onPress={() => router.push('/login')} />
+        <Button title="Go to Signup" onPress={() => router.push('/signup')} />
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
