@@ -35,25 +35,21 @@ export default function RootLayout() {
 }
 
 function Stacks() {
-  const {user} = useUser();
-  console.log("this is the user", user)
+  const { user } = useUser();
+  console.log("this is the user", user);
   const colorScheme = useColorScheme();
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-    <Stack>
-      {user ? (
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      ) : (
-        <>
-          <Stack.Screen name="passcode" options={{ headerShown: false }} />
-          <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="signup" options={{ headerShown: false }} />
-        </>
-      )}
-      <Stack.Screen name="+not-found" />
-    </Stack>
-    <StatusBar style="auto" />
-  </ThemeProvider>
-  )
+      <Stack>
+        {user ? (
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        ) : (
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        )}
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar style="auto" />
+    </ThemeProvider>
+  );
 }
