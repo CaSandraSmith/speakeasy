@@ -20,16 +20,6 @@ ph = PasswordHasher()
 # TODO: Set up secret key in .env later
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
 
-# Dummy data
-# TODO: Replace with database later
-USERS = {
-    "user1": {
-        "password": ph.hash("userpass"),
-        "name": "John Smith"
-    }
-}
-
-
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -76,29 +66,35 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
+    print(f"Login attempt for email: {email}")
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
 
-    if email not in USERS:
+    user = User.query.filter_by(email=email).first()
+    if not user:
         return jsonify({"error": "Invalid credentials"}), 401
 
     try:
-        ph.verify(USERS[email]["password"], password)
+        # For testing purposes, verify plain text password
+        # TODO: Use hashed password verification after hashing the seed passwords in init.sql
+        if password == user.password_hash:
+            name = f"{user.profile.first_name} {user.profile.last_name}".strip()
 
-        # Generate JWT token
-        token = jwt.encode({
-            'sub': email,
-            'name': USERS[email]["name"]
-        }, SECRET_KEY, algorithm='HS256')
+            token = jwt.encode({
+                'sub': email,
+                'name': name,
+                'user_id': user.id
+            }, SECRET_KEY, algorithm='HS256')
 
-        return jsonify({
-            "token": token,
-            "user": {
-                "email": email,
-                "name": USERS[email]["name"]
-            }
-        })
-    except:
+            return jsonify({
+                "token": token,
+                "user": {
+                    "email": email,
+                    "name": name
+                }
+            })
+        return jsonify({"error": "Invalid credentials"}), 401
+    except Exception as e:
         return jsonify({"error": "Invalid credentials"}), 401
 
 # TODO: Set up authorization
