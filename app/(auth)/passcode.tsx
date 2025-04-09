@@ -10,6 +10,7 @@ import {
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type Inputs = {
   passcode: string;
@@ -22,7 +23,10 @@ export default function Passcode() {
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
+    router.push("/signup")
+  };
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -69,19 +73,22 @@ export default function Passcode() {
         <View style={styles.buttonsWrapper}>
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
-            style={styles.demoButton}
-          >
-            <Text style={styles.buttonText}>Use Demo Code</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
             style={styles.button}
           >
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.demoButton}
+          >
+            <Text style={styles.buttonText}>Use Demo Code</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
-    </View>
+      <TouchableOpacity style={styles.loginTextWrapper} onPress={() => router.push("/login")}>
+        <Text style={styles.loginText}>Already a user? Log in</Text>
+      </TouchableOpacity>
+      </View>
   );
 }
 
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 30, // Adds space between the header and the form
     color: "#a27b5b", // Gold color for the header
     fontWeight: "bold",
-    textAlign: "left",
+    textAlign: "center",
   },
   form: {
     width: "100%",
@@ -146,18 +153,27 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 15,
     textAlign: "center",
   },
   buttonsWrapper: {
-    flexDirection: "row",
-    justifyContent: 'center',
     alignItems: "center",
-    columnGap: 20
+    rowGap: 20,
+    width: "100%"
   },
   demoButton: {
     backgroundColor: "#a27b5b",
     borderRadius: 10,
     padding: 10,
+  },
+  loginTextWrapper: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+  },
+  loginText: {
+    color: "white",
+    fontSize: 25,
+    textDecorationLine: "underline"
   }
 });
