@@ -10,23 +10,33 @@ import {
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import { useUser } from "../../context/userContext";
+import { router } from "expo-router";
 
 type Inputs = {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
 };
 
-export default function Signup() {
+export default function Login() {
+  const { setUser } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    setUser(data);
+    router.push("/");
+  };
+
+  const demoPress = () => {
+    setUser({ email: "demo@user.com", password: "demo" });
+    router.push("/");
+  }
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -39,66 +49,8 @@ export default function Signup() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Sign up</Text>
+      <Text style={styles.header}>Log In</Text>
       <Animated.View style={[styles.form, { opacity: fadeAnim }]}>
-        <Controller
-          control={control}
-          rules={{
-            required: "First name is required",
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View style={styles.inputWrapper}>
-              <FontAwesome
-                name="user"
-                size={20}
-                color="white"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="First Name"
-                placeholderTextColor="#a9a9a9"
-              />
-            </View>
-          )}
-          name="firstName"
-        />
-        {errors.firstName && (
-          <Text style={styles.error}>{errors.firstName.message}</Text>
-        )}
-
-        <Controller
-          control={control}
-          rules={{
-            required: "Last name is required",
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View style={styles.inputWrapper}>
-              <FontAwesome
-                name="user"
-                size={20}
-                color="white"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Last Name"
-                placeholderTextColor="#a9a9a9"
-              />
-            </View>
-          )}
-          name="lastName"
-        />
-        {errors.lastName && (
-          <Text style={styles.error}>{errors.lastName.message}</Text>
-        )}
-
         <Controller
           control={control}
           rules={{
@@ -160,48 +112,27 @@ export default function Signup() {
         {errors.password && (
           <Text style={styles.error}>{errors.password.message}</Text>
         )}
-
-        <Controller
-          control={control}
-          rules={{
-            required: "Phone number is required",
-            pattern: {
-              value: /^[0-9]{10}$/, // Simple 10-digit number validation
-              message: "Enter a valid 10-digit phone number",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View style={styles.inputWrapper}>
-              <FontAwesome
-                name="phone"
-                size={20}
-                color="white"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Phone Number"
-                placeholderTextColor="#a9a9a9"
-                keyboardType="phone-pad"
-              />
-            </View>
-          )}
-          name="phoneNumber"
-        />
-        {errors.phoneNumber && (
-          <Text style={styles.error}>{errors.phoneNumber.message}</Text>
-        )}
-
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsWrapper}>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Log in</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => demoPress()}
+            style={styles.demoButton}
+          >
+            <Text style={styles.buttonText}>Log in as Demo user</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
+      <TouchableOpacity
+        style={styles.signupTextWrapper}
+        onPress={() => router.push("/passcode")}
+      >
+        <Text style={styles.signupText}>Don't have an account? Sign up</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -257,7 +188,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     position: "absolute",
     paddingLeft: 15,
-    fontFamily: "FontAwesome",
   },
   button: {
     width: 150,
@@ -269,5 +199,25 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     textAlign: "center",
+  },
+  signupTextWrapper: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+  },
+  signupText: {
+    color: "white",
+    fontSize: 25,
+    textDecorationLine: "underline"
+  },
+  buttonsWrapper: {
+    alignItems: "center",
+    rowGap: 20,
+    width: "100%"
+  },
+  demoButton: {
+    backgroundColor: "#a27b5b",
+    borderRadius: 10,
+    padding: 10,
   },
 });

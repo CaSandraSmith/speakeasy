@@ -9,21 +9,28 @@ import {
 } from "react-native";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type Inputs = {
-  email: string;
-  password: string;
+  passcode: string;
 };
 
-export default function Login() {
+export default function Passcode() {
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
+    router.push("/signup")
+  };
+
+  const demoPress = () => {
+    router.push("/signup");
+  }
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -36,21 +43,17 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Log In</Text>
+      <Text style={styles.header}>Enter your referral code</Text>
       <Animated.View style={[styles.form, { opacity: fadeAnim }]}>
         <Controller
           control={control}
           rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
-            },
+            required: "Passcode is required",
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.inputWrapper}>
               <FontAwesome
-                name="envelope"
+                name="user"
                 size={20}
                 color="white"
                 style={styles.icon}
@@ -60,51 +63,36 @@ export default function Login() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholder="Email"
-                keyboardType="email-address"
+                placeholder="Passcode"
                 placeholderTextColor="#a9a9a9"
               />
             </View>
           )}
-          name="email"
+          name="passcode"
         />
-        {errors.email && (
-          <Text style={styles.error}>{errors.email.message}</Text>
+        {errors.passcode && (
+          <Text style={styles.error}>{errors.passcode.message}</Text>
         )}
 
-        <Controller
-          control={control}
-          rules={{ required: "Password is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View style={styles.inputWrapper}>
-              <FontAwesome
-                name="lock"
-                size={20}
-                color="white"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Password"
-                placeholderTextColor="#a9a9a9"
-                secureTextEntry
-              />
-            </View>
-          )}
-          name="password"
-        />
-        {errors.password && (
-          <Text style={styles.error}>{errors.password.message}</Text>
-        )}
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.button}
-        ><Text style={styles.buttonText}>Log In</Text></TouchableOpacity>
+        <View style={styles.buttonsWrapper}>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => demoPress()}
+            style={styles.demoButton}
+          >
+            <Text style={styles.buttonText}>Use Demo Code</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
-    </View>
+      <TouchableOpacity style={styles.loginTextWrapper} onPress={() => router.push("/login")}>
+        <Text style={styles.loginText}>Already a user? Log in</Text>
+      </TouchableOpacity>
+      </View>
   );
 }
 
@@ -121,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 30, // Adds space between the header and the form
     color: "#a27b5b", // Gold color for the header
     fontWeight: "bold",
-    textAlign: "left",
+    textAlign: "center",
   },
   form: {
     width: "100%",
@@ -129,7 +117,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5, // Adds shadow for a luxury effect
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   input: {
     height: 50,
@@ -159,6 +147,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     position: "absolute",
     paddingLeft: 15,
+    fontFamily: "FontAwesome",
   },
   button: {
     width: 150,
@@ -168,7 +157,27 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 15,
     textAlign: "center",
+  },
+  buttonsWrapper: {
+    alignItems: "center",
+    rowGap: 20,
+    width: "100%"
+  },
+  demoButton: {
+    backgroundColor: "#a27b5b",
+    borderRadius: 10,
+    padding: 10,
+  },
+  loginTextWrapper: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+  },
+  loginText: {
+    color: "white",
+    fontSize: 25,
+    textDecorationLine: "underline"
   }
 });
