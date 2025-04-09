@@ -10,6 +10,8 @@ import {
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { FontAwesome } from '@expo/vector-icons';
+import { useUser } from "../../context/userContext";
+import { router } from "expo-router";
 
 type Inputs = {
   email: string;
@@ -17,13 +19,19 @@ type Inputs = {
 };
 
 export default function Login() {
+  const { setUser } = useUser()
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
+    setUser(data)
+    router.push("/")
+  };
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
