@@ -22,7 +22,7 @@ type Inputs = {
 };
 
 export default function Signup() {
-  const { setUser } = useUser()
+  const { setUser } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -31,10 +31,10 @@ export default function Signup() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-    const {email, password} = data
-    setUser({email, password})
-    router.push("/")
+    console.log(data);
+    const { email, password } = data;
+    setUser({ email, password });
+    router.push("/");
   };
 
   useEffect(() => {
@@ -211,6 +211,12 @@ export default function Signup() {
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </Animated.View>
+      <TouchableOpacity
+        style={styles.loginTextWrapper}
+        onPress={() => router.push("/login")}
+      >
+        <Text style={styles.loginText}>Already a user? Log in</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -279,4 +285,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
+  loginTextWrapper: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+  },
+  loginText: {
+    color: "white",
+    fontSize: 25,
+    textDecorationLine: "underline"
+  }
 });

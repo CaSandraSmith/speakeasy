@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import { useUser } from "../../context/userContext";
 import { router } from "expo-router";
 
@@ -19,19 +19,24 @@ type Inputs = {
 };
 
 export default function Login() {
-  const { setUser } = useUser()
+  const { setUser } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Inputs>();
-  
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-    setUser(data)
-    router.push("/")
+    console.log(data);
+    setUser(data);
+    router.push("/");
   };
+
+  const demoPress = () => {
+    setUser({ email: "demo@user.com", password: "demo" });
+    router.push("/");
+  }
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -107,11 +112,27 @@ export default function Login() {
         {errors.password && (
           <Text style={styles.error}>{errors.password.message}</Text>
         )}
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.button}
-        ><Text style={styles.buttonText}>Log In</Text></TouchableOpacity>
+        <View style={styles.buttonsWrapper}>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Log in</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => demoPress()}
+            style={styles.demoButton}
+          >
+            <Text style={styles.buttonText}>Log in as Demo user</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
+      <TouchableOpacity
+        style={styles.signupTextWrapper}
+        onPress={() => router.push("/passcode")}
+      >
+        <Text style={styles.signupText}>Don't have an account? Sign up</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -137,7 +158,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5, // Adds shadow for a luxury effect
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   input: {
     height: 50,
@@ -178,5 +199,25 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     textAlign: "center",
-  }
+  },
+  signupTextWrapper: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+  },
+  signupText: {
+    color: "white",
+    fontSize: 25,
+    textDecorationLine: "underline"
+  },
+  buttonsWrapper: {
+    alignItems: "center",
+    rowGap: 20,
+    width: "100%"
+  },
+  demoButton: {
+    backgroundColor: "#a27b5b",
+    borderRadius: 10,
+    padding: 10,
+  },
 });

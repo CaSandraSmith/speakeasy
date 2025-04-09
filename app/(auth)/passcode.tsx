@@ -28,6 +28,10 @@ export default function Passcode() {
     router.push("/signup")
   };
 
+  const demoPress = () => {
+    router.push("/signup");
+  }
+
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1, // Fade in
@@ -78,7 +82,7 @@ export default function Passcode() {
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
+            onPress={() => demoPress()}
             style={styles.demoButton}
           >
             <Text style={styles.buttonText}>Use Demo Code</Text>
