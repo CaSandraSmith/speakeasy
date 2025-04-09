@@ -66,13 +66,20 @@ export default function Passcode() {
           <Text style={styles.error}>{errors.passcode.message}</Text>
         )}
 
-       
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsWrapper}>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.demoButton}
+          >
+            <Text style={styles.buttonText}>Use Demo Code</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSubmit(onSubmit)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </View>
   );
@@ -142,4 +149,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
+  buttonsWrapper: {
+    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: "center",
+    columnGap: 20
+  },
+  demoButton: {
+    backgroundColor: "#a27b5b",
+    borderRadius: 10,
+    padding: 10,
+  }
 });
