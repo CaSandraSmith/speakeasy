@@ -118,6 +118,24 @@ def get_experiences():
     except Exception as e:
         return jsonify({'error': 'Failed to fetch experiences'}), 500
 
+@app.route('/experiences/<int:experience_id>', methods=['GET'])
+def get_experience(experience_id):
+    try:
+        experience = Experience.query.get_or_404(experience_id)
+
+        experience_data = {
+            'id': experience.id,
+            'title': experience.title,
+            'description': experience.details,
+            'price': float(experience.price),
+            'duration': str(experience.duration),
+            'location': experience.bundle.location if experience.bundle else None
+        }
+
+        return jsonify({'experience': experience_data}), 200
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch experience'}), 500
+
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5001, debug=True)
