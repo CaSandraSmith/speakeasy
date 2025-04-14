@@ -1,62 +1,95 @@
+import { View, Text, StyleSheet } from 'react-native';
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { useUser } from "../../context/userContext";
 import { Redirect } from "expo-router";
 
+const COLORS = {
+  background: "#1A3636", // Dark teal background
+  primaryText: "#DCD7C9", // Light beige text
+  secondaryText: "#D6BD98", // Golden beige accent
+};
+
 export default function TabLayout() {
   const { user } = useUser();
-
+  
   if (!user) {
     return <Redirect href="/passcode" />;
   }
-
+  
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#ffd33d",
-        headerStyle: {
-          backgroundColor: "#25292e",
-        },
-        headerShadowVisible: false,
-        headerTintColor: "#fff",
+        headerShown: false, // Hide the default header
+        tabBarActiveTintColor: COLORS.secondaryText,
+        tabBarInactiveTintColor: COLORS.primaryText,
         tabBarStyle: {
-          backgroundColor: "#25292e",
+          backgroundColor: COLORS.background,
+          height: 60,
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
         },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '500',
+          marginBottom: 5,
+        },
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
-            <Ionicons
-              name={focused ? "home-sharp" : "home-outline"}
-              color={color}
-              size={24}
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons 
+              name="home" 
+              size={24} 
+              color={color} 
             />
           ),
         }}
       />
+      
       <Tabs.Screen
-        name="profile"
+        name="explore"
         options={{
-          title: "Profile",
-          tabBarIcon: ({
-            color,
-            focused,
-          }: {
-            color: string;
-            focused: boolean;
-          }) => (
-            <AntDesign name="profile" size={24} color={color} />
-            // <Ionicons name={focused ? 'profile' : 'information-circle-outline'} color={color} size={24}/>
+          title: "Explore",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons 
+              name="navigate" 
+              size={24} 
+              color={color} 
+            />
+          ),
+        }}
+      />
+      
+      <Tabs.Screen
+        name="bookings"
+        options={{
+          title: "Bookings",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons 
+              name="document-text" 
+              size={24} 
+              color={color} 
+            />
+          ),
+        }}
+      />
+      
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: "Favorites",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons 
+              name="heart" 
+              size={24} 
+              color={color} 
+            />
           ),
         }}
       />
