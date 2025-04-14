@@ -48,3 +48,93 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Managing the Database 
+
+1. Resetting the Database
+
+```
+bash manage_bd.sh
+```
+
+Choose Option: `3) Reset database with basic test data`
+
+OR RUN directly:
+```
+docker exec speakeasy_db psql -U speakeasy -d speakeasy_dev -f /docker-entrypoint-initdb.d/init.sql
+```
+
+This uses `init.sql` to rebuild the schema and load predefined sample data.
+
+2. Seeding with Faker-generated Realistic Data
+Start the Epress Server:
+```
+node db_api_server.js
+```
+Then run in another terminal window:
+```
+curl -X POST http://localhost:3000/api/seed
+```
+This should populate the Database with:
+
+ . 20 users
+
+ . 10 bundles
+
+ . 30 bookings
+
+ To Customize:
+ ```
+ curl -X POST http://localhost:3000/api/seed \
+  -H "Content-Type: application/json" \
+  -d '{"userCount":10,"bundleCount":5}'
+```
+
+3. Creating a Test user
+```
+curl -X POST http://localhost:3000/api/seed/test-user \
+  -H "Content-Type: application/json" \
+  -d '{"email": "dev@example.com", "password": "password123"}'
+```
+
+## Queryiong the Database 
+1. PostgresSQL CLI
+Access psql shell:
+```
+docker exec -it speakeasy_db psql -U speakeasy -d speakeasy_dev 
+```
+
+Then Run:
+```
+SELECT * FROM users;
+SELECT * FROM bundles;
+\q
+```
+
+## Editing Schema 
+1. Modity `init.sql`
+
+2. Reset DB:
+```
+bash manage_db.sh -> Option 3
+```
+The Test Schnages:
+```
+curl -X POST http://localhost:3000/api/status
+```
+
+## ✅ Useful Tips
+
+. After schema chamge, reset DB to appply them
+
+. Use `/api/seed` to test with realistic data
+
+. Use `/api/seed/test-user` to create specific logins
+
+. Monitor Logs via:
+
+```
+docker logs speakeasy_db
+```
+. Use tolls like pgAdmin, DBeaver, or TablePlus to browse data visually
+
