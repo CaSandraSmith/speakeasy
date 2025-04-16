@@ -49,9 +49,23 @@ export default function Login() {
     }
   };
 
-  const demoPress = () => {
-    setUser({ email: "demo@user.com", password: "demo" });
-    router.push("/");
+  const demoPress = async () => {
+    const response = await fetch(`${FLASK_URL}/api/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: "red@example.com", password: "password1"})
+    })
+
+    const responseData = await response.json()
+
+    if (response.ok) {
+      setUser(responseData["user"]);
+      router.push("/");
+    } else {
+      console.log(responseData.error)
+    }
   }
 
   useEffect(() => {
