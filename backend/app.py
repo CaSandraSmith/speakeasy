@@ -63,6 +63,7 @@ def register():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
+    print("this is the data", data)
     email = data.get('email')
     password = data.get('password')
 
