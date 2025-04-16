@@ -33,7 +33,6 @@ export default function Signup() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data)
     const response = await fetch(`${FLASK_URL}/api/register`, {
       method: 'POST',
       headers: {
