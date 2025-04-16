@@ -25,10 +25,11 @@ def register():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-    name = data.get('name')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
 
-    if not email or not password or not name:
-        return jsonify({"error": "Email, password and name required"}), 400
+    if not email or not password or not first_name or not last_name:
+        return jsonify({"error": "Email, password, first name, and last name required"}), 400
 
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
@@ -36,7 +37,7 @@ def register():
 
     hashed_password = ph.hash(password)
     new_user = User(email=email, password_hash=hashed_password)
-    new_profile = UserProfile(user=new_user, first_name=name)
+    new_profile = UserProfile(user=new_user, first_name=first_name, last_name=last_name)
     new_user.profile = new_profile
 
     try:
@@ -48,14 +49,16 @@ def register():
 
     token = jwt.encode({
         'sub': email,
-        'name': name
+        'firstName': first_name,
+        'lastName': last_name,
     }, SECRET_KEY, algorithm='HS256')
 
     return jsonify({
         "token": token,
         "user": {
             "email": email,
-            "name": name
+            'firstName': first_name,
+            'lastName': last_name,
         }
     }), 201
 
