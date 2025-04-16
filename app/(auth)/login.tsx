@@ -47,8 +47,6 @@ export default function Login() {
     } else {
       console.log(responseData.error)
     }
-
-    console.log(data);
   };
 
   const demoPress = () => {

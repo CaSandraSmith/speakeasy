@@ -25,8 +25,8 @@ def register():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
+    first_name = data.get('firstName')
+    last_name = data.get('lastName')
 
     if not email or not password or not first_name or not last_name:
         return jsonify({"error": "Email, password, first name, and last name required"}), 400
@@ -45,6 +45,7 @@ def register():
         db.session.commit()
     except Exception as e:
         db.session.rollback()
+        print(f"Error creating user: {e}")
         return jsonify({"error": "Database error"}), 500
 
     token = jwt.encode({
