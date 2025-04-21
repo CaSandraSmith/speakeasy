@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  backend:
+    build: ./backend  # This is where your Flask app resides
+    environment:
+      DB_USER: speakeasy
+      DB_PASSWORD: secretpassword
+      DB_HOST: speakeasy_db
+      DB_PORT: 5432
+      DB_NAME: speakeasy_dev
+    ports:
+      - "5001:5001"  # Flask server running on port 5001
+    depends_on:
+      - db
   db:
     image: postgres:15
     container_name: speakeasy_db
