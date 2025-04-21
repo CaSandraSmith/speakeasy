@@ -62,7 +62,7 @@ export default function Login() {
 
     if (response.ok) {
       setUser(responseData["user"]);
-      router.push("/");
+      router.push("/showExperience");
     } else {
       console.log(responseData.error)
     }
