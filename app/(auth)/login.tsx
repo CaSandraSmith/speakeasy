@@ -16,8 +16,6 @@ import Constants from 'expo-constants';
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
-console.log("FLASK_URL", FLASK_URL);
-
 type Inputs = {
   email: string;
   password: string;
