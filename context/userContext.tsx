@@ -68,11 +68,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkToken = async () => {
       const token = await getToken();
-      console.log("this is the token", token);
       if (token) {
         try {
           const decoded = jwtDecode(token) as JwtPayload;
-          console.log("this is the decoded", decoded);
 
           // Token is still valid
           setUser({
