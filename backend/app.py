@@ -1,5 +1,5 @@
 from models import User, UserProfile, Bundle, Experience, Booking, Review
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from extensions import db
 from argon2 import PasswordHasher
 from flask_cors import CORS
@@ -19,6 +19,22 @@ ph = PasswordHasher()
 
 # TODO: Set up secret key in .env later
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
+
+# Helper function to check if a user is logged in
+def is_logged_in():
+    return 'user_id' in session and 'auth_token' in session
+
+# Helper function to get the current user's ID from the session
+def get_current_user_id():
+    return session.get('user_id')
+
+# Helper function to get the current user from the session
+def get_current_user():
+    if not is_logged_in():
+        return None
+    user_id = get_current_user_id()
+    user = User.query.filter_by(id=user_id).first()  # Assuming you have a User model
+    return user
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -90,6 +106,10 @@ def login():
                 'name': name,
                 'user_id': user.id
             }, SECRET_KEY, algorithm='HS256')
+            
+            # Store user info in session
+            session['user_id'] = user.id
+            session['auth_token'] = token
 
             return jsonify({
                 "token": token,

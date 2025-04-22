@@ -24,7 +24,7 @@ type Inputs = {
 };
 
 export default function Login() {
-  const { setUser } = useUser();
+  const { setUser, storeToken } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -45,6 +45,7 @@ export default function Login() {
 
     if (response.ok) {
       setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
       router.push("/");
     } else {
       console.log(responseData.error)
@@ -64,6 +65,7 @@ export default function Login() {
 
     if (response.ok) {
       setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
       router.push("/");
     } else {
       console.log(responseData.error)
