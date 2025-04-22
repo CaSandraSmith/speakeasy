@@ -74,7 +74,6 @@ def register():
     
     # Store user info in session
     session['user_id'] = new_user.id
-    print("This is the new user #{new_user.id}")
     session['auth_token'] = token
 
 
