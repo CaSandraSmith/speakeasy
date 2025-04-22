@@ -71,6 +71,12 @@ def register():
         'firstName': first_name,
         'lastName': last_name,
     }, SECRET_KEY, algorithm='HS256')
+    
+    # Store user info in session
+    session['user_id'] = new_user.id
+    print("This is the new user #{new_user.id}")
+    session['auth_token'] = token
+
 
     return jsonify({
         "token": token,
