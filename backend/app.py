@@ -1,4 +1,4 @@
-from models import User, UserProfile, Bundle, Experience, Booking, Review
+from models import User, Bundle, Experience, Booking, Review
 from flask import Flask, request, jsonify, session
 from extensions import db
 from argon2 import PasswordHasher
@@ -102,10 +102,12 @@ def login():
         return jsonify({"error": "Invalid credentials"}), 401
 
     try:
+        print("in the try")
         # For testing purposes, verify plain text password
         # TODO: Use hashed password verification after hashing the seed passwords in init.sql
         if password == user.password_hash:
-            name = f"{user.profile.first_name} {user.profile.last_name}".strip()
+            print("in the if")
+            name = f"{user.first_name} {user.last_name}".strip()
 
             token = jwt.encode({
                 'sub': email,
@@ -125,8 +127,11 @@ def login():
                     "userId": user.id
                 }
             })
+            
+        print("in the else")
         return jsonify({"error": "Invalid credentials"}), 401
     except Exception as e:
+        print("in the catch")
         return jsonify({"error": "Invalid credentials"}), 401
 
 # TODO: Set up authorization
