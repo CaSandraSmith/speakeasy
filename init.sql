@@ -1,5 +1,16 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS payment_methods CASCADE;
+DROP TABLE IF EXISTS referrals CASCADE;
+DROP TABLE IF EXISTS experiences CASCADE;
+DROP TABLE IF EXISTS experience_images CASCADE;
+DROP TABLE IF EXISTS experience_schedules CASCADE;
+DROP TABLE IF EXISTS bundles CASCADE;
+DROP TABLE IF EXISTS bundle_experiences CASCADE;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS payments CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS tags CASCADE;
+DROP TABLE IF EXISTS experience_tags CASCADE;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -19,7 +30,7 @@ CREATE TABLE payment_methods (
   card_number VARCHAR(100),
   cvv VARCHAR(100),
   billing_zip VARCHAR(100),
-  exp_monthe VARCHAR(10),
+  exp_month VARCHAR(10),
   exp_year VARCHAR(10)
 );
 
@@ -27,7 +38,6 @@ CREATE TABLE referrals (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
   passcode VARCHAR(20)
-  user_id INTEGER REFERENCES users(id),
 );
 
 CREATE TABLE experiences (
@@ -35,7 +45,7 @@ CREATE TABLE experiences (
   title VARCHAR(100),
   description TEXT,
   location VARCHAR(100),
-  price NUMERIC,
+  price NUMERIC
 );
 
 CREATE TABLE experience_images (
@@ -113,7 +123,7 @@ CREATE TABLE experience_tags (
 -- Sample Data Seeding
 
 -- Insert Users
-INSERT INTO users (first_name, last_name, email, password_hash, phone_number, admin) VALUES
+INSERT INTO users (first_name, last_name, email, password_hash, phone, admin) VALUES
 ('Red', 'Ruby', 'red@example.com', 'password1', '1234567890', false),
 ('Blue', 'Sapphire', 'blue@example.com', 'password2', '0987654321', false),
 ('Green', 'Emerald', 'green@example.com', 'password3', '1122334455', false);
@@ -193,6 +203,17 @@ INSERT INTO bundle_experiences (bundle_id, experience_id) VALUES
 (1, 7), -- NYC Adventure -> Chicago River Cruise
 (2, 8); -- LA Experience -> Art Institute Tour
 
+-- Insert Tags (tags like 'Cultural', 'Culinary', etc.)
+INSERT INTO tags (name, description) VALUES
+('Cultural', 'Experiences that offer a cultural immersion'),
+('Culinary', 'Experiences focusing on food and culinary arts'),
+('Historical', 'Experiences that explore historical landmarks'),
+('Outdoor', 'Experiences that take place outdoors'),
+('Entertainment', 'Experiences focusing on entertainment'),
+('Scenic', 'Experiences offering scenic views or routes'),
+('Museum', 'Experiences focused on art and museum tours'),
+('Adventure', 'Experiences that offer exciting and thrilling activities'); -- Add missing tag 'Adventure'
+
 -- Experience Tags (assigning tags to experiences)
 INSERT INTO experience_tags (experience_id, tag_id) VALUES
 (1, 1), -- Eiffel Tower Visit -> Cultural
@@ -203,13 +224,3 @@ INSERT INTO experience_tags (experience_id, tag_id) VALUES
 (6, 6), -- Universal Studios Tour -> Entertainment
 (7, 7), -- Chicago River Cruise -> Scenic
 (8, 8); -- Art Institute Tour -> Museum
-
--- Insert Tags (tags like 'Cultural', 'Culinary', etc.)
-INSERT INTO tags (name, description) VALUES
-('Cultural', 'Experiences that offer a cultural immersion'),
-('Culinary', 'Experiences focusing on food and culinary arts'),
-('Historical', 'Experiences that explore historical landmarks'),
-('Outdoor', 'Experiences that take place outdoors'),
-('Entertainment', 'Experiences focusing on entertainment'),
-('Scenic', 'Experiences offering scenic views or routes'),
-('Museum', 'Experiences focused on art and museum tours');
