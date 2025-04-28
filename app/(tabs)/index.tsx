@@ -89,11 +89,12 @@ export default function Index() {
           </View>
         </View>
         
+        <Text className="font-bold text-lg my-10">Welcome</Text>
         {/* Search Bar */}
         <View style={styles.searchContainer}>
         <TextInput
             style={styles.searchInput}
-            placeholder="Where you want to going?"
+            placeholder="Where you want to go?"
             placeholderTextColor="#666"
             value={searchText}
             onChangeText={setSearchText}
