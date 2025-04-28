@@ -10,7 +10,7 @@ from datetime import datetime, date
 from functools import wraps
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 app.config.from_object(Config)
 
@@ -65,11 +65,12 @@ def register():
         db.session.rollback()
         print(f"Error creating user: {e}")
         return jsonify({"error": "Database error"}), 500
+    name = f"{new_user.profile.first_name} {new_user.profile.last_name}".strip()
 
     token = jwt.encode({
         'sub': email,
-        'firstName': first_name,
-        'lastName': last_name,
+        'name': name,
+        'user_id': new_user.id
     }, SECRET_KEY, algorithm='HS256')
     
     # Store user info in session
@@ -81,8 +82,8 @@ def register():
         "token": token,
         "user": {
             "email": email,
-            'firstName': first_name,
-            'lastName': last_name,
+            "name": name,
+            "userId": new_user.id
         }
     }), 201
 
@@ -122,7 +123,8 @@ def login():
                 "token": token,
                 "user": {
                     "email": email,
-                    "name": name
+                    "name": name,
+                    "userId": user.id
                 }
             })
         return jsonify({"error": "Invalid credentials"}), 401

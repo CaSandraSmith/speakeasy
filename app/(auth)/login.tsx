@@ -36,6 +36,7 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify(data)
     })
 
