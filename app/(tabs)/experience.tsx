@@ -13,15 +13,7 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-const COLORS = {
-  background: "#1A3636", 
-  primary: "#1A3636",    
-  primaryText: "#DCD7C9", 
-  secondaryText: "#D6BD98", 
-  cardBg: "#FFF5FB", 
-  accent: "#D6BD98" 
-};
+import { COLORS } from '../constants/colors';
 
 // Get screen dimensions for responsive layout
 const { width } = Dimensions.get('window');

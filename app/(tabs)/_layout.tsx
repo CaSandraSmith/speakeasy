@@ -3,12 +3,7 @@ import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useUser } from "../../context/userContext";
 import { Redirect } from "expo-router";
-
-const COLORS = {
-  background: "#1A3636", // Dark teal background
-  primaryText: "#DCD7C9", // Light beige text
-  secondaryText: "#D6BD98", // Golden beige accent
-};
+import { COLORS } from '../constants/colors';
 
 export default function TabLayout() {
   const { user } = useUser();

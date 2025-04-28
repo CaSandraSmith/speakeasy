@@ -13,17 +13,7 @@ import {
 } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-
-const COLORS = {
-  background: "#1A3636", 
-  primary: "#1A3636",    
-  primaryText: "#DCD7C9", 
-  secondaryText: "#D6BD98", 
-  searchBg: "rgba(220, 215, 201, 0.2)", 
-  cardBg: "#1A3636", 
-  accent: "#D6BD98" 
-};
+import { COLORS } from '../constants/colors';
 
 export default function Index() {
   const [searchText, setSearchText] = useState('');
