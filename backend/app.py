@@ -1,4 +1,4 @@
-from models import User, UserProfile, Bundle, Experience, Booking, Review
+from models import User, Experience, Bundle, Booking, Review, PaymentMethod, Referral, ExperienceSchedule, BundleExperience, Payment, Tag, ExperienceTag
 from flask import Flask, request, jsonify
 from extensions import db
 from argon2 import PasswordHasher
@@ -8,7 +8,8 @@ import os
 from config import Config
 
 app = Flask(__name__)
-CORS(app)
+# Enable CORS for all routes and all origins
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.config.from_object(Config)
 
@@ -19,6 +20,10 @@ ph = PasswordHasher()
 
 # TODO: Set up secret key in .env later
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
+
+@app.route('/api/status', methods=['GET'])
+def status():
+    return jsonify({"status": "API is working"}), 200
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -36,9 +41,12 @@ def register():
         return jsonify({"error": "Email already registered"}), 409
 
     hashed_password = ph.hash(password)
-    new_user = User(email=email, password_hash=hashed_password)
-    new_profile = UserProfile(user=new_user, first_name=first_name, last_name=last_name)
-    new_user.profile = new_profile
+    new_user = User(
+        email=email,
+        password=hashed_password,
+        first_name=first_name,
+        last_name=last_name
+    )
 
     try:
         db.session.add(new_user)
@@ -63,7 +71,6 @@ def register():
         }
     }), 201
 
-
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -82,8 +89,8 @@ def login():
     try:
         # For testing purposes, verify plain text password
         # TODO: Use hashed password verification after hashing the seed passwords in init.sql
-        if password == user.password_hash:
-            name = f"{user.profile.first_name} {user.profile.last_name}".strip()
+        if password == user.password:
+            name = f"{user.first_name} {user.last_name}".strip()
 
             token = jwt.encode({
                 'sub': email,
@@ -100,11 +107,9 @@ def login():
             })
         return jsonify({"error": "Invalid credentials"}), 401
     except Exception as e:
+        print(f"Login error: {e}")
         return jsonify({"error": "Invalid credentials"}), 401
 
-# TODO: Set up authorization
-
-# ROUTES
 @app.route('/experiences', methods=['GET'])
 def get_experiences():
     try:
@@ -113,10 +118,10 @@ def get_experiences():
         experiences_list = [{
             'id': exp.id,
             'title': exp.title,
-            'description': exp.details,
+            'description': exp.description,
             'price': float(exp.price),
-            'duration': str(exp.duration),
-            'location': exp.bundle.location if exp.bundle else None
+            'location': exp.location,
+            'imageurls': exp.imageurls
         } for exp in experiences]
 
         return jsonify({'experiences': experiences_list}), 200
@@ -131,16 +136,15 @@ def get_experience(experience_id):
         experience_data = {
             'id': experience.id,
             'title': experience.title,
-            'description': experience.details,
+            'description': experience.description,
             'price': float(experience.price),
-            'duration': str(experience.duration),
-            'location': experience.bundle.location if experience.bundle else None
+            'location': experience.location,
+            'imageurls': experience.imageurls
         }
 
         return jsonify({'experience': experience_data}), 200
     except Exception as e:
         return jsonify({'error': 'Failed to fetch experience'}), 500
-
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5001, debug=True)
