@@ -19,6 +19,11 @@ const pool = new Pool({
 
 app.use(express.json());
 
+app.get('/', async (req, res) => {
+  return "Hello world"
+  }
+)
+
 app.get('/api/status', async (req, res) => {
   try {
     const client = await pool.connect();

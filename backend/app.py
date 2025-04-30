@@ -1,14 +1,16 @@
 from models import User, UserProfile, Bundle, Experience, Booking, Review
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify # type: ignore
 from extensions import db
-from argon2 import PasswordHasher
-from flask_cors import CORS
-import jwt
+from argon2 import PasswordHasher # type: ignore
+from flask_cors import CORS # type: ignore
+import jwt # type: ignore
 import os
 from config import Config
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True, origins=["http://localhost:8081", "https://10.54.11.198:5001", "*"],
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 app.config.from_object(Config)
 
@@ -19,6 +21,10 @@ ph = PasswordHasher()
 
 # TODO: Set up secret key in .env later
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
+
+@app.route('/')
+def starter():
+    return "Hello Fromm the Backend"
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -143,4 +149,7 @@ def get_experience(experience_id):
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5001, debug=True)
+    port = 5001
+    print("Flask app running on: ", port)
+    app.run(host='0.0.0.0', port=port, debug=True)
+    

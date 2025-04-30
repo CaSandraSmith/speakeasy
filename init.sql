@@ -6,9 +6,11 @@ CREATE TABLE users (
   first_name VARCHAR(50),
   last_name VARCHAR(50),
   email VARCHAR(100) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
   payment_info TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_login TIMESTAMP DEFAULT NOW(),
   admin BOOLEAN DEFAULT FALSE
 );
 
@@ -102,7 +104,7 @@ CREATE TABLE experience_tags (
 
 -- Sample Data Seeding
 
-INSERT INTO users (first_name, last_name, email, password, phone, payment_info, admin) VALUES
+INSERT INTO users (first_name, last_name, email, password_hash, phone, payment_info, admin) VALUES
 ('Red', 'Ruby', 'red@example.com', 'password1', '1234567890', 'Visa', false),
 ('Blue', 'Sapphire', 'blue@example.com', 'password2', '0987654321', 'Mastercard', false),
 ('Green', 'Emerald', 'green@example.com', 'passwrod3', '1122334455', 'Amex', false);

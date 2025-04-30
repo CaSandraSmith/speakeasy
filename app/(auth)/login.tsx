@@ -14,7 +14,8 @@ import { useUser } from "../../context/userContext";
 import { router } from "expo-router";
 import Constants from 'expo-constants';
 
-const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
+const FLASK_URL = "http://10.54.11.198:5001";
+console.log("FLASK_URL is", FLASK_URL)
 
 type Inputs = {
   email: string;
@@ -31,11 +32,14 @@ export default function Login() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log("FLASK_URL", FLASK_URL)
     const response = await fetch(`${FLASK_URL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: "include",
+      mode: "cors",
       body: JSON.stringify(data)
     })
 
@@ -50,22 +54,31 @@ export default function Login() {
   };
 
   const demoPress = async () => {
-    const response = await fetch(`${FLASK_URL}/api/login`, {
+    console.log(">>>> This is a demo Press <<<<")
+    const response = await fetch(`http://localhost:5001/api/login`, {
+    // const response = await fetch(`${FLASK_URL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: "include",
+      mode: "cors",
       body: JSON.stringify({email: "red@example.com", password: "password1"})
     })
 
-    const responseData = await response.json()
-
+    console.log("response", response)
+    
+    try {
+    const responseData = await response.json() // Not valid Json response, may return an error
     if (response.ok) {
       setUser(responseData["user"]);
       router.push("/");
     } else {
       console.log(responseData.error)
     }
+  } catch (error) {
+    console.log("DEMO USER ERROR");
+    console.log("Error parsing JSON:", error);
   }
 
   useEffect(() => {
@@ -251,3 +264,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+}
