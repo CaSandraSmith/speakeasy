@@ -26,7 +26,7 @@ export default function Index() {
     'Culture',
     'Festival',
     'Other'
-  ];
+  ]; 
   
   const destinations = [
     {
@@ -145,19 +145,6 @@ export default function Index() {
                   <Ionicons name="location" size={16} color="#fff" />
                   <Text style={styles.locationText}>{destination.name}</Text>
                 </View>
-                {/* <View style={styles.ratingContainer}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Ionicons 
-                      key={star}
-                      name={star <= Math.floor(destination.rating) ? "star" : star <= destination.rating ? "star-half" : "star-outline"} 
-                      size={14} 
-                      color="#fff" 
-                    />
-                  ))}
-                  <Text style={styles.ratingText}>
-                    {destination.rating} ({destination.reviews})
-                  </Text>
-                </View> */}
               </View>
             </TouchableOpacity>
           ))}
