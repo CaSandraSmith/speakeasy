@@ -1,9 +1,11 @@
 from models import User
-from flask import Flask, request, jsonify, session
-from extensions import db
+from flask import Flask, request, jsonify, session, Blueprint
+from extensions import db, app
 from argon2 import PasswordHasher
 from flask_cors import CORS
 import jwt
+
+api = Blueprint('api', __name__)
 
 # TODO: Set up authorization
 # AUTHENTICATION

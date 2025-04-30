@@ -1,6 +1,8 @@
 from models import User, Bundle, Experience, Booking, Review
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, Blueprint
 from extensions import db, app
+
+experiences = Blueprint('experiences', __name__)
 
 @app.route('/', methods=['GET'])
 def get_experiences():
