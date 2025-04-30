@@ -24,7 +24,6 @@ export default function Passcode() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
     router.push("/signup")
   };
 

@@ -12,7 +12,9 @@ import { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { useUser } from "../../context/userContext";
 import { router } from "expo-router";
+import Constants from 'expo-constants';
 
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 type Inputs = {
   email: string;
   password: string;
@@ -22,7 +24,7 @@ type Inputs = {
 };
 
 export default function Signup() {
-  const { setUser } = useUser();
+  const { setUser, storeToken } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -30,11 +32,25 @@ export default function Signup() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    const { email, password } = data;
-    setUser({ email, password });
-    router.push("/");
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const response = await fetch(`${FLASK_URL}/api/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include', // 👈 necessary for cookies/session to work
+      body: JSON.stringify(data)
+    })
+
+    const responseData = await response.json()
+
+    if (response.ok) {
+      setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
+      router.push("/");
+    } else {
+      console.log(responseData.error)
+    }
   };
 
   useEffect(() => {

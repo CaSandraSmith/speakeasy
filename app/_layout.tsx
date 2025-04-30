@@ -53,7 +53,6 @@ export default function RootLayout() {
 
 function Stacks() {
   const { user } = useUser();
-  console.log("this is the user", user);
   const colorScheme = useColorScheme();
 
   return (
