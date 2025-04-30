@@ -22,7 +22,7 @@ type Inputs = {
 };
 
 export default function Login() {
-  const { setUser } = useUser();
+  const { setUser, storeToken } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -36,6 +36,7 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify(data)
     })
 
@@ -43,6 +44,7 @@ export default function Login() {
 
     if (response.ok) {
       setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
       router.push("/");
     } else {
       console.log(responseData.error)
@@ -55,6 +57,7 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify({email: "red@example.com", password: "password1"})
     })
 
@@ -62,6 +65,7 @@ export default function Login() {
 
     if (response.ok) {
       setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
       router.push("/");
     } else {
       console.log(responseData.error)

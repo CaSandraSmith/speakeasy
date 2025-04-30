@@ -6,8 +6,9 @@ export default {
     name: "speakeasy",
     slug: "speakeasy",
     version: "1.0.0",
+    plugins: ["expo-router"],
     extra: {
-      FLASK_URL: process.env.FLASK_URL,
+      FLASK_URL: "http://localhost:5001",
     },
   },
 };

@@ -24,7 +24,7 @@ type Inputs = {
 };
 
 export default function Signup() {
-  const { setUser } = useUser();
+  const { setUser, storeToken } = useUser();
   const [fadeAnim] = useState(new Animated.Value(0));
   const {
     handleSubmit,
@@ -38,6 +38,7 @@ export default function Signup() {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify(data)
     })
 
@@ -45,6 +46,7 @@ export default function Signup() {
 
     if (response.ok) {
       setUser(responseData["user"]);
+      await storeToken(responseData["token"]);
       router.push("/");
     } else {
       console.log(responseData.error)
