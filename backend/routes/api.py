@@ -38,18 +38,17 @@ def register():
     password = data.get('password')
     first_name = data.get('firstName')
     last_name = data.get('lastName')
+    phone_number = data.get('phoneNumber')
 
-    if not email or not password or not first_name or not last_name:
-        return jsonify({"error": "Email, password, first name, and last name required"}), 400
+    if not email or not password or not first_name or not last_name or not phone_number:
+        return jsonify({"error": "Email, password, first name, last name, and phone number required"}), 400
 
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
         return jsonify({"error": "Email already registered"}), 409
 
     hashed_password = ph.hash(password)
-    new_user = User(email=email, password_hash=hashed_password)
-    new_profile = UserProfile(user=new_user, first_name=first_name, last_name=last_name)
-    new_user.profile = new_profile
+    new_user = User(email=email, password_hash=hashed_password, first_name=first_name, last_name=last_name, phone_number=phone_number)
 
     try:
         db.session.add(new_user)
@@ -58,7 +57,7 @@ def register():
         db.session.rollback()
         print(f"Error creating user: {e}")
         return jsonify({"error": "Database error"}), 500
-    name = f"{new_user.profile.first_name} {new_user.profile.last_name}".strip()
+    name = f"{new_user.first_name} {new_user.last_name}".strip()
 
     token = jwt.encode({
         'sub': email,
