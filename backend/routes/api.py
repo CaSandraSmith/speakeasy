@@ -4,6 +4,7 @@ from extensions import db, app
 from argon2 import PasswordHasher
 from flask_cors import CORS
 import jwt
+import os
 
 api = Blueprint('api', __name__)
 
@@ -11,6 +12,8 @@ api = Blueprint('api', __name__)
 # AUTHENTICATION
 ph = PasswordHasher()
 
+# TODO: Set up secret key in .env later
+SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
 
 # Helper function to check if a user is logged in
 def is_logged_in():
@@ -28,7 +31,7 @@ def get_current_user():
     user = User.query.filter_by(id=user_id).first()  # Assuming you have a User model
     return user
 
-@app.route('/register', methods=['POST'])
+@api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     email = data.get('email')
@@ -78,7 +81,7 @@ def register():
     }), 201
 
 
-@app.route('/login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     print("this is the data", data)
@@ -123,5 +126,5 @@ def login():
         print("in the else")
         return jsonify({"error": "Invalid credentials"}), 401
     except Exception as e:
-        print("in the catch")
+        print("in the catch", e)
         return jsonify({"error": "Invalid credentials"}), 401

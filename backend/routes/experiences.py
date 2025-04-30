@@ -4,7 +4,7 @@ from extensions import db, app
 
 experiences = Blueprint('experiences', __name__)
 
-@app.route('/', methods=['GET'])
+@experiences.route('/', methods=['GET'])
 def get_experiences():
     try:
         experiences = Experience.query.all()
@@ -22,7 +22,7 @@ def get_experiences():
     except Exception as e:
         return jsonify({'error': 'Failed to fetch experiences'}), 500
 
-@app.route('/<int:experience_id>', methods=['GET'])
+@experiences.route('/<int:experience_id>', methods=['GET'])
 def get_experience(experience_id):
     try:
         experience = Experience.query.get_or_404(experience_id)
