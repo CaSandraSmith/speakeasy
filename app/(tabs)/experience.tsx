@@ -103,6 +103,10 @@ export default function Experience() {
         cardHeight = 200;
         break;
     }
+
+    const handleExprienceClick = () => {
+      router.push(`/(nonTabPages)/experience/${item.id}`);
+    }
     
     return (
       <TouchableOpacity 
@@ -113,6 +117,7 @@ export default function Experience() {
             height: cardHeight
           }
         ]}
+        onPress={handleExprienceClick}
       >
         <Image source={item.source} style={styles.media} />
         <View style={styles.overlay}>
