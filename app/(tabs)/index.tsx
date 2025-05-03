@@ -48,7 +48,7 @@ export default function Index() {
   const handleSearch = () => {
     if (searchText.trim()) {
       router.push({
-        pathname: '/experience',
+        pathname: '/(stack)/experience',
         params: { search: searchText }
       });
     }
