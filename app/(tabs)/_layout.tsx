@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Tabs } from "expo-router";
+import { Tabs, Stack } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useUser } from "../../context/userContext";
 import { Redirect } from "expo-router";
@@ -86,6 +86,15 @@ export default function TabLayout() {
               color={color} 
             />
           ),
+        }}
+      />
+      
+      {/* Add the experience route but hide it from the tab bar */}
+      <Tabs.Screen
+        name="experience/[id]"
+        options={{
+          tabBarButton: () => null, // This also hides it from the tab bar
+          headerShown: false, // No header as requested
         }}
       />
     </Tabs>

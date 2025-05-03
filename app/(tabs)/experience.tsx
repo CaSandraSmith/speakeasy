@@ -105,7 +105,7 @@ export default function Experience() {
     }
 
     const handleExprienceClick = () => {
-      router.push(`/(nonTabPages)/experience/${item.id}`);
+      router.push(`/(tabs)/experience/${item.id}`);
     }
     
     return (
