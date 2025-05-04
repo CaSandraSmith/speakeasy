@@ -25,7 +25,7 @@ class User(db.Model):
     last_login = db.Column(db.DateTime)
     phone_number = db.Column(db.String(20))
     admin = db.Column(db.Boolean, default=False)
-    
+
     # Fixed relationships to use back_populates
     bookings = db.relationship('Booking', back_populates='user')
     reviews = db.relationship('Review', back_populates='user')
@@ -35,14 +35,14 @@ class User(db.Model):
 
 class PaymentMethod(db.Model):
     __tablename__ = 'payment_methods'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     card_number = db.Column(db.String(100), nullable=False)
     cvv = db.Column(db.String(100), nullable=False)
     billing_zip = db.Column(db.String(100), nullable=False)
     exp_month = db.Column(db.Integer, nullable=False)
     exp_year = db.Column(db.Integer, nullable=False)
-    
+
     # Relationships with back_populates
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship("User", back_populates="payment_methods")
@@ -51,15 +51,15 @@ class PaymentMethod(db.Model):
 
 class Referral(db.Model):
     __tablename__ = 'referrals'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     passcode = db.Column(db.String(20), nullable=False)
-    
+
     # Relationships with back_populates
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship("User", back_populates="referral_code")
-    
-    
+
+
 class Experience(db.Model):
     __tablename__ = 'experiences'
 
@@ -74,7 +74,7 @@ class Experience(db.Model):
     reviews = db.relationship('Review', back_populates='experience')
     images = db.relationship('ExperienceImage', back_populates='experience')
     schedules = db.relationship('ExperienceSchedule', back_populates='experience')
-    
+
     # Many-to-many relationships with secondary tables
     bundles = db.relationship('Bundle', secondary=bundle_experience, back_populates='experiences')
     tags = db.relationship('Tag', secondary=experience_tag, back_populates='experiences')
@@ -85,12 +85,12 @@ class ExperienceImage(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.Text, nullable=False)
-    
+
     # Relationships with back_populates
     experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False)
     experience = db.relationship("Experience", back_populates="images")
-    
-    
+
+
 class ExperienceSchedule(db.Model):
     __tablename__ = 'experience_schedules'
 
@@ -99,14 +99,14 @@ class ExperienceSchedule(db.Model):
     end_date = db.Column(db.Date)
     recurring_pattern = db.Column(db.String(50))
     days_of_week = db.Column(db.String(50))
-    start_time = db.Column(db.Time, nullable=False) 
-    end_time = db.Column(db.Time, nullable=False) 
-    
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
+
     # Relationships with back_populates
     experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False)
     experience = db.relationship("Experience", back_populates="schedules")
-    
-    
+
+
 class Bundle(db.Model):
     __tablename__ = 'bundles'
 
@@ -152,8 +152,8 @@ class Payment(db.Model):
     booking = db.relationship('Booking', back_populates='payments')
     user = db.relationship('User', foreign_keys=[user_id])
     payment_method = db.relationship('PaymentMethod', back_populates='payments')
-    
-    
+
+
 class Review(db.Model):
     __tablename__ = 'reviews'
 
@@ -167,6 +167,21 @@ class Review(db.Model):
     # Relationships with back_populates
     user = db.relationship('User', back_populates='reviews')
     experience = db.relationship('Experience', back_populates='reviews')
+
+    def to_dict(self, user_id=None):
+        return {
+            "id": self.id,
+            "rating": self.rating,
+            "comment": self.comment,
+            "timestamp": self.timestamp.isoformat(),
+            "user_id": self.user_id,
+            "experience_id": self.experience_id,
+            # Python has a weird way of setting up ternary operators compared to JS or Ruby.
+            # The below would basically read as
+            # `user_id ? self.user_id == user_id : False`
+            # in JS or Ruby
+            "is_owner": self.user_id == user_id if user_id else False
+        }
 
 
 class Tag(db.Model):
