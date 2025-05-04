@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,13 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  Platform,
+  Modal,
   Image,
+  Pressable,
+  TouchableOpacity
 } from "react-native";
 import Constants from "expo-constants";
-import { Experience } from "../types";
+import { Experience, ExperienceImage } from "../types";
 import { COLORS } from "../constants/colors";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
@@ -20,8 +22,9 @@ const { width } = Dimensions.get("window");
 export default function ShowExperience() {
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
   useEffect(() => {
     const fetchExperience = async () => {
       try {
@@ -57,13 +60,14 @@ export default function ShowExperience() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Top Image */}
       {experience.images?.[0] && (
-        <Image 
-          source={{ uri: experience.images[0].image_url }} 
-          style={styles.image} 
-          resizeMode="cover"
-        />
+        <Pressable onPress={() => setModalVisible(true)}>
+          <Image
+            source={{ uri: experience.images[0].image_url }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </Pressable>
       )}
-
 
       {/* Title & Location */}
       <View style={styles.header}>
@@ -96,7 +100,83 @@ export default function ShowExperience() {
         <Text style={styles.label}>Price:</Text>
         <Text style={styles.value}>${experience.price}</Text>
       </View>
+
+      {/* Image Modal */}
+      <ImageModal
+        visibility={modalVisible}
+        setVisibility={setModalVisible}
+        images={experience.images || []}
+        selectedImageIndex={selectedImageIndex}
+        setSelectedImageIndex={setSelectedImageIndex}
+      />
     </ScrollView>
+  );
+}
+
+interface Props {
+  visibility: boolean;
+  setVisibility: Dispatch<SetStateAction<boolean>>;
+  images: ExperienceImage[];
+  selectedImageIndex: number;
+  setSelectedImageIndex: Dispatch<SetStateAction<number>>
+}
+
+function ImageModal({
+  visibility,
+  setVisibility,
+  images,
+  selectedImageIndex,
+  setSelectedImageIndex,
+}: Props) {
+  if (!images || images.length === 0) return null;
+
+  const currentImage = images[selectedImageIndex];
+
+  const handleNext = () => {
+    setSelectedImageIndex(prevIndex => // No need to specify type here as TypeScript already infers it
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+  
+  const handlePrevious = () => {
+    setSelectedImageIndex(prevIndex => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visibility}
+      onRequestClose={() => setVisibility(false)}
+    >
+      <View style={modalStyles.centeredView}>
+        <TouchableOpacity
+          style={modalStyles.closeButton}
+          onPress={() => setVisibility(false)}
+        >
+          <Text style={modalStyles.closeText}>Close</Text>
+        </TouchableOpacity>
+
+        {/* Image Carousel */}
+        <Image
+          source={{ uri: currentImage.image_url }}
+          style={modalStyles.modalImage}
+          resizeMode="contain"
+        />
+
+        {/* Navigation Buttons */}
+        <View style={modalStyles.navigationButtons}>
+          <Pressable style={modalStyles.navButton} onPress={handlePrevious}>
+            <Text style={modalStyles.navButtonText}>{"<"}</Text>
+          </Pressable>
+          <Pressable style={modalStyles.navButton} onPress={handleNext}>
+            <Text style={modalStyles.navButtonText}>{">"}</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -172,5 +252,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.primaryText,
     fontWeight: "400",
+  },
+});
+
+const modalStyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalImage: {
+    width: "90%",
+    height: "80%",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    padding: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    borderRadius: 20,
+  },
+  closeText: {
+    color: "white",
+    fontSize: 16,
+  },
+  navigationButtons: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 20,
+    justifyContent: "space-between",
+    width: "80%",
+  },
+  navButton: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 20,
+    padding: 10,
+  },
+  navButtonText: {
+    color: "white",
+    fontSize: 20,
   },
 });
