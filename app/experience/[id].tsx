@@ -60,12 +60,15 @@ export default function ShowExperience() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Top Image */}
       {experience.images?.[0] && (
-        <Pressable onPress={() => setModalVisible(true)}>
+        <Pressable style={styles.imageWrapper} onPress={() => setModalVisible(true)}>
           <Image
             source={{ uri: experience.images[0].image_url }}
             style={styles.image}
             resizeMode="cover"
           />
+          <View style={styles.imagesTextWrapper}>
+            <Text style={styles.imagesText}>{experience.images?.length} image{experience.images?.length === 1 ? "": "s"}</Text>
+          </View>
         </Pressable>
       )}
 
@@ -152,12 +155,12 @@ function ImageModal({
       onRequestClose={() => setVisibility(false)}
     >
       <View style={modalStyles.centeredView}>
-        <TouchableOpacity
+        <Pressable
           style={modalStyles.closeButton}
           onPress={() => setVisibility(false)}
         >
           <Text style={modalStyles.closeText}>Close</Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Image Carousel */}
         <Image
@@ -197,6 +200,27 @@ const styles = StyleSheet.create({
   image: {
     width: width,
     height: 300,
+  },
+  imageWrapper: {
+    position: "relative"
+  },
+  imagesTextWrapper: {
+    position: "absolute",
+    bottom: 15, // Slightly adjusted for a more balanced look
+    right: 15, // Adjusted for better spacing from the edge
+    paddingHorizontal: 12, // Added horizontal padding to make text more readable
+    paddingVertical: 8, // Added vertical padding for balance
+    backgroundColor: "rgba(0, 0, 0, 0.6)", // Added transparency for a subtle background
+    borderRadius: 12, // Slightly rounded edges for better appearance
+    shadowColor: "#000", // Shadow to make text more visible
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+  },
+  imagesText: {
+    color: "white",
+    fontSize: 16, // Increased font size for better readability
+    fontWeight: "bold", // Added font weight for emphasis
   },
   header: {
     paddingHorizontal: 20,
@@ -260,11 +284,12 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent background to focus on the modal
+    position: "relative"
   },
   modalImage: {
-    width: "90%",
-    height: "80%",
+    width: "90%", // Width of the image in the modal
+    height: "80%", // Height of the image in the modal
   },
   closeButton: {
     position: "absolute",
@@ -279,11 +304,15 @@ const modalStyles = StyleSheet.create({
     fontSize: 16,
   },
   navigationButtons: {
-    flexDirection: "row",
     position: "absolute",
-    bottom: 20,
+    top: "50%", // Center vertically
+    left: "50%", // Center horizontally
+    marginLeft: -40, // Adjust based on the width of your buttons
+    marginTop: -30, // Adjust based on the height of your buttons
+    flexDirection: "row",
     justifyContent: "space-between",
-    width: "80%",
+    width: 80, // Set a fixed width for the buttons container
+    alignItems: "center",
   },
   navButton: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
