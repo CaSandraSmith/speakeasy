@@ -88,15 +88,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      
-      {/* Add the experience route but hide it from the tab bar */}
-      <Tabs.Screen
-        name="experience/[id]"
-        options={{
-          tabBarButton: () => null, // This also hides it from the tab bar
-          headerShown: false, // No header as requested
-        }}
-      />
     </Tabs>
   );
 }
