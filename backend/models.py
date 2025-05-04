@@ -102,7 +102,7 @@ class Experience(db.Model):
     bookings = db.relationship('Booking', back_populates='experience')
     reviews = db.relationship('Review', back_populates='experience')
     images = db.relationship('ExperienceImage', back_populates='experience')
-    schedules = db.relationship('ExperienceSchedule', back_populates='experience')
+    schedule = db.relationship('ExperienceSchedule', back_populates='experience', uselist=False, cascade='all, delete-orphan')
     
     # Many-to-many relationships with secondary tables
     bundles = db.relationship('Bundle', secondary=bundle_experience, back_populates='experiences')
@@ -116,7 +116,7 @@ class Experience(db.Model):
             'location': self.location,
             'price': float(self.price) if self.price else None,
             'images': [img.to_dict() for img in self.images],
-            'schedules': [s.to_dict() for s in self.schedules],
+            'schedule': self.schedule.to_dict() if self.schedule else None,
             'tags': [t.to_dict() for t in self.tags],
             'reviews': [r.to_dict() for r in self.reviews]
         }
@@ -152,8 +152,8 @@ class ExperienceSchedule(db.Model):
     end_time = db.Column(db.Time, nullable=False) 
     
     # Relationships with back_populates
-    experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False)
-    experience = db.relationship("Experience", back_populates="schedules")
+    experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False, unique=True)
+    experience = db.relationship("Experience", back_populates="schedule")
     
     def to_dict(self):
         return {
