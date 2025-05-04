@@ -10,7 +10,8 @@ import {
   Modal,
   Image,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from "react-native";
 import Constants from "expo-constants";
 import { Experience, ExperienceImage } from "../types";
@@ -147,20 +148,20 @@ function ImageModal({
     );
   };
 
+  const handleClose = () => {
+    console.log("close button pressed")
+    setVisibility(false)
+  }
+
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visibility}
-      onRequestClose={() => setVisibility(false)}
+      onRequestClose={handleClose}
     >
+      <TouchableWithoutFeedback onPress={handleClose}>
       <View style={modalStyles.centeredView}>
-        <Pressable
-          style={modalStyles.closeButton}
-          onPress={() => setVisibility(false)}
-        >
-          <Text style={modalStyles.closeText}>Close</Text>
-        </Pressable>
 
         {/* Image Carousel */}
         <Image
@@ -179,6 +180,7 @@ function ImageModal({
           </Pressable>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
@@ -291,14 +293,6 @@ const modalStyles = StyleSheet.create({
     width: "90%", // Width of the image in the modal
     height: "80%", // Height of the image in the modal
   },
-  closeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    padding: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    borderRadius: 20,
-  },
   closeText: {
     color: "white",
     fontSize: 16,
@@ -306,21 +300,24 @@ const modalStyles = StyleSheet.create({
   navigationButtons: {
     position: "absolute",
     top: "50%", // Center vertically
-    left: "50%", // Center horizontally
-    marginLeft: -40, // Adjust based on the width of your buttons
     marginTop: -30, // Adjust based on the height of your buttons
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: 80, // Set a fixed width for the buttons container
+    justifyContent: "space-between", // Center horizontally
+    width: "100%",
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   navButton: {
+    width: 50,  // Ensure equal width and height to make it circular
+    height: 50, // Equal height to make the button circular
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 25, // Half of width/height to make the button circular
+    justifyContent: "center",
+    alignItems: "center", // Center the text inside the button
+    marginHorizontal: 10,  // Add space between the buttons
   },
   navButtonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 24, // Slightly larger font size for better visibility
   },
 });
