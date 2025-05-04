@@ -37,14 +37,14 @@ experiences = [
 ]
 
 experience_images = [
-    ExperienceImage(experience_id=1, image_url='https://example.com/eiffel.jpg'),
-    ExperienceImage(experience_id=2, image_url='https://example.com/sushi.jpg'),
-    ExperienceImage(experience_id=3, image_url='https://example.com/statue.jpg'),
-    ExperienceImage(experience_id=4, image_url='https://example.com/bike.jpg'),
-    ExperienceImage(experience_id=5, image_url='https://example.com/hollywood.jpg'),
-    ExperienceImage(experience_id=6, image_url='https://example.com/universal.jpg'),
-    ExperienceImage(experience_id=7, image_url='https://example.com/river.jpg'),
-    ExperienceImage(experience_id=8, image_url='https://example.com/art.jpg'),
+    ExperienceImage(experience_id=1, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=2, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=3, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=4, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=5, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=6, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=7, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=8, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
 ]
 
 bookings = [
