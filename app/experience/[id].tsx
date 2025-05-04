@@ -9,12 +9,14 @@ const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 export default function ShowExperience() {
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience>({
-    id: "",
+    id: 0,
     title: "",
     description: "",
     price: 0,
     location: "",
-    schedule: [],
+    schedule: {
+      id: 0,
+    },
     images: [],
     reviews: [],
     tags: [],
@@ -45,7 +47,7 @@ export default function ShowExperience() {
     fetchExperience();
   }, [id]);
 
-  if (!experience.title) return <h1>Loading</h1>
+  if (!experience.title) return <Text>Loading</Text>
 
   console.log("experience", experience)
   
@@ -53,8 +55,16 @@ export default function ShowExperience() {
   return (
     <View>
       <Text>Experience ID: {id}</Text>
-      <Text>Experience Title: {experience.title || "Loading..."}</Text>
-      {/* Add more fields as needed */}
+      <Text>Experience Title: {experience.title}</Text>
+      <Text>Experience Description: {experience.description}</Text>
+      <Text>Experience Price: {experience.price}</Text>
+      <Text>Experience Location: {experience.location}</Text>
+      <Text>Experience Schedule: {experience.schedule?.days_of_week} at {experience.schedule?.start_time} - {experience.schedule?.end_time}</Text>
+      <View>
+        {experience.tags?.map(tag => (
+          <Text key={tag.id}>{tag.name}</Text>
+        ))}
+      </View>
     </View>
   );
 }
