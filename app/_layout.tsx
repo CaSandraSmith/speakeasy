@@ -60,8 +60,18 @@ function Stacks() {
       <Stack screenOptions={{ headerShown: false }}>
         {user ? (
           <>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(stack)" options={{ headerShown: false }} />
+          </>
+            <Stack.Screen 
+              name="experience/[id]" 
+              options={{ 
+                presentation: "modal", 
+                headerShown: false,
+                animation: "slide_from_bottom"
+              }} 
+            />
           </>
         ) : (
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
