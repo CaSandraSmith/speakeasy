@@ -23,17 +23,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
-        options={{
-          title: 'Search',
-          tabBarLabel: 'search',
-        }}
-      />
-      <Tabs.Screen
         name="bookings"
         options={{
           title: 'Bookings',
-          tabBarLabel: 'bookings',
+          tabBarLabel: 'Bookings',
         }}
       />
       <Tabs.Screen

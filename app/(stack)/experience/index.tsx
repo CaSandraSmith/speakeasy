@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { COLORS } from '../../constants/colors';
 
 // Get screen dimensions for responsive layout
 const { width } = Dimensions.get('window');
@@ -35,47 +35,47 @@ const japanExperiences: ExperienceItem[] = [
     id: '1',
     title: 'Mount Fuji',
     subtitle: 'Iconic volcano',
-    source: require('../../assets/images/mount-fuji.jpg'),
+    source: require('../../../assets/images/mount-fuji.jpg'),
     size: 'large'  // Takes up full width in the first row
   },
   {
     id: '2',
     title: 'Tokyo Streets',
     subtitle: 'Urban adventure',
-    source: require('../../assets/images/tokyo-thumbnail.jpg'),
+    source: require('../../../assets/images/tokyo-thumbnail.jpg'),
     size: 'medium'  // Takes up half width in the second row
   },
   {
     id: '3',
     title: 'Kyoto Temples',
     subtitle: 'Cultural heritage',
-    source: require('../../assets/images/kyoto.jpg'),
+    source: require('../../../assets/images/kyoto.jpg'),
     size: 'medium'  // Takes up half width in the second row
   },
   {
     id: '4',
     title: 'Osaka Food',
     subtitle: 'Culinary delights',
-    source: require('../../assets/images/osaka.jpg'),
+    source: require('../../../assets/images/osaka.jpg'),
     size: 'small'  // Takes up half width in the third row
   },
   {
     id: '5',
     title: 'Cherry Blossoms',
     subtitle: 'Seasonal beauty',
-    source: require('../../assets/images/sakura-thumbnail.jpg'),
+    source: require('../../../assets/images/sakura-thumbnail.jpg'),
     size: 'small'  // Takes up half width in the third row
   },
   {
     id: '6',
     title: 'Bullet Train',
     subtitle: 'Modern transport',
-    source: require('../../assets/images/shinkansen-thumbnail.jpg'),
+    source: require('../../../assets/images/shinkansen-thumbnail.jpg'),
     size: 'large'  // Takes up full width in the fourth row
   },
 ];
 
-export default function Experience() {
+export default function ExperienceIndex() {
   const router = useRouter();
   const { destination } = useLocalSearchParams();
 

@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -13,14 +13,15 @@ import {
   Platform
 } from "react-native";
 import Constants from "expo-constants";
-import { Experience } from "../types";
-import { COLORS } from "../constants/colors";
-import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
+import { Experience } from "../../types";
+import { COLORS } from "../../constants/colors";
+import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
 
 export default function ShowExperience() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -70,6 +71,19 @@ export default function ShowExperience() {
       </View>
     );
   }
+
+  const handleBookPress = () => {
+    if (experience) {
+      router.push({
+        pathname: "/(stack)/bookingInfo",
+        // params: { 
+        //   id: experience.id.toString(),
+        //   title: experience.title,
+        //   imageUrl: experience.images?.[0]?.image_url
+        // }
+      });
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -165,9 +179,14 @@ export default function ShowExperience() {
       />
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.bookButton}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={styles.bookButton}
+          onPress={handleBookPress}
+        >
           <Text style={styles.bookButtonText}>Book</Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   );

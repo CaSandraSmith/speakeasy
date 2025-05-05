@@ -7,7 +7,14 @@ export default function Header() {
 
   return (
     <View className="flex-row justify-between items-center mt-4 mb-6">
-      <Text className="text-background font-montserrat-bold text-3xl">
+      <Text 
+        className="text-textPrimary font-montserrat-bold text-3xl"
+        style={{
+          textShadowColor: 'rgba(0, 0, 0, 0.75)',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 2
+        }}
+      >
         Let's Discover
       </Text>
       

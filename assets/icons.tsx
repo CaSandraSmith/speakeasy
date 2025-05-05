@@ -6,7 +6,7 @@ type IconProps = {
   size?: number;
 };
 
-export type IconName = 'index' | 'explore' | 'profile';
+export type IconName = 'index' | 'bookings' | 'profile';
 
 // Individual icon functions
 export function HomeIcon(props: IconProps) {
@@ -15,11 +15,6 @@ export function HomeIcon(props: IconProps) {
   );
 }
 
-export function ExploreIcon(props: IconProps) {
-  return (
-    <Ionicons name="compass-outline" size={props.size || 24} color={props.color} />
-  );
-}
 
 export function ProfileIcon(props: IconProps) {
   return (
@@ -27,11 +22,17 @@ export function ProfileIcon(props: IconProps) {
   );
 }
 
+export function BookingsIcon(props: IconProps) {
+  return (
+    <Ionicons name="calendar-outline" size={props.size || 24} color={props.color} />
+  );
+}
+
 // Main icons object
 export const icons: Record<IconName, (props: IconProps) => JSX.Element> = {
   index: HomeIcon,
-  explore: ExploreIcon,
   profile: ProfileIcon,
+  bookings: BookingsIcon,
 };
 
 // Default export
