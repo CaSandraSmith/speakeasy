@@ -80,11 +80,11 @@ export default function ShowExperience() {
     if (experience) {
       router.push({
         pathname: "/(stack)/experience/bookingInfo",
-        // params: { 
-        //   id: experience.id.toString(),
-        //   title: experience.title,
-        //   imageUrl: experience.images?.[0]?.image_url
-        // }
+        params: { 
+          id: experience.id.toString(),
+          title: experience.title,
+          imageUrl: experience.images?.[0]?.image_url
+        }
       });
     }
   };
