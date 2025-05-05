@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -13,15 +13,24 @@ import {
   Platform
 } from "react-native";
 import Constants from "expo-constants";
-import { Experience } from "../types";
-import { COLORS } from "../constants/colors";
-import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
+import { Experience } from "../../types";
+import { COLORS } from "../../constants/colors";
+import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
+<<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuthFetch } from "@/context/userContext";
+=======
+import { Ionicons } from "@expo/vector-icons";
+>>>>>>> 501f2a6 (draft bookings page)
+=======
+import { Ionicons } from "@expo/vector-icons";
+>>>>>>> 4f9feeb614b0a7c60e3089425ab84c342e9a5b4e
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
 
 export default function ShowExperience() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -71,8 +80,27 @@ export default function ShowExperience() {
     );
   }
 
+  const handleBookPress = () => {
+    if (experience) {
+      router.push({
+        pathname: "/(stack)/experience/bookingInfo",
+        params: { 
+          id: experience.id.toString(),
+          title: experience.title,
+          imageUrl: experience.images?.[0]?.image_url
+        }
+      });
+    }
+  };
+
   return (
     <View style={styles.screen}>
+        {/* <TouchableOpacity
+          className="p-1"
+          onPress={() => router.back()}
+        >
+          <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
+        </TouchableOpacity> */}
       <FlatList
         data={experience.reviews}
         keyExtractor={(item) => item.id.toString()}
@@ -165,9 +193,14 @@ export default function ShowExperience() {
       />
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.bookButton}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={styles.bookButton}
+          onPress={handleBookPress}
+        >
           <Text style={styles.bookButtonText}>Book</Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
