@@ -1,4 +1,4 @@
-from models import Review, User
+from models import Review
 from flask import Blueprint, request, jsonify, session
 from extensions import db
 from datetime import datetime

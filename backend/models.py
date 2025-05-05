@@ -79,6 +79,17 @@ class Experience(db.Model):
     bundles = db.relationship('Bundle', secondary=bundle_experience, back_populates='experiences')
     tags = db.relationship('Tag', secondary=experience_tag, back_populates='experiences')
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'location': self.location,
+            'price': float(self.price) if self.price else None,
+            'images': [{'id': img.id, 'url': img.image_url} for img in self.images],
+            'reviews': [review.to_dict() for review in self.reviews],
+            'schedules': [schedule.to_dict() for schedule in self.schedules]
+        }
 
 class ExperienceImage(db.Model):
     __tablename__ = 'experience_images'
@@ -105,6 +116,17 @@ class ExperienceSchedule(db.Model):
     # Relationships with back_populates
     experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False)
     experience = db.relationship("Experience", back_populates="schedules")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'start_date': self.start_date.isoformat(),
+            'end_date': self.end_date.isoformat() if self.end_date else None,
+            'recurring_pattern': self.recurring_pattern,
+            'days_of_week': self.days_of_week,
+            'start_time': self.start_time.isoformat(),
+            'end_time': self.end_time.isoformat()
+        }
 
 
 class Bundle(db.Model):
