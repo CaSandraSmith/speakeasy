@@ -141,7 +141,7 @@ experiences = [
 ]
 
 experience_images = [
-    ExperienceImage(experience_id=1, image_url='assets/images/zero-gravity.jpg'),
+    ExperienceImage(experience_id=1, image_url='../assets/images/zero-gravity.jpg'),
     ExperienceImage(experience_id=2, image_url='assets/images/mig-flight.jpg'),
     ExperienceImage(experience_id=3, image_url='assets/images/spacex-launch.jpg'),
     ExperienceImage(experience_id=4, image_url='assets/images/titanic-sub.jpg'),

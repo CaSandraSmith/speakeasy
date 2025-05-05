@@ -4,7 +4,7 @@ export default function StackLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen 
-        name="experience/experienceIndex" 
+        name="experience/index" 
         options={{
           animation: 'slide_from_right',
         }}

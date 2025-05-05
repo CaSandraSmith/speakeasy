@@ -144,12 +144,12 @@ class ExperienceSchedule(db.Model):
     __tablename__ = 'experience_schedules'
 
     id = db.Column(db.Integer, primary_key=True)
-    start_date = db.Column(db.Date, nullable=False, default=lambda: datetime.now(timezone.utc))
+    start_date = db.Column(db.Date, nullable=True, default=lambda: datetime.now(timezone.utc))
     end_date = db.Column(db.Date)
     recurring_pattern = db.Column(db.String(50))
     days_of_week = db.Column(db.String(50))
-    start_time = db.Column(db.Time, nullable=False) 
-    end_time = db.Column(db.Time, nullable=False) 
+    start_time = db.Column(db.Time, nullable=True) 
+    end_time = db.Column(db.Time, nullable=True) 
     
     # Relationships with back_populates
     experience_id = db.Column(db.Integer, db.ForeignKey('experiences.id'), nullable=False, unique=True)
