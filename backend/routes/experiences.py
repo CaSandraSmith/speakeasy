@@ -1,6 +1,8 @@
 from models import Experience
-from flask import jsonify, Blueprint, request, session
+from flask import jsonify, Blueprint, request
 from extensions import db
+from routes.auth import require_admin
+
 experiences = Blueprint('experiences', __name__)
 
 # Get all experiences
@@ -36,10 +38,10 @@ def get_experience(experience_id):
 
 # Update an experience
 @experiences.route('/<int:experience_id>', methods=['PUT'])
+@require_admin
 def update_experience(experience_id):
     experience = Experience.query.get_or_404(experience_id)
     data = request.json()
-    user_id = session.get('user_id')
 
     if 'title' in data:
         experience.title = data['title']
@@ -52,6 +54,7 @@ def update_experience(experience_id):
 
     try:
         db.session.commit()
+        return jsonify({'experience': experience.to_dict()}), 200
     except Exception as e:
         print(f"Error in update_experience: {e}")
         return jsonify({'error': 'Failed to update experience'}), 500

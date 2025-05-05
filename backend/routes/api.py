@@ -1,35 +1,28 @@
 from models import User
-from flask import Flask, request, jsonify, session, Blueprint
-from extensions import db, app
+from flask import Flask, request, jsonify, Blueprint
+from extensions import db
 from argon2 import PasswordHasher
 from flask_cors import CORS
 import jwt
 import os
+from datetime import datetime, timedelta, timezone
+from config import Config
 
 api = Blueprint('api', __name__)
 
-# TODO: Set up authorization
 # AUTHENTICATION
 ph = PasswordHasher()
 
-# TODO: Set up secret key in .env later
-SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
-
-# Helper function to check if a user is logged in
-def is_logged_in():
-    return 'user_id' in session and 'auth_token' in session
-
-# Helper function to get the current user's ID from the session
-def get_current_user_id():
-    return session.get('user_id')
-
-# Helper function to get the current user from the session
-def get_current_user():
-    if not is_logged_in():
-        return None
-    user_id = get_current_user_id()
-    user = User.query.filter_by(id=user_id).first()  # Assuming you have a User model
-    return user
+def generate_token(user):
+    """Generate a JWT token for the user"""
+    name = f"{user.first_name} {user.last_name}".strip()
+    payload = {
+        'sub': user.email,
+        'name': name,
+        'user_id': user.id,
+        'exp': datetime.now(timezone.utc) + timedelta(days=30)  # Token expires in 30 days
+    }
+    return jwt.encode(payload, Config.SECRET_KEY, algorithm='HS256')
 
 @api.route('/register', methods=['POST'])
 def register():
@@ -57,18 +50,9 @@ def register():
         db.session.rollback()
         print(f"Error creating user: {e}")
         return jsonify({"error": "Database error"}), 500
+
+    token = generate_token(new_user)
     name = f"{new_user.first_name} {new_user.last_name}".strip()
-
-    token = jwt.encode({
-        'sub': email,
-        'name': name,
-        'user_id': new_user.id
-    }, SECRET_KEY, algorithm='HS256')
-    
-    # Store user info in session
-    session['user_id'] = new_user.id
-    session['auth_token'] = token
-
 
     return jsonify({
         "token": token,
@@ -79,15 +63,12 @@ def register():
         }
     }), 201
 
-
 @api.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    print("this is the data", data)
     email = data.get('email')
     password = data.get('password')
 
-    print(f"Login attempt for email: {email}")
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
 
@@ -96,22 +77,11 @@ def login():
         return jsonify({"error": "Invalid credentials"}), 401
 
     try:
-        print("in the try")
         # For testing purposes, verify plain text password
         # TODO: Use hashed password verification after hashing the seed passwords in init.sql
         if password == user.password_hash:
-            print("in the if")
+            token = generate_token(user)
             name = f"{user.first_name} {user.last_name}".strip()
-
-            token = jwt.encode({
-                'sub': email,
-                'name': name,
-                'user_id': user.id
-            }, SECRET_KEY, algorithm='HS256')
-            
-            # Store user info in session
-            session['user_id'] = user.id
-            session['auth_token'] = token
 
             return jsonify({
                 "token": token,
@@ -121,9 +91,8 @@ def login():
                     "userId": user.id
                 }
             })
-            
-        print("in the else")
+
         return jsonify({"error": "Invalid credentials"}), 401
     except Exception as e:
-        print("in the catch", e)
+        print(f"Login error: {e}")
         return jsonify({"error": "Invalid credentials"}), 401

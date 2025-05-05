@@ -2,6 +2,7 @@ from models import ExperienceSchedule, Experience
 from flask import Blueprint, request, jsonify
 from extensions import db
 from datetime import datetime
+from routes.auth import require_admin
 
 schedules = Blueprint('schedules', __name__)
 
@@ -19,6 +20,7 @@ def get_experience_schedules(experience_id):
 
 # Add schedule(s) to an experience
 @schedules.route('/<int:experience_id>/schedules', methods=['POST'])
+@require_admin
 def add_experience_schedules(experience_id):
     try:
         experience = Experience.query.get_or_404(experience_id)
@@ -58,6 +60,7 @@ def add_experience_schedules(experience_id):
 
 # Update schedule(s) of an experience
 @schedules.route('/<int:experience_id>/schedules', methods=['PUT'])
+@require_admin
 def update_experience_schedules(experience_id):
     try:
         data = request.json
@@ -101,6 +104,7 @@ def update_experience_schedules(experience_id):
 
 # Delete schedule(s) of an experience
 @schedules.route('/<int:experience_id>/schedules', methods=['DELETE'])
+@require_admin
 def delete_experience_schedules(experience_id):
     try:
         data = request.json
