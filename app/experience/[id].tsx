@@ -16,6 +16,7 @@ import Constants from "expo-constants";
 import { Experience } from "../types";
 import { COLORS } from "../constants/colors";
 import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
+import { useAuthFetch } from "@/context/userContext";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
@@ -24,6 +25,7 @@ export default function ShowExperience() {
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const authFetch = useAuthFetch();
 
   const formatTime = (time: string | undefined) => {
     if (!time) return "";
@@ -43,10 +45,8 @@ export default function ShowExperience() {
   useEffect(() => {
     const fetchExperience = async () => {
       try {
-        const response = await fetch(`${FLASK_URL}/experiences/${id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+        const response = await authFetch(`${FLASK_URL}/experiences/${id}`, {
+          method: "GET"
         });
 
         if (response.ok) {

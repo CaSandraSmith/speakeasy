@@ -104,3 +104,23 @@ export const useUser = () => {
   }
   return context;
 };
+
+// Custom fetch function to add the JWT token on requests
+export const useAuthFetch = () => {
+  const { getToken } = useUser();
+
+  return async (url: string, options: RequestInit = {}) => {
+    const token = await getToken();
+    const headers = new Headers(options.headers);
+
+    headers.set('Content-Type', 'application/json');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return fetch(url, {
+      ...options,
+      headers,
+    });
+  };
+};
