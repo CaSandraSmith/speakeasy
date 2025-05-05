@@ -61,7 +61,7 @@ function Stacks() {
         {user ? (
           <>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(stack)" options={{ headerShown: false }} />
+            <Stack.Screen name="(stack)" options={{ headerShown: false }} />
           </>
         ) : (
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />

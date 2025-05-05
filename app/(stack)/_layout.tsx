@@ -4,9 +4,16 @@ export default function StackLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen 
-        name="experience" 
+        name="experience/experienceIndex" 
         options={{
           animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="experience/[id]" 
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
         }}
       />
     </Stack>
