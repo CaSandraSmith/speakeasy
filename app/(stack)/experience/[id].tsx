@@ -19,7 +19,6 @@ import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselMo
 import { useAuthFetch } from "@/context/userContext";
 import { Ionicons } from "@expo/vector-icons";
 
-
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
 
