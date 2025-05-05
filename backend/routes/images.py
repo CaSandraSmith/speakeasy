@@ -1,6 +1,7 @@
 from models import ExperienceImage, Experience
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify
 from extensions import db
+from routes.auth import require_admin
 
 images = Blueprint('images', __name__)
 
@@ -16,6 +17,7 @@ def get_experience_images(experience_id):
 
 # Add images to a specific experience
 @images.route('/<int:experience_id>/images', methods=['POST'])
+@require_admin
 def add_experience_image(experience_id):
     experience = Experience.query.get_or_404(experience_id)
     data = request.json
@@ -50,6 +52,7 @@ def add_experience_image(experience_id):
 
 # Delete images from a specific experience
 @images.route('/<int:experience_id>/images', methods=['DELETE'])
+@require_admin
 def delete_experience_images(experience_id):
     data = request.json
 
