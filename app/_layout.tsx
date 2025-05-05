@@ -60,7 +60,7 @@ function Stacks() {
       <Stack screenOptions={{ headerShown: false }}>
         {user ? (
           <>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="(stack)" options={{ headerShown: false }} />
           </>
         ) : (
