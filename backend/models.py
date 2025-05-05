@@ -70,6 +70,17 @@ class PaymentMethod(db.Model):
         }
 
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'card_number': self.card_number,
+            'billing_zip': self.billing_zip,
+            'exp_month': self.exp_month,
+            'exp_year': self.exp_year,
+            'user_id': self.user_id
+        }
+
+
 class Referral(db.Model):
     __tablename__ = 'referrals'
 
@@ -218,6 +229,8 @@ class Booking(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'reservations': [reservation.to_dict() for reservation in self.reservations],
         }
+            'bundle_id': self.bundle_id
+        }
 
 class Reservation(db.Model):
     __tablename__ = 'reservations'
@@ -242,6 +255,31 @@ class Reservation(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
+
+class Payment(db.Model):
+    __tablename__ = 'payments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    amount = db.Column(db.Numeric, nullable=False)
+    payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.id'), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+
+    # Relationships with back_populates
+    booking = db.relationship('Booking', back_populates='payments')
+    user = db.relationship('User', foreign_keys=[user_id])
+    payment_method = db.relationship('PaymentMethod', back_populates='payments')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'booking_id': self.booking_id,
+            'user_id': self.user_id,
+            'amount': float(self.amount),
+            'payment_method_id': self.payment_method_id,
+            'status': self.status
+        }
 
 class Payment(db.Model):
     __tablename__ = 'payments'
