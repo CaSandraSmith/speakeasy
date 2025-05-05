@@ -1,5 +1,5 @@
 from models import Review
-from api import get_current_user
+from routes.api import get_current_user
 from functools import wraps
 from flask import request, jsonify
 
