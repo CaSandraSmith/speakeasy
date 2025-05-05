@@ -20,6 +20,7 @@ referrals = [
 ]
 
 bundles = [
+    # Luxury exclusive bundles
     Bundle(name='Ultimate Space Explorer', description='Complete space tourism package', total_price=55000.00),
     Bundle(name='Ocean Depths Adventure', description='Explore the mysteries of the deep', total_price=280000.00),
     Bundle(name='Arctic Explorer Package', description='Experience the frozen north in luxury', total_price=80000.00),
@@ -30,61 +31,11 @@ bundles = [
     Bundle(name='Royal Lifestyle Experience', description='Live like royalty around the world', total_price=150000.00),
     Bundle(name='Scientific Discovery Package', description='Behind the scenes of groundbreaking research', total_price=110000.00),
     Bundle(name='Entertainment Insider Access', description='VIP access to entertainment world', total_price=550000.00),
-]
-
-bundle_experiences = [
-    # Ultimate Space Explorer
-    {'bundle_id': 1, 'experience_id': 1},  # Zero Gravity
-    {'bundle_id': 1, 'experience_id': 2},  # Edge of Space
-    {'bundle_id': 1, 'experience_id': 3},  # SpaceX Launch
     
-    # Ocean Depths Adventure
-    {'bundle_id': 2, 'experience_id': 4},  # Titanic
-    {'bundle_id': 2, 'experience_id': 5},  # Shark Cage
-    {'bundle_id': 2, 'experience_id': 6},  # Underwater Restaurant
-    {'bundle_id': 2, 'experience_id': 21}, # Underwater Wine
-    
-    # Arctic Explorer Package
-    {'bundle_id': 3, 'experience_id': 7},  # North Pole
-    {'bundle_id': 3, 'experience_id': 8},  # Emperor Penguins
-    {'bundle_id': 3, 'experience_id': 9},  # Ice Hotel
-    
-    # Cultural Heritage Journey
-    {'bundle_id': 4, 'experience_id': 13}, # Louvre
-    {'bundle_id': 4, 'experience_id': 14}, # Forbidden City
-    {'bundle_id': 4, 'experience_id': 15}, # Vatican Archives
-    
-    # Wildlife Conservation Experience
-    {'bundle_id': 5, 'experience_id': 16}, # Gorilla Family
-    {'bundle_id': 5, 'experience_id': 17}, # Tiger Reserve
-    {'bundle_id': 5, 'experience_id': 18}, # Whale Migration
-    
-    # Extreme Adventure Collection
-    {'bundle_id': 6, 'experience_id': 10}, # Everest Helicopter
-    {'bundle_id': 6, 'experience_id': 11}, # Volcano Descent
-    {'bundle_id': 6, 'experience_id': 12}, # Supersonic Fighter
-    {'bundle_id': 6, 'experience_id': 23}, # F1 Driver
-    
-    # Culinary World Tour
-    {'bundle_id': 7, 'experience_id': 19}, # World Chef Tour
-    {'bundle_id': 7, 'experience_id': 20}, # Truffle Hunt
-    {'bundle_id': 7, 'experience_id': 21}, # Underwater Wine
-    
-    # Royal Lifestyle Experience
-    {'bundle_id': 8, 'experience_id': 37}, # Scottish Castle
-    {'bundle_id': 8, 'experience_id': 38}, # Versailles Dinner
-    {'bundle_id': 8, 'experience_id': 39}, # Monaco GP Yacht
-    
-    # Scientific Discovery Package
-    {'bundle_id': 9, 'experience_id': 34}, # CERN
-    {'bundle_id': 9, 'experience_id': 35}, # NASA Mission Control
-    {'bundle_id': 9, 'experience_id': 36}, # Deep Sea Research
-    
-    # Entertainment Insider Access
-    {'bundle_id': 10, 'experience_id': 22}, # Movie Set
-    {'bundle_id': 10, 'experience_id': 24}, # Private Concert
-    {'bundle_id': 10, 'experience_id': 47}, # James Bond
-    {'bundle_id': 10, 'experience_id': 48}, # Star Wars
+    # City packages
+    Bundle(name='NYC Adventure', description='Explore the best of New York City with this exciting bundle.', total_price=299.99),
+    Bundle(name='LA Experience', description='Discover the glamour and beauty of Los Angeles.', total_price=399.99),
+    Bundle(name='Windy City Wonders', description='Experience the charm and culture of Chicago.', total_price=249.99),
 ]
 
 experiences = [
@@ -177,6 +128,16 @@ experiences = [
     Experience(title='La Scala Private Box', description='Private box for season at La Scala with backstage access', location='Milan, Italy', price=50000.00),
     Experience(title='Broadway Show Takeover', description='Rent entire Broadway theater for private performance', location='New York, USA', price=100000.00),
     Experience(title='Abbey Road Recording', description='Record at Abbey Road Studios with famous producer', location='London, UK', price=25000.00),
+    
+    # Regular Experiences (from first file)
+    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower', location='Paris', price=59.99),
+    Experience(title='Sushi Workshop', description='Learn to make sushi with a master chef', location='Tokyo', price=89.99),
+    Experience(title='Statue of Liberty Tour', description='Visit the iconic Statue of Liberty and Ellis Island.', location='New York', price=49.99),
+    Experience(title='Central Park Bike Tour', description='Explore Central Park on a bike with a local guide.', location='New York', price=29.99),
+    Experience(title='Hollywood Sign Hike', description='Hike to the famous Hollywood Sign for stunning views.', location='Los Angeles', price=59.99),
+    Experience(title='Universal Studios Tour', description='Experience the magic of Universal Studios.', location='Los Angeles', price=129.99),
+    Experience(title='Chicago River Cruise', description='Enjoy a scenic cruise on the Chicago River.', location='Chicago', price=39.99),
+    Experience(title='Art Institute Tour', description='Explore one of the best art museums in the world.', location='Chicago', price=49.99),
 ]
 
 experience_images = [
@@ -230,6 +191,19 @@ experience_images = [
     ExperienceImage(experience_id=48, image_url='assets/images/star-wars.jpg'),
     ExperienceImage(experience_id=49, image_url='assets/images/area-51.jpg'),
     ExperienceImage(experience_id=50, image_url='assets/images/chernobyl.jpg'),
+    
+    # Adding images for the regular experiences (from first file)
+    ExperienceImage(experience_id=51, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=51, image_url='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww'),
+    ExperienceImage(experience_id=51, image_url='https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg'),
+    ExperienceImage(experience_id=51, image_url='https://static.vecteezy.com/system/resources/thumbnails/037/248/582/small/ai-generated-travelling-to-thailand-advertisment-background-with-copy-space-free-photo.jpg'),
+    ExperienceImage(experience_id=52, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=53, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=54, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=55, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=56, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=57, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=58, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
 ]
 
 bookings = [
@@ -298,9 +272,17 @@ experience_schedules = [
     ExperienceSchedule(experience_id=48, start_date=None, end_date=None, recurring_pattern='Custom', days_of_week=None, start_time=None, end_time=None),
     ExperienceSchedule(experience_id=49, start_date=None, end_date=None, recurring_pattern='Weekly', days_of_week='Friday,Saturday', start_time='06:00:00', end_time='18:00:00'),
     ExperienceSchedule(experience_id=50, start_date=None, end_date=None, recurring_pattern='Custom', days_of_week=None, start_time=None, end_time=None),
+    
+    # Regular experience schedules (from first file)
+    ExperienceSchedule(experience_id=51, start_date='2025-05-01', end_date='2025-05-01', recurring_pattern='None', days_of_week='Monday, Wednesday, Friday', start_time='09:00:00', end_time='11:00:00'),
+    ExperienceSchedule(experience_id=52, start_date='2025-05-02', end_date='2025-05-02', recurring_pattern='None', days_of_week='Tuesday, Thursday', start_time='14:00:00', end_time='16:00:00'),
+    ExperienceSchedule(experience_id=53, start_date='2025-05-03', end_date='2025-05-03', recurring_pattern='None', days_of_week='Wednesday, Saturday', start_time='10:00:00', end_time='12:00:00'),
+    ExperienceSchedule(experience_id=54, start_date='2025-05-04', end_date='2025-05-04', recurring_pattern='None', days_of_week='Monday, Friday', start_time='08:00:00', end_time='10:00:00'),
+    ExperienceSchedule(experience_id=55, start_date='2025-05-05', end_date='2025-05-05', recurring_pattern='None', days_of_week='Tuesday, Thursday', start_time='07:00:00', end_time='09:00:00'),
+    ExperienceSchedule(experience_id=56, start_date='2025-05-06', end_date='2025-05-06', recurring_pattern='None', days_of_week='Monday, Wednesday', start_time='09:00:00', end_time='11:00:00'),
+    ExperienceSchedule(experience_id=57, start_date='2025-05-07', end_date='2025-05-07', recurring_pattern='None', days_of_week='Saturday, Sunday', start_time='15:00:00', end_time='17:00:00'),
+    ExperienceSchedule(experience_id=58, start_date='2025-05-08', end_date='2025-05-08', recurring_pattern='None', days_of_week='Friday, Sunday', start_time='13:00:00', end_time='15:00:00'),
 ]
-
-
 
 tags = [
     Tag(name='Exclusive Access', description='Access to normally restricted areas'),
@@ -318,7 +300,83 @@ tags = [
     Tag(name='Celebrity', description='Meet famous personalities'),
     Tag(name='Scientific', description='Cutting-edge science and technology'),
     Tag(name='Spiritual', description='Transformative spiritual journeys'),
-    Tag(name='Featured Deals', description="Featured Experiences")
+    Tag(name='Featured Deals', description="Featured Experiences"),
+    # Tags from the first file
+    Tag(name='Museum', description='Experiences focused on art and museum tours'),
+    Tag(name='Entertainment', description='Experiences focusing on entertainment'),
+    Tag(name='Scenic', description='Experiences offering scenic views or routes'),
+    Tag(name='Outdoor', description='Experiences that take place outdoors'),
+]
+
+# The luxury bundle experiences (from second file)
+bundle_experiences = [
+    # Ultimate Space Explorer
+    {'bundle_id': 1, 'experience_id': 1},  # Zero Gravity
+    {'bundle_id': 1, 'experience_id': 2},  # Edge of Space
+    {'bundle_id': 1, 'experience_id': 3},  # SpaceX Launch
+    
+    # Ocean Depths Adventure
+    {'bundle_id': 2, 'experience_id': 4},  # Titanic
+    {'bundle_id': 2, 'experience_id': 5},  # Mermaid Expedition
+    {'bundle_id': 2, 'experience_id': 6},  # Underwater Restaurant
+    {'bundle_id': 2, 'experience_id': 21}, # Underwater Wine
+    
+    # Arctic Explorer Package
+    {'bundle_id': 3, 'experience_id': 7},  # North Pole
+    {'bundle_id': 3, 'experience_id': 8},  # Emperor Penguins
+    {'bundle_id': 3, 'experience_id': 9},  # Ice Hotel
+    
+    # Cultural Heritage Journey
+    {'bundle_id': 4, 'experience_id': 13}, # Louvre
+    {'bundle_id': 4, 'experience_id': 14}, # Forbidden City
+    {'bundle_id': 4, 'experience_id': 15}, # Vatican Archives
+    
+    # Wildlife Conservation Experience
+    {'bundle_id': 5, 'experience_id': 16}, # Gorilla Family
+    {'bundle_id': 5, 'experience_id': 17}, # Tiger Reserve
+    {'bundle_id': 5, 'experience_id': 18}, # Whale Migration
+    
+    # Extreme Adventure Collection
+    {'bundle_id': 6, 'experience_id': 10}, # Everest Helicopter
+    {'bundle_id': 6, 'experience_id': 11}, # Volcano Descent
+    {'bundle_id': 6, 'experience_id': 12}, # Supersonic Fighter
+    {'bundle_id': 6, 'experience_id': 23}, # F1 Driver
+    
+    # Culinary World Tour
+    {'bundle_id': 7, 'experience_id': 19}, # World Chef Tour
+    {'bundle_id': 7, 'experience_id': 20}, # Truffle Hunt
+    {'bundle_id': 7, 'experience_id': 21}, # Underwater Wine
+    
+    # Royal Lifestyle Experience
+    {'bundle_id': 8, 'experience_id': 37}, # Scottish Castle
+    {'bundle_id': 8, 'experience_id': 38}, # Versailles Dinner
+    {'bundle_id': 8, 'experience_id': 39}, # Monaco GP Yacht
+    
+    # Scientific Discovery Package
+    {'bundle_id': 9, 'experience_id': 34}, # CERN
+    {'bundle_id': 9, 'experience_id': 35}, # NASA Mission Control
+    {'bundle_id': 9, 'experience_id': 36}, # Deep Sea Research
+    
+    # Entertainment Insider Access
+    {'bundle_id': 10, 'experience_id': 22}, # Movie Set
+    {'bundle_id': 10, 'experience_id': 24}, # Private Concert
+    {'bundle_id': 10, 'experience_id': 47}, # James Bond
+    {'bundle_id': 10, 'experience_id': 48}, # Star Wars
+    
+    # NYC Adventure (regular bundles from first file)
+    {'bundle_id': 11, 'experience_id': 53}, # Statue of Liberty
+    {'bundle_id': 11, 'experience_id': 54}, # Central Park
+    {'bundle_id': 11, 'experience_id': 57}, # Chicago River - adding this to NYC for variety
+    
+    # LA Experience
+    {'bundle_id': 12, 'experience_id': 55}, # Hollywood Sign
+    {'bundle_id': 12, 'experience_id': 56}, # Universal Studios
+    {'bundle_id': 12, 'experience_id': 58}, # Art Institute - adding this to LA for variety
+    
+    # Windy City Wonders
+    {'bundle_id': 13, 'experience_id': 57}, # Chicago River
+    {'bundle_id': 13, 'experience_id': 58}, # Art Institute
+    {'bundle_id': 13, 'experience_id': 53}, # Statue of Liberty - adding this to Chicago for variety
 ]
 
 experience_tags = [
@@ -504,33 +562,44 @@ experience_tags = [
     {'experience_id': 50, 'tag_id': 12}, # Historical
     {'experience_id': 50, 'tag_id': 5},  # Educational
     
-    # Featured Deals for Landing Page - 3 per category
+    # Featured Deals for Landing Page - Categories
     {'experience_id': 2, 'tag_id': 16},   # Black Origin Space Experience
     {'experience_id': 4, 'tag_id': 16},   # Submarine Expedition to Titanic
     {'experience_id': 31, 'tag_id': 16},  # Banksy Studio Visit
     
-    # Once in a Lifetime - 3 experiences
+    # Once in a Lifetime
     {'experience_id': 4, 'tag_id': 16},   # Submarine Expedition to Titanic
     {'experience_id': 16, 'tag_id': 16},  # Gorilla Family Adoption
     {'experience_id': 25, 'tag_id': 16},  # Egyptian Tomb Opening
     
-    # Adventure - 3 experiences
+    # Adventure
     {'experience_id': 5, 'tag_id': 16},   # Great White Shark Cage Expedition
     {'experience_id': 11, 'tag_id': 16},  # Volcano Lava Lake Descent
     {'experience_id': 23, 'tag_id': 16},  # Formula 1 Driver Experience
     
-    # Ocean - 3 experiences
+    # Ocean
     {'experience_id': 4, 'tag_id': 16},   # Submarine Expedition to Titanic
     {'experience_id': 5, 'tag_id': 16},   # Great White Shark Cage Expedition
     {'experience_id': 21, 'tag_id': 16},  # Underwater Wine Cellar
     
-    # Space - 3 experiences
+    # Space
     {'experience_id': 1, 'tag_id': 16},   # Zero Gravity Space Training
     {'experience_id': 2, 'tag_id': 16},   # Black Origin Space Experience
     {'experience_id': 3, 'tag_id': 16},   # Private SpaceX Launch Viewing
     
-    # Celebrity - 3 experiences
+    # Celebrity
     {'experience_id': 22, 'tag_id': 16},  # Hollywood Movie Set Access
     {'experience_id': 24, 'tag_id': 16},  # Private Concert Series
     {'experience_id': 47, 'tag_id': 16},  # James Bond Experience
+    
+    # Regular experiences (from first file)
+    {'experience_id': 51, 'tag_id': 1},  # Cultural
+    {'experience_id': 51, 'tag_id': 3},  # Historical
+    {'experience_id': 52, 'tag_id': 2},  # Culinary 
+    {'experience_id': 53, 'tag_id': 12}, # Historical
+    {'experience_id': 54, 'tag_id': 20}, # Outdoor
+    {'experience_id': 55, 'tag_id': 3},  # Adventure
+    {'experience_id': 56, 'tag_id': 18}, # Entertainment
+    {'experience_id': 57, 'tag_id': 19}, # Scenic
+    {'experience_id': 58, 'tag_id': 17}, # Museum
 ]
