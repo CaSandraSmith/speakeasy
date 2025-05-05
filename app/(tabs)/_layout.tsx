@@ -1,40 +1,46 @@
-import { Tabs } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useUser } from "../../context/userContext";
-import { Redirect } from "expo-router";
-import { COLORS } from '../constants/colors';
-import TabBar from "../components/tabsNavigation/TabBar";
+import React from 'react';
+import { Tabs } from 'expo-router';
+import TabBar from '../components/tabsNavigation/TabBar';
 
 export default function TabLayout() {
-  const { user } = useUser();
-  
-  if (!user) {
-    return <Redirect href="/passcode" />;
-  }
-  
   return (
     <Tabs
-      tabBar={props => <TabBar {...props} />}
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
+        tabBarStyle: {
+          position: 'absolute',
+          borderTopWidth: 0,
+          elevation: 0,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home"
+          title: 'Home',
+          tabBarLabel: 'Home',
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search"
         options={{
-          title: "Explore"
+          title: 'Search',
+          tabBarLabel: 'search',
+        }}
+      />
+      <Tabs.Screen
+        name="bookings"
+        options={{
+          title: 'Bookings',
+          tabBarLabel: 'bookings',
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile"
+          title: 'Profile',
+          tabBarLabel: 'Profile',
         }}
       />
     </Tabs>

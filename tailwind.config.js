@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const { COLORS } = require('./app/constants/colors')
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
@@ -18,9 +19,13 @@ module.exports = {
         "playfair-bold-italic": ["PlayfairDisplay-BoldItalic", "serif"]
       },
       colors: {
-        background: "#1A3636",
-        textPrimary: "#DCD7C9",
-        textSecondary: "#D6BD98"
+        background: COLORS.background,
+        textPrimary: COLORS.primaryText,
+        textSecondary: COLORS.secondaryText,
+        primary: COLORS.primary,
+        cardBg: COLORS.cardBg,
+        accent: COLORS.accent,
+        searchBg: COLORS.searchBg,
       },
     },
   },

@@ -1,49 +1,53 @@
-import React, { useState } from 'react';
+// app/(tabs)/index.tsx
+import React, { useState, useEffect } from 'react';
 import { 
-  Text, 
   View, 
-  StyleSheet, 
-  TextInput, 
-  Image, 
-  ScrollView, 
-  TouchableOpacity, 
   SafeAreaView, 
   StatusBar,
-  ImageBackground 
+  Dimensions,
+  StyleSheet,
+  Platform,
+  Text
 } from 'react-native';
-import { Link, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/colors';
+import { useRouter } from 'expo-router';
+import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+
+// Components
+import Header from '../components/indexPage/Header';
+import SearchBar from '../components/indexPage/SearchBar';
+import CategoryTabs from '../components/indexPage/CategoryTabs';
+import DestinationCard from '../components/indexPage/DestinationCard';
+import BackdropPhoto from '../components/indexPage/BackdropPhoto';
+
+// Constants
+import { 
+  categories, 
+  featuredExperiencesByCategory, 
+  CategoryType 
+} from '../constants/featuredExperiences';
+
+const {width, height} = Dimensions.get("screen");
+const _imageWidth = Platform.select({
+  web: Math.min(width * 0.4, 400), // Limit max width on web
+  default: width * 0.7
+});
+const _spacing = 12;
 
 export default function Index() {
   const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Popular');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType>('Exclusive Access');
+  const [experiences, setExperiences] = useState(featuredExperiencesByCategory['Exclusive Access']);
   const router = useRouter();
-  
-  const categories = [
-    'Popular',
-    'Adventure',
-    'Culture',
-    'Festival',
-    'Other'
-  ]; 
-  
-  const destinations = [
-    {
-      id: '1',
-      name: 'Maldives',
-      image: require("../../assets/images/maldives.jpg"),
-      rating: 4.5,
-      reviews: 1010
-    },
-    {
-      id: '2',
-      name: 'Santorini',
-      image: require('../../assets/images/blue-lago.jpg'),
-      rating: 4.7,
-      reviews: 890
-    }
-  ];
+
+  const scrollX = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler((e) => {
+    scrollX.value = e.contentOffset.x / (_imageWidth + _spacing);
+  });
+
+  // Update experiences when category changes
+  useEffect(() => {
+    setExperiences(featuredExperiencesByCategory[selectedCategory]);
+  }, [selectedCategory]);
 
   const handleSearch = () => {
     if (searchText.trim()) {
@@ -54,261 +58,93 @@ export default function Index() {
     }
   };
 
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category as CategoryType);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <View className="flex-1">
+      {/* Status Bar - set to transparent so it takes the color of the backdrop */}
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
       
-      {/* Background Image with Overlay */}
-      <ImageBackground 
-        source={require('../../assets/images/everest.jpg')}
-        style={styles.backgroundImage}
-      >
-        {/* Header with User Profile */}
-        <View style={styles.header}>
-          <View style={styles.profileSection}>
-            <View style={styles.avatarContainer}>
-              <Image 
-                source={require('../../assets/images/dinner.jpg')} 
-                style={styles.avatar} 
-              />
-            </View>
-            <View style={styles.userInfo}>
-              <Text style={styles.greeting}>Hi,</Text>
-              <Text style={styles.userName}>Name</Text>
-            </View>
+      {/* Background Photos - Full screen including status bar and bottom area */}
+      <View style={StyleSheet.absoluteFillObject}>
+        {experiences.map((experience, index) => (
+          <BackdropPhoto 
+            key={experience.id} 
+            destination={{
+              id: experience.id.toString(),
+              name: experience.title,
+              image: experience.image,
+              rating: experience.rating,
+              reviews: experience.reviews
+            }} 
+            index={index} 
+            scrollX={scrollX} 
+          />
+        ))}
+      </View>
+      
+      {/* Main Content */}
+      <SafeAreaView className="flex-1" style={{ backgroundColor: 'transparent' }}>
+        <View className="flex-1 px-5">
+          {/* Fixed Header Section */}
+          <View>
+            <Header />
+            <SearchBar 
+              value={searchText}
+              onChangeText={setSearchText}
+              onSubmit={handleSearch}
+            />
+            <CategoryTabs 
+              categories={categories as unknown as string[]}
+              selectedCategory={selectedCategory}
+              onSelectCategory={handleCategoryChange}
+            />
+          </View>
+          
+          {/* Carousel Container - adjusted spacing */}
+          <View className="flex-1" style={{ paddingTop: 20, justifyContent: 'flex-start' }}>
+            <Animated.FlatList
+              data={experiences}
+              keyExtractor={item => item.id.toString()}
+              horizontal
+              style={{ flexGrow: 0 }}
+              snapToInterval={_imageWidth + _spacing}
+              decelerationRate="fast"
+              contentContainerStyle={{
+                gap: _spacing,
+                paddingHorizontal: (width - _imageWidth) / 2,
+                alignItems: 'center'
+              }}
+              renderItem={({item, index}) => {
+                return (
+                  <DestinationCard 
+                    destination={{
+                      id: item.id.toString(),
+                      name: item.title,
+                      image: item.image,
+                      rating: item.rating,
+                      reviews: item.reviews
+                    }} 
+                    index={index} 
+                    scrollX={scrollX} 
+                    onPress={() => {
+                      router.push({
+                        pathname: '/(stack)/experience-detail',
+                        params: { id: item.id }
+                      });
+                    }}
+                  />
+                );
+              }}
+              onScroll={onScroll}
+              scrollEventThrottle={16.6}
+              showsHorizontalScrollIndicator={false}
+            />
           </View>
         </View>
-        
-        <Text className="font-bold text-lg my-10">Welcome</Text>
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-        <TextInput
-            style={styles.searchInput}
-            placeholder="Where you want to go?"
-            placeholderTextColor="#666"
-            value={searchText}
-            onChangeText={setSearchText}
-            onSubmitEditing={handleSearch}
-            returnKeyType="search"
-          />
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-            <Ionicons name="search" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-      
-      {/* Main Content Card */}
-      <View style={styles.contentCard}>
-        {/* Categories */}
-        <Text style={styles.categoryHeader}>Category</Text>
-        <View style={styles.categoryWrapper}>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoryContainer}
-            contentContainerStyle={styles.categoryContentContainer}
-          >
-            {categories.map((category) => (
-              <TouchableOpacity 
-                key={category} 
-                style={styles.categoryItem}
-                onPress={() => setSelectedCategory(category)}
-              >
-                <Text 
-                  style={[
-                    styles.categoryText, 
-                    selectedCategory === category && styles.selectedCategoryText
-                  ]}
-                >
-                  {category}
-                </Text>
-                {selectedCategory === category && <View style={styles.categoryDot} />}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-        
-        {/* Destinations */}
-        <ScrollView 
-          showsVerticalScrollIndicator={false} 
-          style={styles.destinationsContainer}
-          contentContainerStyle={styles.destinationsContentContainer}
-        >
-          {destinations.map((destination) => (
-            <TouchableOpacity key={destination.id} style={styles.destinationCard}>
-              <Image 
-                source={destination.image} 
-                style={styles.destinationImage}
-              />
-              <View style={styles.destinationDetails}>
-                <View style={styles.locationContainer}>
-                  <Ionicons name="location" size={16} color="#fff" />
-                  <Text style={styles.locationText}>{destination.name}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  backgroundImage: {
-    width: '100%',
-    height: 260,
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-  },
-  profileSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatarContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    marginRight: 10,
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-  userInfo: {
-    flexDirection: 'column',
-  },
-  greeting: {
-    fontSize: 14,
-    color: '#fff',
-    fontWeight: '400',
-  },
-  userName: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 20,
-    marginTop: 10,
-    borderRadius: 25,
-    backgroundColor: COLORS.searchBg,
-    paddingHorizontal: 15,
-    height: 50,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 14,
-    color: '#333',
-  },
-  searchButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: COLORS.secondaryText,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  contentCard: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    marginTop: -30,
-    paddingHorizontal: 20,
-    paddingTop: 25,
-  },
-  categoryHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.primaryText,
-    marginBottom: 10,
-  },
-  categoryWrapper: {
-    height: 50, // Fixed height for category section
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-  },
-  categoryContentContainer: {
-    alignItems: 'center',
-    paddingBottom: 5,
-  },
-  categoryItem: {
-    marginRight: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 30, // Fixed height for each category item
-  },
-  categoryText: {
-    fontSize: 16,
-    color: 'rgba(220, 215, 201, 0.6)',
-    marginBottom: 5,
-  },
-  selectedCategoryText: {
-    color: COLORS.secondaryText,
-    fontWeight: '500',
-  },
-  categoryDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: COLORS.secondaryText,
-  },
-  destinationsContainer: {
-    flex: 1,
-    marginTop: 10,
-  },
-  destinationsContentContainer: {
-    paddingBottom: 20,
-  },
-  destinationCard: {
-    width: '100%',
-    height: 180,
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 20,
-  },
-  destinationImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  destinationDetails: {
-    position: 'absolute',
-    bottom: 15,
-    left: 15,
-    right: 15,
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  locationText: {
-    color: COLORS.primaryText,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 5,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ratingText: {
-    color: COLORS.primaryText,
-    fontSize: 12,
-    marginLeft: 5,
-  },
-});
