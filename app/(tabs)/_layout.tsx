@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Tabs } from "expo-router";
+import { Tabs, Stack } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useUser } from "../../context/userContext";
 import { Redirect } from "expo-router";

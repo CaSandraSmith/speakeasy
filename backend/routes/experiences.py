@@ -12,7 +12,7 @@ def get_experiences():
         experiences_list = [{
             'id': exp.id,
             'title': exp.title,
-            'description': exp.details,
+            'description': exp.description,
             'price': float(exp.price),
             'duration': str(exp.duration),
             'location': exp.bundle.location if exp.bundle else None
@@ -27,15 +27,7 @@ def get_experience(experience_id):
     try:
         experience = Experience.query.get_or_404(experience_id)
 
-        experience_data = {
-            'id': experience.id,
-            'title': experience.title,
-            'description': experience.details,
-            'price': float(experience.price),
-            'duration': str(experience.duration),
-            'location': experience.bundle.location if experience.bundle else None
-        }
-
-        return jsonify({'experience': experience_data}), 200
+        return jsonify({'experience': experience.to_dict()}), 200
     except Exception as e:
+        print(e)
         return jsonify({'error': 'Failed to fetch experience'}), 500
