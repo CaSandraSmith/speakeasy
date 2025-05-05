@@ -59,7 +59,7 @@ export interface Tag {
 
 export interface Review {
   id: number;
-  user_id: number;
+  user_name: string;
   experience_id: number;
   rating: number;
   comment?: string;

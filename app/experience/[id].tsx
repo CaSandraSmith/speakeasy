@@ -4,14 +4,14 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Dimensions,
   ActivityIndicator,
   Image,
   Pressable,
+  FlatList
 } from "react-native";
 import Constants from "expo-constants";
-import { Experience, ExperienceImage } from "../types";
+import { Experience } from "../types";
 import { COLORS } from "../constants/colors";
 import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
 
@@ -22,7 +22,6 @@ export default function ShowExperience() {
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
   const formatTime = (time: string | undefined) => {
     if (!time) return ""
@@ -71,8 +70,11 @@ export default function ShowExperience() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Top Image */}
+    <FlatList
+  data={experience.reviews}
+  keyExtractor={(item) => item.id.toString()}
+  ListHeaderComponent={() => (
+    <View>
       {experience.images?.[0] && (
         <Pressable
           style={styles.imageWrapper}
@@ -92,13 +94,11 @@ export default function ShowExperience() {
         </Pressable>
       )}
 
-      {/* Title & Location */}
       <View style={styles.header}>
         <Text style={styles.title}>{experience.title}</Text>
         <Text style={styles.location}>{experience.location}</Text>
       </View>
 
-      {/* Tags */}
       <View style={styles.tagsContainer}>
         {experience.tags?.map((tag) => (
           <View key={tag.id} style={styles.tag}>
@@ -107,17 +107,11 @@ export default function ShowExperience() {
         ))}
       </View>
 
-      {/* Description */}
       <Text style={styles.description}>{experience.description}</Text>
 
-      {/* Schedule & Price */}
       <View style={styles.infoRow}>
         <Text style={styles.label}>Operating Hours:</Text>
-
-        {/* Days of the week on a separate line */}
         <Text style={styles.daysText}>{experience.schedule?.days_of_week}</Text>
-
-        {/* Time displayed separately */}
         <Text style={styles.timeText}>
           {formatTime(experience.schedule?.start_time)} - {formatTime(experience.schedule?.end_time)}
         </Text>
@@ -128,23 +122,49 @@ export default function ShowExperience() {
         <Text style={styles.value}>${experience.price}</Text>
       </View>
 
-      {/* Reviews */}
+      <Text style={styles.reviewHeader}>Reviews</Text>
 
-
-      {/* Image Modal */}
       <ImageCaroselModal
         visibility={modalVisible}
         setVisibility={setModalVisible}
         images={experience.images || []}
       />
-    </ScrollView>
-  );
+    </View>
+  )}
+  renderItem={({ item }) => (
+    <View style={styles.reviewCard}>
+      <Text style={styles.reviewerName}>{item.user_name}</Text>
+      <View style={styles.rating}>
+        {[...Array(5)].map((_, index) => (
+          <Text
+            key={index}
+            style={[
+              styles.star,
+              index < item.rating ? styles.filledStar : styles.emptyStar,
+            ]}
+          >
+            ★
+          </Text>
+        ))}
+      </View>
+      <Text style={styles.reviewContent}>{item.comment}</Text>
+    </View>
+  )}
+  ListEmptyComponent={
+    <Text style={{ padding: 20, color: COLORS.secondaryText }}>
+      No reviews yet.
+    </Text>
+  }
+  contentContainerStyle={styles.container}
+/>
+
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLORS.background,
+    paddingBottom: 30,
   },
   content: {
     paddingBottom: 30,
@@ -247,5 +267,54 @@ const styles = StyleSheet.create({
     color: COLORS.primaryText,
     fontWeight: "400",
   },
+  reviewCard: {
+    backgroundColor: "#254545",
+    padding: 15,
+    marginHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 15,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    borderWidth: 1,
+    borderColor: "#323840", // A soft contrasting border
+  },  
+  reviewerName: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: COLORS.primaryText,
+  },
+  rating: {
+    flexDirection: "row",
+    marginVertical: 5,
+  },
+  star: {
+    fontSize: 20,
+    marginRight: 3,
+  },
+  filledStar: {
+    color: "#FFD700", // Golden color for filled stars
+  },
+  emptyStar: {
+    color: "#D3D3D3", // Light grey for empty stars
+  },
+  reviewContent: {
+    fontSize: 16,
+    color: COLORS.secondaryText,
+    marginTop: 5,
+  },
+  reviewHeader: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: COLORS.primaryText,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.secondaryText,
+  }
+  
 });
 
