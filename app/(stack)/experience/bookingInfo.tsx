@@ -264,7 +264,7 @@ export default function BookingInfo() {
       {/* Book Button */}
       <View className="p-5 bg-background border-t border-textSecondary/20">
         <TouchableOpacity 
-          className="bg-[#8A63D2] rounded-3xl py-4 items-center justify-center"
+          className="bg-accent rounded-3xl py-4 items-center justify-center"
           onPress={handleBooking}
         >
           <Text className="text-white text-lg font-semibold font-montserrat-bold">
