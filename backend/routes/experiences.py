@@ -10,18 +10,7 @@ experiences = Blueprint('experiences', __name__)
 def get_experiences():
     try:
         experiences = Experience.query.all()
-
-        experiences_list = [{
-            'id': exp.id,
-            'title': exp.title,
-            'description': exp.description,
-            'price': float(exp.price),
-            'duration': str(exp.duration),
-            'location': exp.bundle.location if exp.bundle else None
-        } for exp in experiences]
-
         return jsonify({'experiences': [exp.to_dict() for exp in experiences]}), 200
-
     except Exception as e:
         print(f"Error in get_experiences: {e}")
         return jsonify({'error': 'Failed to fetch experiences'}), 500
@@ -41,7 +30,7 @@ def get_experience(experience_id):
 @require_admin
 def update_experience(experience_id):
     experience = Experience.query.get_or_404(experience_id)
-    data = request.json()
+    data = request.json
 
     if 'title' in data:
         experience.title = data['title']
