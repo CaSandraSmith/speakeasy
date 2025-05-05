@@ -16,6 +16,7 @@ import Constants from "expo-constants";
 import { Experience } from "../../types";
 import { COLORS } from "../../constants/colors";
 import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
+import { Ionicons } from "@expo/vector-icons";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
@@ -75,7 +76,7 @@ export default function ShowExperience() {
   const handleBookPress = () => {
     if (experience) {
       router.push({
-        pathname: "/(stack)/bookingInfo",
+        pathname: "/(stack)/experience/bookingInfo",
         // params: { 
         //   id: experience.id.toString(),
         //   title: experience.title,
@@ -87,6 +88,12 @@ export default function ShowExperience() {
 
   return (
     <View style={styles.screen}>
+        {/* <TouchableOpacity
+          className="p-1"
+          onPress={() => router.back()}
+        >
+          <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
+        </TouchableOpacity> */}
       <FlatList
         data={experience.reviews}
         keyExtractor={(item) => item.id.toString()}
