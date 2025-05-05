@@ -195,12 +195,16 @@ class Booking(db.Model):
     number_of_guests = db.Column(db.Integer, nullable=False)
     confirmation_code = db.Column(db.String(50), nullable=False)
     bundle_id = db.Column(db.Integer, db.ForeignKey('bundles.id'))
+    status = db.Column(db.String(50), default='pending')
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationships with back_populates
     user = db.relationship('User', back_populates='bookings')
     experience = db.relationship('Experience', back_populates='bookings')
     bundle = db.relationship('Bundle', back_populates='bookings')
     payments = db.relationship('Payment', back_populates='booking')
+    reservations = db.relationship('Reservation', back_populates='booking', cascade='all, delete-orphan')
+
 
     def to_dict(self):
         return {
@@ -209,9 +213,34 @@ class Booking(db.Model):
             'experience_id': self.experience_id,
             'number_of_guests': self.number_of_guests,
             'confirmation_code': self.confirmation_code,
-            'bundle_id': self.bundle_id
+            'bundle_id': self.bundle_id,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'reservations': [reservation.to_dict() for reservation in self.reservations],
         }
 
+class Reservation(db.Model):
+    __tablename__ = 'reservations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False)
+    date = db.Column(db.date, nullable=False)
+    time_slot = db.Column(db.Time, nullable=False)
+    status = db.Column(db.String(50), default='pending')
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Relationship
+    booking = db.relationship('Booking', back_populates='reservations')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'booking_id': self.booking_id,
+            'date': self.date.isoformat() if self.date else None,
+            'time_slot': self.time_slot.isoformat() if self.time_slot else None,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
 
 
 class Payment(db.Model):

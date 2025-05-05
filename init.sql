@@ -86,8 +86,19 @@ CREATE TABLE bookings (
   confirmation_code VARCHAR(50),
   bundle_id INTEGER,
   FOREIGN KEY (experience_id) REFERENCES experiences(id),
-  FOREIGN KEY (bundle_id) REFERENCES bundles(id)
+  FOREIGN KEY (bundle_id) REFERENCES bundles(id),
+  status VARCHAR(50) DEFAULT 'Pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 );
+
+CREATE TABLE reservations (
+  id SERIAL PRIMARY KEY,
+  booking_id INTEGER REFERENCES bookings(id) on DELETE CASCADE,
+  date DATE NOT NULL,
+  time_slot TIME NOT NULL,
+  status VARCHAR(50) DEFAULT 'Pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+)
 
 CREATE TABLE payments (
   id SERIAL PRIMARY KEY,
