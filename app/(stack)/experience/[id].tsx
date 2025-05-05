@@ -16,15 +16,9 @@ import Constants from "expo-constants";
 import { Experience } from "../../types";
 import { COLORS } from "../../constants/colors";
 import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { useAuthFetch } from "@/context/userContext";
-=======
 import { Ionicons } from "@expo/vector-icons";
->>>>>>> 501f2a6 (draft bookings page)
-=======
-import { Ionicons } from "@expo/vector-icons";
->>>>>>> 4f9feeb614b0a7c60e3089425ab84c342e9a5b4e
+
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
@@ -83,7 +77,7 @@ export default function ShowExperience() {
   const handleBookPress = () => {
     if (experience) {
       router.push({
-        pathname: "/(stack)/experience/bookingInfo",
+        pathname: "/(stack)/experience/createBooking",
         params: { 
           id: experience.id.toString(),
           title: experience.title,
