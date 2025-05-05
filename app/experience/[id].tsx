@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
   Image,
   Pressable,
-  FlatList
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
 import { Experience } from "../types";
@@ -24,7 +25,7 @@ export default function ShowExperience() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const formatTime = (time: string | undefined) => {
-    if (!time) return ""
+    if (!time) return "";
     // Convert the ISO 8601 time string (e.g., "14:30:00") into a 12-hour AM/PM format
     const date = new Date(`1970-01-01T${time}Z`); // Use a fixed date to parse the time
     const hours = date.getHours();
@@ -70,101 +71,138 @@ export default function ShowExperience() {
   }
 
   return (
-    <FlatList
-  data={experience.reviews}
-  keyExtractor={(item) => item.id.toString()}
-  ListHeaderComponent={() => (
-    <View>
-      {experience.images?.[0] && (
-        <Pressable
-          style={styles.imageWrapper}
-          onPress={() => setModalVisible(true)}
-        >
-          <Image
-            source={{ uri: experience.images[0].image_url }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-          <View style={styles.imagesTextWrapper}>
-            <Text style={styles.imagesText}>
-              {experience.images?.length} image
-              {experience.images?.length === 1 ? "" : "s"}
-            </Text>
+    <View style={styles.screen}>
+      <FlatList
+        data={experience.reviews}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={() => (
+          <View>
+            {experience.images?.[0] && (
+              <Pressable
+                style={styles.imageWrapper}
+                onPress={() => setModalVisible(true)}
+              >
+                <Image
+                  source={{ uri: experience.images[0].image_url }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+                <View style={styles.imagesTextWrapper}>
+                  <Text style={styles.imagesText}>
+                    {experience.images?.length} image
+                    {experience.images?.length === 1 ? "" : "s"}
+                  </Text>
+                </View>
+              </Pressable>
+            )}
+
+            <View style={styles.header}>
+              <Text style={styles.title}>{experience.title}</Text>
+              <Text style={styles.location}>{experience.location}</Text>
+            </View>
+
+            <View style={styles.tagsContainer}>
+              {experience.tags?.map((tag) => (
+                <View key={tag.id} style={styles.tag}>
+                  <Text style={styles.tagText}>{tag.name}</Text>
+                </View>
+              ))}
+            </View>
+
+            <Text style={styles.description}>{experience.description}</Text>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.label}>Operating Hours:</Text>
+              <Text style={styles.daysText}>
+                {experience.schedule?.days_of_week}
+              </Text>
+              <Text style={styles.timeText}>
+                {formatTime(experience.schedule?.start_time)} -{" "}
+                {formatTime(experience.schedule?.end_time)}
+              </Text>
+            </View>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.label}>Price:</Text>
+              <Text style={styles.value}>${experience.price}</Text>
+            </View>
+
+            <Text style={styles.reviewHeader}>Reviews</Text>
+
+            <ImageCaroselModal
+              visibility={modalVisible}
+              setVisibility={setModalVisible}
+              images={experience.images || []}
+            />
           </View>
-        </Pressable>
-      )}
-
-      <View style={styles.header}>
-        <Text style={styles.title}>{experience.title}</Text>
-        <Text style={styles.location}>{experience.location}</Text>
-      </View>
-
-      <View style={styles.tagsContainer}>
-        {experience.tags?.map((tag) => (
-          <View key={tag.id} style={styles.tag}>
-            <Text style={styles.tagText}>{tag.name}</Text>
+        )}
+        renderItem={({ item }) => (
+          <View style={styles.reviewCard}>
+            <Text style={styles.reviewerName}>{item.user_name}</Text>
+            <View style={styles.rating}>
+              {[...Array(5)].map((_, index) => (
+                <Text
+                  key={index}
+                  style={[
+                    styles.star,
+                    index < item.rating ? styles.filledStar : styles.emptyStar,
+                  ]}
+                >
+                  ★
+                </Text>
+              ))}
+            </View>
+            <Text style={styles.reviewContent}>{item.comment}</Text>
           </View>
-        ))}
-      </View>
-
-      <Text style={styles.description}>{experience.description}</Text>
-
-      <View style={styles.infoRow}>
-        <Text style={styles.label}>Operating Hours:</Text>
-        <Text style={styles.daysText}>{experience.schedule?.days_of_week}</Text>
-        <Text style={styles.timeText}>
-          {formatTime(experience.schedule?.start_time)} - {formatTime(experience.schedule?.end_time)}
-        </Text>
-      </View>
-
-      <View style={styles.infoRow}>
-        <Text style={styles.label}>Price:</Text>
-        <Text style={styles.value}>${experience.price}</Text>
-      </View>
-
-      <Text style={styles.reviewHeader}>Reviews</Text>
-
-      <ImageCaroselModal
-        visibility={modalVisible}
-        setVisibility={setModalVisible}
-        images={experience.images || []}
-      />
-    </View>
-  )}
-  renderItem={({ item }) => (
-    <View style={styles.reviewCard}>
-      <Text style={styles.reviewerName}>{item.user_name}</Text>
-      <View style={styles.rating}>
-        {[...Array(5)].map((_, index) => (
-          <Text
-            key={index}
-            style={[
-              styles.star,
-              index < item.rating ? styles.filledStar : styles.emptyStar,
-            ]}
-          >
-            ★
+        )}
+        ListEmptyComponent={
+          <Text style={{ padding: 20, color: COLORS.secondaryText }}>
+            No reviews yet.
           </Text>
-        ))}
-      </View>
-      <Text style={styles.reviewContent}>{item.comment}</Text>
-    </View>
-  )}
-  ListEmptyComponent={
-    <Text style={{ padding: 20, color: COLORS.secondaryText }}>
-      No reviews yet.
-    </Text>
-  }
-  contentContainerStyle={styles.container}
-/>
+        }
+        contentContainerStyle={styles.container}
+      />
 
-  )
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.bookButton}>
+          <Text style={styles.bookButtonText}>Book</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    justifyContent: "space-between",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: COLORS.background,
+    padding: 20,
+    paddingBottom: 25,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.accent,
+  },
+  bookButton: {
+    backgroundColor: COLORS.accent,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  bookButtonText: {
+    color: "#1A1A1A",
+    fontSize: 18,
+    fontWeight: "600",
+  },
   container: {
     backgroundColor: COLORS.background,
-    paddingBottom: 30,
+    paddingBottom: 100,
   },
   content: {
     paddingBottom: 30,
@@ -280,7 +318,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     borderWidth: 1,
     borderColor: "#323840", // A soft contrasting border
-  },  
+  },
   reviewerName: {
     fontSize: 18,
     fontWeight: "600",
@@ -314,7 +352,5 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.secondaryText,
-  }
-  
+  },
 });
-
