@@ -26,7 +26,7 @@ bundles = [
 ]
 
 experiences = [
-    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower', location='Paris', price=59.99),
+    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower', location='Paris', price=59.99),
     Experience(title='Sushi Workshop', description='Learn to make sushi with a master chef', location='Tokyo', price=89.99),
     Experience(title='Statue of Liberty Tour', description='Visit the iconic Statue of Liberty and Ellis Island.', location='New York', price=49.99),
     Experience(title='Central Park Bike Tour', description='Explore Central Park on a bike with a local guide.', location='New York', price=29.99),
@@ -37,14 +37,17 @@ experiences = [
 ]
 
 experience_images = [
-    ExperienceImage(experience_id=1, image_url='https://example.com/eiffel.jpg'),
-    ExperienceImage(experience_id=2, image_url='https://example.com/sushi.jpg'),
-    ExperienceImage(experience_id=3, image_url='https://example.com/statue.jpg'),
-    ExperienceImage(experience_id=4, image_url='https://example.com/bike.jpg'),
-    ExperienceImage(experience_id=5, image_url='https://example.com/hollywood.jpg'),
-    ExperienceImage(experience_id=6, image_url='https://example.com/universal.jpg'),
-    ExperienceImage(experience_id=7, image_url='https://example.com/river.jpg'),
-    ExperienceImage(experience_id=8, image_url='https://example.com/art.jpg'),
+    ExperienceImage(experience_id=1, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=1, image_url='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww'),
+    ExperienceImage(experience_id=1, image_url='https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg'),
+    ExperienceImage(experience_id=1, image_url='https://static.vecteezy.com/system/resources/thumbnails/037/248/582/small/ai-generated-travelling-to-thailand-advertisment-background-with-copy-space-free-photo.jpg'),
+    ExperienceImage(experience_id=2, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=3, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=4, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=5, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=6, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=7, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=8, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
 ]
 
 bookings = [
@@ -95,6 +98,10 @@ tags = [
 
 experience_tags = [
     {'experience_id': 1, 'tag_id': 1},
+    {'experience_id': 1, 'tag_id': 2},
+    {'experience_id': 1, 'tag_id': 3},
+    {'experience_id': 1, 'tag_id': 4},
+    {'experience_id': 1, 'tag_id': 5},
     {'experience_id': 2, 'tag_id': 2},
     {'experience_id': 3, 'tag_id': 3},
     {'experience_id': 4, 'tag_id': 4},
