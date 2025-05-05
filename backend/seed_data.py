@@ -26,7 +26,7 @@ bundles = [
 ]
 
 experiences = [
-    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower', location='Paris', price=59.99),
+    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower Guided tour of Eiffel Tower', location='Paris', price=59.99),
     Experience(title='Sushi Workshop', description='Learn to make sushi with a master chef', location='Tokyo', price=89.99),
     Experience(title='Statue of Liberty Tour', description='Visit the iconic Statue of Liberty and Ellis Island.', location='New York', price=49.99),
     Experience(title='Central Park Bike Tour', description='Explore Central Park on a bike with a local guide.', location='New York', price=29.99),
@@ -98,6 +98,10 @@ tags = [
 
 experience_tags = [
     {'experience_id': 1, 'tag_id': 1},
+    {'experience_id': 1, 'tag_id': 2},
+    {'experience_id': 1, 'tag_id': 3},
+    {'experience_id': 1, 'tag_id': 4},
+    {'experience_id': 1, 'tag_id': 5},
     {'experience_id': 2, 'tag_id': 2},
     {'experience_id': 3, 'tag_id': 3},
     {'experience_id': 4, 'tag_id': 4},

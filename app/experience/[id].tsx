@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,15 +7,13 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  Modal,
   Image,
   Pressable,
-  TouchableOpacity,
-  TouchableWithoutFeedback
 } from "react-native";
 import Constants from "expo-constants";
 import { Experience, ExperienceImage } from "../types";
 import { COLORS } from "../constants/colors";
+import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
@@ -25,6 +23,21 @@ export default function ShowExperience() {
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
+  const formatTime = (time: string | undefined) => {
+    if (!time) return ""
+    // Convert the ISO 8601 time string (e.g., "14:30:00") into a 12-hour AM/PM format
+    const date = new Date(`1970-01-01T${time}Z`); // Use a fixed date to parse the time
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Determine AM/PM and convert the hours to 12-hour format
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const hour12 = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+    const minute = minutes < 10 ? `0${minutes}` : minutes; // Add leading zero if necessary
+
+    return `${hour12}:${minute} ${ampm}`;
+  };
 
   useEffect(() => {
     const fetchExperience = async () => {
@@ -61,14 +74,20 @@ export default function ShowExperience() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Top Image */}
       {experience.images?.[0] && (
-        <Pressable style={styles.imageWrapper} onPress={() => setModalVisible(true)}>
+        <Pressable
+          style={styles.imageWrapper}
+          onPress={() => setModalVisible(true)}
+        >
           <Image
             source={{ uri: experience.images[0].image_url }}
             style={styles.image}
             resizeMode="cover"
           />
           <View style={styles.imagesTextWrapper}>
-            <Text style={styles.imagesText}>{experience.images?.length} image{experience.images?.length === 1 ? "": "s"}</Text>
+            <Text style={styles.imagesText}>
+              {experience.images?.length} image
+              {experience.images?.length === 1 ? "" : "s"}
+            </Text>
           </View>
         </Pressable>
       )}
@@ -93,10 +112,14 @@ export default function ShowExperience() {
 
       {/* Schedule & Price */}
       <View style={styles.infoRow}>
-        <Text style={styles.label}>Schedule:</Text>
-        <Text style={styles.value}>
-          {experience.schedule?.days_of_week} from{" "}
-          {experience.schedule?.start_time} - {experience.schedule?.end_time}
+        <Text style={styles.label}>Operating Hours:</Text>
+
+        {/* Days of the week on a separate line */}
+        <Text style={styles.daysText}>{experience.schedule?.days_of_week}</Text>
+
+        {/* Time displayed separately */}
+        <Text style={styles.timeText}>
+          {formatTime(experience.schedule?.start_time)} - {formatTime(experience.schedule?.end_time)}
         </Text>
       </View>
 
@@ -105,83 +128,16 @@ export default function ShowExperience() {
         <Text style={styles.value}>${experience.price}</Text>
       </View>
 
+      {/* Reviews */}
+
+
       {/* Image Modal */}
-      <ImageModal
+      <ImageCaroselModal
         visibility={modalVisible}
         setVisibility={setModalVisible}
         images={experience.images || []}
-        selectedImageIndex={selectedImageIndex}
-        setSelectedImageIndex={setSelectedImageIndex}
       />
     </ScrollView>
-  );
-}
-
-interface Props {
-  visibility: boolean;
-  setVisibility: Dispatch<SetStateAction<boolean>>;
-  images: ExperienceImage[];
-  selectedImageIndex: number;
-  setSelectedImageIndex: Dispatch<SetStateAction<number>>
-}
-
-function ImageModal({
-  visibility,
-  setVisibility,
-  images,
-  selectedImageIndex,
-  setSelectedImageIndex,
-}: Props) {
-  if (!images || images.length === 0) return null;
-
-  const currentImage = images[selectedImageIndex];
-
-  const handleNext = () => {
-    setSelectedImageIndex(prevIndex => // No need to specify type here as TypeScript already infers it
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-  
-  const handlePrevious = () => {
-    setSelectedImageIndex(prevIndex => 
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleClose = () => {
-    console.log("close button pressed")
-    setVisibility(false)
-  }
-
-  return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={visibility}
-      onRequestClose={handleClose}
-    >
-      <TouchableWithoutFeedback onPress={handleClose}>
-      <View style={modalStyles.centeredView}>
-
-        {/* Image Carousel */}
-        <Image
-          source={{ uri: currentImage.image_url }}
-          style={modalStyles.modalImage}
-          resizeMode="contain"
-        />
-
-        {/* Navigation Buttons */}
-        <View style={modalStyles.navigationButtons}>
-          <Pressable style={modalStyles.navButton} onPress={handlePrevious}>
-            <Text style={modalStyles.navButtonText}>{"<"}</Text>
-          </Pressable>
-          <Pressable style={modalStyles.navButton} onPress={handleNext}>
-            <Text style={modalStyles.navButtonText}>{">"}</Text>
-          </Pressable>
-        </View>
-      </View>
-      </TouchableWithoutFeedback>
-    </Modal>
   );
 }
 
@@ -204,7 +160,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   imageWrapper: {
-    position: "relative"
+    position: "relative",
   },
   imagesTextWrapper: {
     position: "absolute",
@@ -264,15 +220,27 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   infoRow: {
-    flexDirection: "row",
+    flexDirection: "column", // Stack the label, days, and time vertically
+    marginTop: 20, // Optional: Add space between info rows
     justifyContent: "space-between",
     paddingHorizontal: 20,
-    marginTop: 20,
   },
   label: {
     fontSize: 16,
-    color: COLORS.secondaryText,
     fontWeight: "600",
+    color: COLORS.secondaryText,
+  },
+  daysText: {
+    fontSize: 16,
+    color: COLORS.primaryText,
+    marginTop: 5, // Space between days and label
+    fontWeight: "500", // Optional: You could make it lighter than the time
+  },
+  timeText: {
+    fontSize: 16,
+    color: COLORS.primaryText,
+    marginTop: 5, // Space between time and days
+    fontWeight: "600", // You can make the time slightly bolder than the days
   },
   value: {
     fontSize: 16,
@@ -281,43 +249,3 @@ const styles = StyleSheet.create({
   },
 });
 
-const modalStyles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent background to focus on the modal
-    position: "relative"
-  },
-  modalImage: {
-    width: "90%", // Width of the image in the modal
-    height: "80%", // Height of the image in the modal
-  },
-  closeText: {
-    color: "white",
-    fontSize: 16,
-  },
-  navigationButtons: {
-    position: "absolute",
-    top: "50%", // Center vertically
-    marginTop: -30, // Adjust based on the height of your buttons
-    flexDirection: "row",
-    justifyContent: "space-between", // Center horizontally
-    width: "100%",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  navButton: {
-    width: 50,  // Ensure equal width and height to make it circular
-    height: 50, // Equal height to make the button circular
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: 25, // Half of width/height to make the button circular
-    justifyContent: "center",
-    alignItems: "center", // Center the text inside the button
-    marginHorizontal: 10,  // Add space between the buttons
-  },
-  navButtonText: {
-    color: "white",
-    fontSize: 24, // Slightly larger font size for better visibility
-  },
-});
