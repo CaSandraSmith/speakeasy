@@ -39,8 +39,7 @@ export default function TabBarButton(props: TabBarButtonProps) {
     };
   });
 
-  // Using your travel app color palette with better contrast
-  const color = isFocused ? '#D6BD98' : '#DCD7C9'; // textSecondary for active, textPrimary for inactive
+  const color = isFocused ? '#D6BD98' : '#DCD7C9';
 
   return (
     <Pressable
