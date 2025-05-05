@@ -10,6 +10,7 @@ import {
   Pressable,
   FlatList,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import Constants from "expo-constants";
 import { Experience } from "../types";
@@ -215,7 +216,9 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width,
-    height: 300,
+    // height: 300,
+    aspectRatio: 4 / 3,
+    maxHeight: Platform.OS === "web" ? 400 : undefined,
   },
   imageWrapper: {
     position: "relative",
