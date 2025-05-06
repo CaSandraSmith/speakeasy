@@ -14,7 +14,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 
-export default function BookingInfo() {
+export default function createBooking() {
   const router = useRouter();
   const { id, title, imageUrl } = useLocalSearchParams();
   

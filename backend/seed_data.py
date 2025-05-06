@@ -40,170 +40,157 @@ bundles = [
 
 experiences = [
     # Space & Aviation
-    Experience(title='Zero Gravity Space Training', description='Experience astronaut training and zero gravity flight with Space Adventures', location='Star City, Russia', price=24999.99),
-    Experience(title='Black Origin Space Experience', description='11-minute suborbital flight to the edge of space, crossing the Kármán line with several minutes of weightlessness', location='West Texas, USA', price=450000.00),
-    Experience(title='Private SpaceX Launch Viewing', description='VIP access to witness a SpaceX rocket launch with meet & greet with engineers', location='Cape Canaveral, USA', price=15000.00),
+    Experience(title='Zero Gravity Space Training', description='Experience astronaut training and zero gravity flight with Space Adventures', location='Star City, Russia', price=24999.99),  # ID: 1
+    Experience(title='Black Origin Space Experience', description='11-minute suborbital flight to the edge of space, crossing the Kármán line with several minutes of weightlessness', location='West Texas, USA', price=450000.00),  # ID: 2
+    Experience(title='Private SpaceX Launch Viewing', description='VIP access to witness a SpaceX rocket launch with meet & greet with engineers', location='Cape Canaveral, USA', price=15000.00),  # ID: 3
     
     # Underwater Experiences
-    Experience(title='Submarine Expedition to Titanic', description='Dive to the Titanic wreck in a private submersible with oceanographers', location='North Atlantic Ocean', price=250000.00),
-    Experience(title='Mermaid Legend Expedition', description='Multi-day luxury yacht journey to explore ancient mermaid legend sites with marine biologists', location='Greek Islands, Mediterranean Sea', price=18000.00),
-    Experience(title='Private Underwater Restaurant', description='Exclusive dining experience 16 feet underwater in the Maldives', location='Conrad Maldives', price=3500.00),
+    Experience(title='Submarine Expedition to Titanic', description='Dive to the Titanic wreck in a private submersible with oceanographers', location='North Atlantic Ocean', price=250000.00),  # ID: 4
+    Experience(title='Mermaid Legend Expedition', description='Multi-day luxury yacht journey to explore ancient mermaid legend sites with marine biologists', location='Greek Islands, Mediterranean Sea', price=18000.00),  # ID: 5
+    Experience(title='Private Underwater Restaurant', description='Exclusive dining experience 16 feet underwater in the Maldives', location='Conrad Maldives', price=3500.00),  # ID: 6
     
     # Arctic & Antarctic
-    Experience(title='North Pole Expedition', description='Reach the geographic North Pole by nuclear icebreaker', location='Arctic Ocean', price=35000.00),
-    Experience(title='Emperor Penguin Safari', description='Private helicopter expedition to remote Emperor penguin colonies', location='Antarctica', price=45000.00),
-    Experience(title='Arctic Ice Hotel Suite', description='Stay in a luxury ice suite with Northern Lights viewing', location='Jukkasjärvi, Sweden', price=2800.00),
+    Experience(title='North Pole Expedition', description='Reach the geographic North Pole by nuclear icebreaker', location='Arctic Ocean', price=35000.00),  # ID: 7
+    Experience(title='Emperor Penguin Safari', description='Private helicopter expedition to remote Emperor penguin colonies', location='Antarctica', price=45000.00),  # ID: 8
+    Experience(title='Arctic Ice Hotel Suite', description='Stay in a luxury ice suite with Northern Lights viewing', location='Jukkasjärvi, Sweden', price=2800.00),  # ID: 9
     
     # Extreme Adventures
-    Experience(title='Everest Base Camp Helicopter', description='Private helicopter tour to Everest Base Camp with champagne breakfast', location='Nepal', price=7500.00),
-    Experience(title='Volcano Lava Lake Descent', description='Rappel into an active volcano with volcanologists', location='Marum Crater, Vanuatu', price=15000.00),
-    Experience(title='Supersonic Fighter Pilot', description='Fly and control an L-39 fighter jet breaking the sound barrier', location='Las Vegas, USA', price=22000.00),
+    Experience(title='Everest Base Camp Helicopter', description='Private helicopter tour to Everest Base Camp with champagne breakfast', location='Nepal', price=7500.00),  # ID: 10
+    Experience(title='Volcano Lava Lake Descent', description='Rappel into an active volcano with volcanologists', location='Marum Crater, Vanuatu', price=15000.00),  # ID: 11
+    Experience(title='Supersonic Fighter Pilot', description='Fly and control an L-39 fighter jet breaking the sound barrier', location='Las Vegas, USA', price=22000.00),  # ID: 12
     
     # Cultural & Historical
-    Experience(title='After Hours Louvre', description='Private evening tour of the Louvre with curator and champagne dinner', location='Paris, France', price=12000.00),
-    Experience(title='Forbidden City Private Access', description='Exclusive access to normally restricted areas with imperial historian', location='Beijing, China', price=8500.00),
-    Experience(title='Vatican Secret Archives', description="Rare access to Vatican's secret archives with personal guide", location='Vatican City', price=15000.00),
+    Experience(title='After Hours Louvre', description='Private evening tour of the Louvre with curator and champagne dinner', location='Paris, France', price=12000.00),  # ID: 13
+    Experience(title='Forbidden City Private Access', description='Exclusive access to normally restricted areas with imperial historian', location='Beijing, China', price=8500.00),  # ID: 14
+    Experience(title='Vatican Secret Archives', description="Rare access to Vatican's secret archives with personal guide", location='Vatican City', price=15000.00),  # ID: 15
     
     # Wildlife & Safari
-    Experience(title='Gorilla Family Adoption', description='Spend a week with researchers and adopt a gorilla family', location='Volcanoes National Park, Rwanda', price=50000.00),
-    Experience(title='Private Island Tiger Reserve', description='Exclusive stay at private tiger conservation island', location='Ranthambore, India', price=18000.00),
-    Experience(title='Whale Migration by Yacht', description='Follow blue whale migration on luxury research vessel', location='Sri Lanka to Antarctica', price=75000.00),
+    Experience(title='Gorilla Family Adoption', description='Spend a week with researchers and adopt a gorilla family', location='Volcanoes National Park, Rwanda', price=50000.00),  # ID: 16
+    Experience(title='Private Island Tiger Reserve', description='Exclusive stay at private tiger conservation island', location='Ranthambore, India', price=18000.00),  # ID: 17
+    Experience(title='Whale Migration by Yacht', description='Follow blue whale migration on luxury research vessel', location='Sri Lanka to Antarctica', price=75000.00),  # ID: 18
     
     # Culinary Excellence
-    Experience(title='World Chef Tour', description='Private jet tour dining with 10 Michelin star chefs worldwide', location='Global', price=150000.00),
-    Experience(title='Truffle Hunt & Castle Dinner', description='Hunt white truffles with expert and private dinner in Italian castle', location='Alba, Italy', price=12000.00),
-    Experience(title='Underwater Wine Cellar', description='Dive to retrieve aged wine from underwater cellar, followed by tasting', location='Corsica, France', price=8000.00),
+    Experience(title='World Chef Tour', description='Private jet tour dining with 10 Michelin star chefs worldwide', location='Global', price=150000.00),  # ID: 19
+    Experience(title='Truffle Hunt & Castle Dinner', description='Hunt white truffles with expert and private dinner in Italian castle', location='Alba, Italy', price=12000.00),  # ID: 20
+    Experience(title='Underwater Wine Cellar', description='Dive to retrieve aged wine from underwater cellar, followed by tasting', location='Corsica, France', price=8000.00),  # ID: 21
     
     # Entertainment & Celebrity
-    Experience(title='Hollywood Movie Set Access', description='Spend a day on set of major Hollywood production as VIP guest', location='Los Angeles, USA', price=25000.00),
-    Experience(title='Formula 1 Driver Experience', description='Drive an actual F1 car with professional training and pit crew', location='Silverstone, UK', price=35000.00),
-    Experience(title='Private Concert Series', description='Commission private performances from Grammy-winning artists', location='Your Choice', price=500000.00),
+    Experience(title='Hollywood Movie Set Access', description='Spend a day on set of major Hollywood production as VIP guest', location='Los Angeles, USA', price=25000.00),  # ID: 22
+    Experience(title='Formula 1 Driver Experience', description='Drive an actual F1 car with professional training and pit crew', location='Silverstone, UK', price=35000.00),  # ID: 23
+    Experience(title='Private Concert Series', description='Commission private performances from Grammy-winning artists', location='Your Choice', price=500000.00),  # ID: 24
     
     # Archaeology & Discovery
-    Experience(title='Egyptian Tomb Opening', description='Witness the opening of newly discovered tomb with archaeologists', location='Valley of the Kings, Egypt', price=100000.00),
-    Experience(title='Machu Picchu at Sunrise', description='Private access to Machu Picchu before opening with archaeologist', location='Peru', price=5000.00),
-    Experience(title='Lost City Expedition', description='Join archaeological team searching for lost Mayan city', location='Guatemala Jungle', price=30000.00),
+    Experience(title='Egyptian Tomb Opening', description='Witness the opening of newly discovered tomb with archaeologists', location='Valley of the Kings, Egypt', price=100000.00),  # ID: 25
+    Experience(title='Machu Picchu at Sunrise', description='Private access to Machu Picchu before opening with archaeologist', location='Peru', price=5000.00),  # ID: 26
+    Experience(title='Lost City Expedition', description='Join archaeological team searching for lost Mayan city', location='Guatemala Jungle', price=30000.00),  # ID: 27
     
     # Luxury Transport
-    Experience(title='Orient Express Full Journey', description='Venice to Istanbul on restored Orient Express with butler service', location='Europe', price=25000.00),
-    Experience(title='Nuclear Submarine Tour', description='Exclusive tour and overnight stay on decommissioned nuclear sub', location='San Diego, USA', price=15000.00),
-    Experience(title='Concorde Flight Simulator', description='Fly the Concorde in professional simulator with retired captain', location='London, UK', price=3500.00),
+    Experience(title='Orient Express Full Journey', description='Venice to Istanbul on restored Orient Express with butler service', location='Europe', price=25000.00),  # ID: 28
+    Experience(title='Nuclear Submarine Tour', description='Exclusive tour and overnight stay on decommissioned nuclear sub', location='San Diego, USA', price=15000.00),  # ID: 29
+    Experience(title='Concorde Flight Simulator', description='Fly the Concorde in professional simulator with retired captain', location='London, UK', price=3500.00),  # ID: 30
     
     # Art & Creativity
-    Experience(title='Timeless Brushstrokes: Paint With the Masters', description='Step inside an exclusive studio to co-create art with your favorite artist—past or present—in a once-in-a-lifetime immersive experience', location='London, UK', price=200000.00),
-    Experience(title='Sistine Chapel Restoration', description='Participate in actual restoration work with Vatican conservators', location='Vatican City', price=50000.00),
-    Experience(title='Private Hermitage After Dark', description='Exclusive night tour of Hermitage Museum with curator', location='St. Petersburg, Russia', price=15000.00),
+    Experience(title='Timeless Brushstrokes: Paint With the Masters', description='Step inside an exclusive studio to co-create art with your favorite artist—past or present—in a once-in-a-lifetime immersive experience', location='London, UK', price=200000.00),  # ID: 31
+    Experience(title='Sistine Chapel Restoration', description='Participate in actual restoration work with Vatican conservators', location='Vatican City', price=50000.00),  # ID: 32
+    Experience(title='Private Hermitage After Dark', description='Exclusive night tour of Hermitage Museum with curator', location='St. Petersburg, Russia', price=15000.00),  # ID: 33
     
     # Scientific Exploration
-    Experience(title='CERN Particle Accelerator', description='Behind-the-scenes tour of Large Hadron Collider with physicists', location='Geneva, Switzerland', price=8000.00),
-    Experience(title='NASA Mission Control', description='Spend a day in Mission Control during active space mission', location='Houston, USA', price=20000.00),
-    Experience(title='Deep Sea Research Mission', description='Join marine biologists on deep sea exploration mission', location='Mariana Trench', price=85000.00),
+    Experience(title='CERN Particle Accelerator', description='Behind-the-scenes tour of Large Hadron Collider with physicists', location='Geneva, Switzerland', price=8000.00),  # ID: 34
+    Experience(title='NASA Mission Control', description='Spend a day in Mission Control during active space mission', location='Houston, USA', price=20000.00),  # ID: 35
+    Experience(title='Deep Sea Research Mission', description='Join marine biologists on deep sea exploration mission', location='Mariana Trench', price=85000.00),  # ID: 36
     
     # Royal & Nobility
-    Experience(title='Scottish Castle Ownership', description='Be lord/lady of Scottish castle for a week with full staff', location='Scottish Highlands', price=50000.00),
-    Experience(title='Royal Palace Dinner', description='Private dinner in Versailles Hall of Mirrors with orchestra', location='Versailles, France', price=30000.00),
-    Experience(title='Monaco Grand Prix Yacht', description="Watch Monaco GP from prince's private yacht with royalty", location='Monte Carlo, Monaco', price=75000.00),
+    Experience(title='Scottish Castle Ownership', description='Be lord/lady of Scottish castle for a week with full staff', location='Scottish Highlands', price=50000.00),  # ID: 37
+    Experience(title='Royal Palace Dinner', description='Private dinner in Versailles Hall of Mirrors with orchestra', location='Versailles, France', price=30000.00),  # ID: 38
+    Experience(title='Monaco Grand Prix Yacht', description="Watch Monaco GP from prince's private yacht with royalty", location='Monte Carlo, Monaco', price=75000.00),  # ID: 39
     
     # Extreme Luxury
-    Experience(title='Private Island Buyout', description='Exclusive use of entire private island resort for a week', location='Fiji', price=250000.00),
-    Experience(title='Supersonic Private Jet', description='Cross Atlantic on supersonic business jet prototype', location='New York to London', price=50000.00),
-    Experience(title='Diamond Mine Experience', description='Mine your own diamonds with experts in restricted mine', location='Kimberley, South Africa', price=40000.00),
+    Experience(title='Private Island Buyout', description='Exclusive use of entire private island resort for a week', location='Fiji', price=250000.00),  # ID: 40
+    Experience(title='Supersonic Private Jet', description='Cross Atlantic on supersonic business jet prototype', location='New York to London', price=50000.00),  # ID: 41
+    Experience(title='Diamond Mine Experience', description='Mine your own diamonds with experts in restricted mine', location='Kimberley, South Africa', price=40000.00),  # ID: 42
     
     # Spiritual & Wellness
-    Experience(title='Himalayan Monastery Retreat', description='Live with Buddhist monks in remote monastery for spiritual journey', location='Bhutan', price=12000.00),
-    Experience(title='Ayahuasca with Shaman', description='Traditional ceremony with renowned shaman in Amazon', location='Peru Amazon', price=8000.00),
-    Experience(title='Dead Sea Healing Retreat', description='Private section of Dead Sea with personal healers', location='Jordan', price=15000.00),
+    Experience(title='Himalayan Monastery Retreat', description='Live with Buddhist monks in remote monastery for spiritual journey', location='Bhutan', price=12000.00),  # ID: 43
+    Experience(title='Ayahuasca with Shaman', description='Traditional ceremony with renowned shaman in Amazon', location='Peru Amazon', price=8000.00),  # ID: 44
+    Experience(title='Dead Sea Healing Retreat', description='Private section of Dead Sea with personal healers', location='Jordan', price=15000.00),  # ID: 45
     
     # Film & TV Experiences
-    Experience(title='Game of Thrones Castle Stay', description='Live in actual GoT filming castle with medieval feast', location='Northern Ireland', price=10000.00),
-    Experience(title='James Bond Experience', description='Drive Bond cars, use gadgets with stunt coordinators', location='London, UK', price=25000.00),
-    Experience(title='Star Wars Set Visit', description='Visit active Star Wars production with meet & greet', location='Pinewood Studios, UK', price=30000.00),
+    Experience(title='Hollywood Movie Set Access', description='Spend a day on set of major Hollywood production as VIP guest', location='Los Angeles, USA', price=25000.00),  # ID: 46
+    Experience(title='James Bond Experience', description='Drive Bond cars, use gadgets with stunt coordinators', location='London, UK', price=25000.00),  # ID: 47
+    Experience(title='Star Wars Set Visit', description='Visit active Star Wars production with meet & greet', location='Pinewood Studios, UK', price=30000.00),  # ID: 48
     
     # Rare Access
-    Experience(title='Area 51 Perimeter Tour', description='Closest legal access to Area 51 with former military guide', location='Nevada, USA', price=5000.00),
-    Experience(title='Chernobyl Exclusion Zone', description='Private tour of Chernobyl with nuclear physicist', location='Pripyat, Ukraine', price=8000.00),
-    Experience(title='North Korea Luxury Tour', description='Exclusive access to areas rarely seen by outsiders', location='Pyongyang, North Korea', price=15000.00),
+    Experience(title='Area 51 Perimeter Tour', description='Closest legal access to Area 51 with former military guide', location='Nevada, USA', price=5000.00),  # ID: 49
+    Experience(title='Chernobyl Exclusion Zone', description='Private tour of Chernobyl with nuclear physicist', location='Pripyat, Ukraine', price=8000.00),  # ID: 50
+    Experience(title='North Korea Luxury Tour', description='Exclusive access to areas rarely seen by outsiders', location='Pyongyang, North Korea', price=15000.00),  # ID: 51
     
     # Music & Performance
-    Experience(title='La Scala Private Box', description='Private box for season at La Scala with backstage access', location='Milan, Italy', price=50000.00),
-    Experience(title='Broadway Show Takeover', description='Rent entire Broadway theater for private performance', location='New York, USA', price=100000.00),
-    Experience(title='Abbey Road Recording', description='Record at Abbey Road Studios with famous producer', location='London, UK', price=25000.00),
-    
-    # Regular Experiences (from first file)
-    Experience(title='Eiffel Tower Visit', description='Guided tour of Eiffel Tower', location='Paris', price=59.99),
-    Experience(title='Sushi Workshop', description='Learn to make sushi with a master chef', location='Tokyo', price=89.99),
-    Experience(title='Statue of Liberty Tour', description='Visit the iconic Statue of Liberty and Ellis Island.', location='New York', price=49.99),
-    Experience(title='Central Park Bike Tour', description='Explore Central Park on a bike with a local guide.', location='New York', price=29.99),
-    Experience(title='Hollywood Sign Hike', description='Hike to the famous Hollywood Sign for stunning views.', location='Los Angeles', price=59.99),
-    Experience(title='Universal Studios Tour', description='Experience the magic of Universal Studios.', location='Los Angeles', price=129.99),
-    Experience(title='Chicago River Cruise', description='Enjoy a scenic cruise on the Chicago River.', location='Chicago', price=39.99),
-    Experience(title='Art Institute Tour', description='Explore one of the best art museums in the world.', location='Chicago', price=49.99),
+    Experience(title='La Scala Private Box', description='Private box for season at La Scala with backstage access', location='Milan, Italy', price=50000.00),  # ID: 52
+    Experience(title='Broadway Show Takeover', description='Rent entire Broadway theater for private performance', location='New York, USA', price=100000.00),  # ID: 53
+    Experience(title='Abbey Road Recording', description='Record at Abbey Road Studios with famous producer', location='London, UK', price=25000.00),  # ID: 54
 ]
 
 experience_images = [
-    ExperienceImage(experience_id=1, image_url='../assets/images/zero-gravity.jpg'),
-    ExperienceImage(experience_id=2, image_url='assets/images/mig-flight.jpg'),
-    ExperienceImage(experience_id=3, image_url='assets/images/spacex-launch.jpg'),
-    ExperienceImage(experience_id=4, image_url='assets/images/titanic-sub.jpg'),
-    ExperienceImage(experience_id=5, image_url='assets/images/mermaid.jpg'),
-    ExperienceImage(experience_id=6, image_url='assets/images/underwater-dining.jpg'),
-    ExperienceImage(experience_id=7, image_url='assets/images/north-pole.jpg'),
-    ExperienceImage(experience_id=8, image_url='assets/images/emperor-penguins.jpg'),
-    ExperienceImage(experience_id=9, image_url='assets/images/ice-hotel.jpg'),
-    ExperienceImage(experience_id=10, image_url='assets/images/everest-helicopter.jpg'),
-    ExperienceImage(experience_id=11, image_url='assets/images/volcano-descent.jpg'),
-    ExperienceImage(experience_id=12, image_url='assets/images/fighter-jet.jpg'),
-    ExperienceImage(experience_id=13, image_url='assets/images/louvre-night.jpg'),
-    ExperienceImage(experience_id=14, image_url='assets/images/forbidden-city.jpg'),
-    ExperienceImage(experience_id=15, image_url='assets/images/vatican-archives.jpg'),
-    ExperienceImage(experience_id=16, image_url='assets/images/gorilla-family.jpg'),
-    ExperienceImage(experience_id=17, image_url='assets/images/tiger-island.jpg'),
-    ExperienceImage(experience_id=18, image_url='assets/images/whale-yacht.jpg'),
-    ExperienceImage(experience_id=19, image_url='assets/images/chef-tour.jpg'),
-    ExperienceImage(experience_id=20, image_url='assets/images/truffle-hunt.jpg'),
-    ExperienceImage(experience_id=21, image_url='assets/images/underwater-wine.jpg'),
-    ExperienceImage(experience_id=22, image_url='assets/images/movie-set.jpg'),
-    ExperienceImage(experience_id=23, image_url='assets/images/f1-car.jpg'),
-    ExperienceImage(experience_id=24, image_url='assets/images/private-concert.jpg'),
-    ExperienceImage(experience_id=25, image_url='assets/images/egypt-tomb.jpg'),
-    ExperienceImage(experience_id=26, image_url='assets/images/machu-picchu.jpg'),
-    ExperienceImage(experience_id=27, image_url='assets/images/lost-city.jpg'),
-    ExperienceImage(experience_id=28, image_url='assets/images/orient-express.jpg'),
-    ExperienceImage(experience_id=29, image_url='assets/images/submarine.jpg'),
-    ExperienceImage(experience_id=30, image_url='assets/images/concorde.jpg'),
-    ExperienceImage(experience_id=31, image_url='assets/images/banksy-studio.jpg'),
-    ExperienceImage(experience_id=32, image_url='assets/images/sistine-chapel.jpg'),
-    ExperienceImage(experience_id=33, image_url='assets/images/hermitage.jpg'),
-    ExperienceImage(experience_id=34, image_url='assets/images/cern.jpg'),
-    ExperienceImage(experience_id=35, image_url='assets/images/mission-control.jpg'),
-    ExperienceImage(experience_id=36, image_url='assets/images/deep-sea.jpg'),
-    ExperienceImage(experience_id=37, image_url='assets/images/scottish-castle.jpg'),
-    ExperienceImage(experience_id=38, image_url='assets/images/versailles.jpg'),
-    ExperienceImage(experience_id=39, image_url='assets/images/monaco-yacht.jpg'),
-    ExperienceImage(experience_id=40, image_url='assets/images/private-island.jpg'),
-    ExperienceImage(experience_id=41, image_url='assets/images/supersonic-jet.jpg'),
-    ExperienceImage(experience_id=42, image_url='assets/images/diamond-mine.jpg'),
-    ExperienceImage(experience_id=43, image_url='assets/images/monastery.jpg'),
-    ExperienceImage(experience_id=44, image_url='assets/images/amazon-shaman.jpg'),
-    ExperienceImage(experience_id=45, image_url='assets/images/dead-sea.jpg'),
-    ExperienceImage(experience_id=46, image_url='assets/images/got-castle.jpg'),
-    ExperienceImage(experience_id=47, image_url='assets/images/james-bond.jpg'),
-    ExperienceImage(experience_id=48, image_url='assets/images/star-wars.jpg'),
-    ExperienceImage(experience_id=49, image_url='assets/images/area-51.jpg'),
-    ExperienceImage(experience_id=50, image_url='assets/images/chernobyl.jpg'),
+    ExperienceImage(experience_id=1, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471082/zero-gravity_kvgjhz.jpg'),
+    ExperienceImage(experience_id=2, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471087/space-flight_fy2wxe.jpg'),
+    ExperienceImage(experience_id=3, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471082/spacex-launch_oz2ufa.jpg'),
+    ExperienceImage(experience_id=4, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471086/titanic-sub_cvzyjy.jpg'),
+    ExperienceImage(experience_id=5, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471083/mermaid_b5yju6.jpg'),
+    ExperienceImage(experience_id=6, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471083/underwater-wine_tbj6wm.jpg'),
+    ExperienceImage(experience_id=7, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477658/north-pole_aqdcly.jpg'),
+    ExperienceImage(experience_id=8, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477656/emperor-penguins_te7ntp.jpg'),
+    ExperienceImage(experience_id=9, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477657/ice-hotel_wpdi6s.jpg'),
+    ExperienceImage(experience_id=10, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471081/everest-helicopter_idvchu.jpg'),
+    ExperienceImage(experience_id=11, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471084/volcano-descent_qwdegg.jpg'),
+    ExperienceImage(experience_id=12, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471080/fighter-jet_gx8flc.jpg'),
+    ExperienceImage(experience_id=13, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477654/louvre-night_lcpoeq.jpg'),
+    ExperienceImage(experience_id=14, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477652/forbidden-city_mqfsjb.jpg'),
+    ExperienceImage(experience_id=15, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477649/vatican-archives_upk1p1.jpg'),
+    ExperienceImage(experience_id=16, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746472372/gorilla-family_yzbljt.jpg'),
+    ExperienceImage(experience_id=17, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477651/tiger-island_teabe9.jpg'),
+    ExperienceImage(experience_id=18, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477929/whale-yacht_fwoltg.jpg'),
+    ExperienceImage(experience_id=19, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477931/chef-tour_ljjsvm.jpg'),
+    ExperienceImage(experience_id=20, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477925/truffle-hunt_e5hmp0.jpg'),
+    ExperienceImage(experience_id=21, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471083/underwater-wine_tbj6wm.jpg'),
+    ExperienceImage(experience_id=22, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471081/movie-set_igmoa5.jpg'),
+    ExperienceImage(experience_id=23, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471084/f1-car_gpei8i.jpg'),
+    ExperienceImage(experience_id=24, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471081/private-concert_qoamru.jpg'),
+    ExperienceImage(experience_id=25, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471085/egypt-tomb_mwbp7f.jpg'),
+    ExperienceImage(experience_id=26, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477928/machu-picchu_y6l1pl.jpg'),
+    ExperienceImage(experience_id=27, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477926/lost-city_f3bfgi.jpg'),
+    ExperienceImage(experience_id=28, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480783/orient-express_jbhmjv.jpg'),
+    ExperienceImage(experience_id=29, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479293/submarine_picehi.jpg.jpg'),
+    ExperienceImage(experience_id=30, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479291/concorde_bwksjy.jpg'),
+    ExperienceImage(experience_id=31, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471086/art-studio_qic3i8.jpg'),
+    ExperienceImage(experience_id=32, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479290/sistine-chapel_wsaf8b.jpg'),
+    ExperienceImage(experience_id=33, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480781/hermitage_xroyzw.jpg'),
+    ExperienceImage(experience_id=34, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480779/cern_njp0km.jpg'),
+    ExperienceImage(experience_id=35, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480777/mission-control_zwosoh.jpg'),
+    ExperienceImage(experience_id=36, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480776/deep-sea_xgbpwl.jpg'),
+    ExperienceImage(experience_id=37, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484611/scottish-castle_cc1c3e.jpg'),
+    ExperienceImage(experience_id=38, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484605/versailles_oshpj2.jpg'),
+    ExperienceImage(experience_id=39, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484609/monaco-yacht_f1cum6.jpg'),
+    ExperienceImage(experience_id=40, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484603/private-island_t22q6z.jpg'),
+    ExperienceImage(experience_id=41, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484607/supersonic-jet_iu15x1.jpg'),
+    ExperienceImage(experience_id=42, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484601/diamond-mine_ptnluo.jpg'),
+    ExperienceImage(experience_id=43, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484599/monastery_lxsv0y.jpg'),
+    ExperienceImage(experience_id=44, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484947/amazon-shaman_rtyw0q.jpg'),
+    ExperienceImage(experience_id=45, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484597/dead-sea_t5hu8c.jpg'),
+    ExperienceImage(experience_id=46, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471081/movie-set_igmoa5.jpg'),
+    ExperienceImage(experience_id=47, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471081/james-bond_kwanl7.jpg'),
+    ExperienceImage(experience_id=48, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484595/star-wars_vcebwu.jpg'),
+    ExperienceImage(experience_id=49, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484592/area-51_kfmp0z.jpg'),
+    ExperienceImage(experience_id=50, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484594/chernobyl_izgxwj.jpg'),
+    ExperienceImage(experience_id=51, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484590/north-korea_tqfhjc.jpg'),
+    ExperienceImage(experience_id=52, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484586/la-scala_thn1p0.jpg'),
+    ExperienceImage(experience_id=53, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484589/broadway_xoly08.jpg'),
+    ExperienceImage(experience_id=54, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746484587/abbey-road_dow2gb.jpg'),
     
     # Adding images for the regular experiences (from first file)
-    ExperienceImage(experience_id=51, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=51, image_url='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww'),
-    ExperienceImage(experience_id=51, image_url='https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg'),
-    ExperienceImage(experience_id=51, image_url='https://static.vecteezy.com/system/resources/thumbnails/037/248/582/small/ai-generated-travelling-to-thailand-advertisment-background-with-copy-space-free-photo.jpg'),
-    ExperienceImage(experience_id=52, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=53, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=54, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=55, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=56, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=57, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
-    ExperienceImage(experience_id=58, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=19, image_url='https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks='),
+    ExperienceImage(experience_id=17, image_url='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww'),
+    ExperienceImage(experience_id=19, image_url='https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg'),
+    ExperienceImage(experience_id=19, image_url='https://static.vecteezy.com/system/resources/thumbnails/037/248/582/small/ai-generated-travelling-to-thailand-advertisment-background-with-copy-space-free-photo.jpg'),
 ]
 
 bookings = [
@@ -278,34 +265,29 @@ experience_schedules = [
     ExperienceSchedule(experience_id=52, start_date='2025-05-02', end_date='2025-05-02', recurring_pattern='None', days_of_week='Tuesday, Thursday', start_time='14:00:00', end_time='16:00:00'),
     ExperienceSchedule(experience_id=53, start_date='2025-05-03', end_date='2025-05-03', recurring_pattern='None', days_of_week='Wednesday, Saturday', start_time='10:00:00', end_time='12:00:00'),
     ExperienceSchedule(experience_id=54, start_date='2025-05-04', end_date='2025-05-04', recurring_pattern='None', days_of_week='Monday, Friday', start_time='08:00:00', end_time='10:00:00'),
-    ExperienceSchedule(experience_id=55, start_date='2025-05-05', end_date='2025-05-05', recurring_pattern='None', days_of_week='Tuesday, Thursday', start_time='07:00:00', end_time='09:00:00'),
-    ExperienceSchedule(experience_id=56, start_date='2025-05-06', end_date='2025-05-06', recurring_pattern='None', days_of_week='Monday, Wednesday', start_time='09:00:00', end_time='11:00:00'),
-    ExperienceSchedule(experience_id=57, start_date='2025-05-07', end_date='2025-05-07', recurring_pattern='None', days_of_week='Saturday, Sunday', start_time='15:00:00', end_time='17:00:00'),
-    ExperienceSchedule(experience_id=58, start_date='2025-05-08', end_date='2025-05-08', recurring_pattern='None', days_of_week='Friday, Sunday', start_time='13:00:00', end_time='15:00:00'),
 ]
 
 tags = [
-    Tag(name='Exclusive Access', description='Access to normally restricted areas'),
-    Tag(name='Once in a Lifetime', description='Rare opportunities that may never come again'),
-    Tag(name='Adventure', description='Thrilling and adventurous experiences'),
-    Tag(name='Luxury', description='Ultra-premium experiences with exceptional service'),
-    Tag(name='Educational', description='Learn from world experts'),
-    Tag(name='Cultural', description='Deep cultural immersion'),
-    Tag(name='Wildlife', description='Close encounters with rare animals'),
-    Tag(name='Space', description='Space and aviation experiences'),
-    Tag(name='Ocean', description='Marine and underwater experiences'),
-    Tag(name='Extreme', description='Pushing physical and mental limits'),
-    Tag(name='Culinary', description='Exceptional food and wine experiences'),
-    Tag(name='Historical', description='Access to historical sites and artifacts'),
-    Tag(name='Celebrity', description='Meet famous personalities'),
-    Tag(name='Scientific', description='Cutting-edge science and technology'),
-    Tag(name='Spiritual', description='Transformative spiritual journeys'),
-    Tag(name='Featured Deals', description="Featured Experiences"),
-    # Tags from the first file
-    Tag(name='Museum', description='Experiences focused on art and museum tours'),
-    Tag(name='Entertainment', description='Experiences focusing on entertainment'),
-    Tag(name='Scenic', description='Experiences offering scenic views or routes'),
-    Tag(name='Outdoor', description='Experiences that take place outdoors'),
+    Tag(name='Exclusive Access', description='Access to normally restricted areas'), #1
+    Tag(name='Once in a Lifetime', description='Rare opportunities that may never come again'), #2
+    Tag(name='Adventure', description='Thrilling and adventurous experiences'), #3
+    Tag(name='Luxury', description='Ultra-premium experiences with exceptional service'), #4
+    Tag(name='Educational', description='Learn from world experts'), #5
+    Tag(name='Cultural', description='Deep cultural immersion'),  #6
+    Tag(name='Wildlife', description='Close encounters with rare animals'), #7
+    Tag(name='Space', description='Space and aviation experiences'), #8
+    Tag(name='Ocean', description='Marine and underwater experiences'), #9
+    Tag(name='Extreme', description='Pushing physical and mental limits'), #10
+    Tag(name='Culinary', description='Exceptional food and wine experiences'), #11
+    Tag(name='Historical', description='Access to historical sites and artifacts'), #12
+    Tag(name='Celebrity', description='Meet famous personalities'), #13
+    Tag(name='Scientific', description='Cutting-edge science and technology'), #14
+    Tag(name='Spiritual', description='Transformative spiritual journeys'), #15
+    Tag(name='Featured Deals', description="Featured Experiences"), #16
+    Tag(name='Museum', description='Experiences focused on art and museum tours'), #17
+    Tag(name='Entertainment', description='Experiences focusing on entertainment'), #18
+    Tag(name='Scenic', description='Experiences offering scenic views or routes'), #19
+    Tag(name='Outdoor', description='Experiences that take place outdoors'), #20
 ]
 
 # The luxury bundle experiences (from second file)
@@ -362,21 +344,6 @@ bundle_experiences = [
     {'bundle_id': 10, 'experience_id': 24}, # Private Concert
     {'bundle_id': 10, 'experience_id': 47}, # James Bond
     {'bundle_id': 10, 'experience_id': 48}, # Star Wars
-    
-    # NYC Adventure (regular bundles from first file)
-    {'bundle_id': 11, 'experience_id': 53}, # Statue of Liberty
-    {'bundle_id': 11, 'experience_id': 54}, # Central Park
-    {'bundle_id': 11, 'experience_id': 57}, # Chicago River - adding this to NYC for variety
-    
-    # LA Experience
-    {'bundle_id': 12, 'experience_id': 55}, # Hollywood Sign
-    {'bundle_id': 12, 'experience_id': 56}, # Universal Studios
-    {'bundle_id': 12, 'experience_id': 58}, # Art Institute - adding this to LA for variety
-    
-    # Windy City Wonders
-    {'bundle_id': 13, 'experience_id': 57}, # Chicago River
-    {'bundle_id': 13, 'experience_id': 58}, # Art Institute
-    {'bundle_id': 13, 'experience_id': 53}, # Statue of Liberty - adding this to Chicago for variety
 ]
 
 experience_tags = [
@@ -592,14 +559,13 @@ experience_tags = [
     {'experience_id': 24, 'tag_id': 16},  # Private Concert Series
     {'experience_id': 47, 'tag_id': 16},  # James Bond Experience
     
-    # Regular experiences (from first file)
-    {'experience_id': 51, 'tag_id': 1},  # Cultural
-    {'experience_id': 51, 'tag_id': 3},  # Historical
-    {'experience_id': 52, 'tag_id': 2},  # Culinary 
-    {'experience_id': 53, 'tag_id': 12}, # Historical
-    {'experience_id': 54, 'tag_id': 20}, # Outdoor
-    {'experience_id': 55, 'tag_id': 3},  # Adventure
-    {'experience_id': 56, 'tag_id': 18}, # Entertainment
-    {'experience_id': 57, 'tag_id': 19}, # Scenic
-    {'experience_id': 58, 'tag_id': 17}, # Museum
+    #Others
+    {'experience_id': 51, 'tag_id': 6},  # Cultural
+    {'experience_id': 51, 'tag_id': 12},  # Historical
+    {'experience_id': 52, 'tag_id': 18},  # Entertainment 
+    {'experience_id': 52, 'tag_id': 4},  # Luxury 
+    {'experience_id': 53, 'tag_id': 18}, # Entertainment
+    {'experience_id': 53, 'tag_id': 13}, # Celebrity
+    {'experience_id': 54, 'tag_id': 13}, # Celebrity
+    {'experience_id': 54, 'tag_id': 18}, # Entertainment
 ]
