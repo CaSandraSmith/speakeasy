@@ -35,7 +35,6 @@ const UserContext = createContext<ContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  console.log("user", user)
   // Helper function to store token
   const storeToken = async (token: string) => {
     if (Platform.OS === "web") {
@@ -71,7 +70,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (token) {
         try {
           const decoded = jwtDecode(token) as JwtPayload;
-          console.log("decoded", decoded)
           // Token is still valid
           setUser({
             email: decoded.sub,
@@ -103,4 +101,24 @@ export const useUser = () => {
     throw new Error("useUser must be used within an UserProvider");
   }
   return context;
+};
+
+// Custom fetch function to add the JWT token on requests
+export const useAuthFetch = () => {
+  const { getToken } = useUser();
+
+  return async (url: string, options: RequestInit = {}) => {
+    const token = await getToken();
+    const headers = new Headers(options.headers);
+
+    headers.set('Content-Type', 'application/json');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return fetch(url, {
+      ...options,
+      headers,
+    });
+  };
 };

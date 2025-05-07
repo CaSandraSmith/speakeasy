@@ -77,10 +77,10 @@ export interface Bundle {
 export interface Booking {
   id: number;
   user_id: number;
-  experience_id: number;
+  experience?: Experience;
   number_of_guests: number;
   confirmation_code: string;
-  bundle_id?: number;
+  bundle?: Bundle;
 }
 
 export interface Payment {

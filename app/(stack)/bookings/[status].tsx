@@ -1,15 +1,15 @@
-import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { Booking } from "../../types";
 import { useEffect, useState } from "react";
-import BookingsList from "../components/BookingsList/BookingsList";
-import { Booking, User } from "../types";
-import { useRouter } from "expo-router";
+import { Text, ScrollView, StyleSheet } from "react-native";
+import BookingsList from "../../components/BookingsList/BookingsList";
 
-export default function BookingsScreen() {
-  const [upcomingBookings, setUpcomingBookings] = useState<Booking[]>([]);
-  const router = useRouter()
+export default function ShowBookingsOfType() {
+  const { status } = useLocalSearchParams();
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    setUpcomingBookings([
+    setBookings([
       {
         id: 1,
         user_id: 101,
@@ -88,18 +88,11 @@ export default function BookingsScreen() {
     ]);
   }, []);
 
+  if (!bookings.length) return <Text>Loading</Text>;
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <BookingsList bookings={upcomingBookings} type={"future"} />
-      <View style={styles.section}>
-        <BookingsList bookings={upcomingBookings.slice(0, 2)} type={"past"} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("/(stack)/bookings/past")}
-        >
-          <Text style={styles.buttonText}>View All Past Bookings</Text>
-        </TouchableOpacity>
-      </View>
+      <BookingsList bookings={bookings} type={String(status)} />
     </ScrollView>
   );
 }
@@ -108,25 +101,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1A3636", // your background color
-    paddingTop: 40,
+    paddingTop: 50
+
   },
   content: {
     padding: 16,
     paddingBottom: 40,
-  },
-  section: {
-    marginTop: 10,
-  },
-  button: {
-    marginTop: 12,
-    backgroundColor: "#D6BD98", // accent
-    padding: 12,
-    borderRadius: 10,
-    alignItems: "center",
-    marginBottom: 130,
-  },
-  buttonText: {
-    color: "#1A3636",
-    fontWeight: "600",
   },
 });

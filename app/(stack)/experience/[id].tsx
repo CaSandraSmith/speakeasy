@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -13,17 +13,22 @@ import {
   Platform
 } from "react-native";
 import Constants from "expo-constants";
-import { Experience } from "../types";
-import { COLORS } from "../constants/colors";
-import ImageCaroselModal from "../components/ImageCaroselModal/ImageCaroselModal";
+import { Experience } from "../../types";
+import { COLORS } from "../../constants/colors";
+import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
+import { useAuthFetch } from "@/context/userContext";
+import { Ionicons } from "@expo/vector-icons";
+
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
 
 export default function ShowExperience() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const [experience, setExperience] = useState<Experience | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const authFetch = useAuthFetch();
 
   const formatTime = (time: string | undefined) => {
     if (!time) return "";
@@ -43,10 +48,8 @@ export default function ShowExperience() {
   useEffect(() => {
     const fetchExperience = async () => {
       try {
-        const response = await fetch(`${FLASK_URL}/experiences/${id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+        const response = await authFetch(`${FLASK_URL}/experiences/${id}`, {
+          method: "GET"
         });
 
         if (response.ok) {
@@ -71,8 +74,27 @@ export default function ShowExperience() {
     );
   }
 
+  const handleBookPress = () => {
+    if (experience) {
+      router.push({
+        pathname: "/(stack)/experience/createBooking",
+        params: { 
+          id: experience.id.toString(),
+          title: experience.title,
+          imageUrl: experience.images?.[0]?.image_url
+        }
+      });
+    }
+  };
+
   return (
     <View style={styles.screen}>
+        {/* <TouchableOpacity
+          className="p-1"
+          onPress={() => router.back()}
+        >
+          <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
+        </TouchableOpacity> */}
       <FlatList
         data={experience.reviews}
         keyExtractor={(item) => item.id.toString()}
@@ -165,9 +187,14 @@ export default function ShowExperience() {
       />
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.bookButton}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity 
+          style={styles.bookButton}
+          onPress={handleBookPress}
+        >
           <Text style={styles.bookButtonText}>Book</Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   );

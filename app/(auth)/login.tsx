@@ -36,18 +36,17 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify(data)
-    })
+    });
 
-    const responseData = await response.json()
+    const responseData = await response.json();
 
     if (response.ok) {
       setUser(responseData["user"]);
       await storeToken(responseData["token"]);
       router.push("/");
     } else {
-      console.log(responseData.error)
+      console.log(responseData.error);
     }
   };
 
@@ -57,18 +56,17 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include', // 👈 necessary for cookies/session to work
       body: JSON.stringify({email: "red@example.com", password: "password1"})
-    })
+    });
 
-    const responseData = await response.json()
+    const responseData = await response.json();
 
     if (response.ok) {
       setUser(responseData["user"]);
       await storeToken(responseData["token"]);
       router.push("/");
     } else {
-      console.log(responseData.error)
+      console.log(responseData.error);
     }
   }
 
