@@ -9,6 +9,7 @@ from routes.reviews import reviews_bp
 from routes.images import images
 from routes.schedules import schedules
 from routes.bookings import bookings
+from routes.tags import tags
 
 
 db.init_app(app)
@@ -19,6 +20,7 @@ app.register_blueprint(images, url_prefix='/images')
 app.register_blueprint(schedules, url_prefix='/schedules')
 app.register_blueprint(reviews_bp, url_prefix='/reviews')
 app.register_blueprint(bookings, url_prefix='/bookings')
+app.register_blueprint(tags, url_prefix='/tags')
 
 
 with app.app_context():
