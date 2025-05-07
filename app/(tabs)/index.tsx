@@ -121,8 +121,6 @@ export default function Index() {
     setSelectedCategory(category);
   };
 
-  console.log("expereinces", experiences)
-
   return (
     <View className="flex-1">
       {/* Status Bar - set to transparent so it takes the color of the backdrop */}
@@ -194,7 +192,7 @@ export default function Index() {
                     scrollX={scrollX}
                     onPress={() => {
                       router.push({
-                        pathname: "/(stack)/experience-detail",
+                        pathname: `/(stack)/experience/${item.id}`,
                         params: { id: item.id },
                       });
                     }}

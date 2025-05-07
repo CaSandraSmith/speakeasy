@@ -29,7 +29,7 @@ export default function BackdropPhoto({ destination, index, scrollX }: BackdropP
   
   return (
     <Animated.Image 
-      source={destination.image} 
+      source={{uri: destination.image}} 
       style={[StyleSheet.absoluteFillObject, stylez]}
       resizeMode="cover" // This ensures the image covers the full screen
       blurRadius={15}
