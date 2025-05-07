@@ -1,4 +1,4 @@
-from models import Experience
+from models import Experience, Tag
 from flask import jsonify, Blueprint, request
 from extensions import db
 from routes.auth import require_admin
@@ -47,3 +47,13 @@ def update_experience(experience_id):
     except Exception as e:
         print(f"Error in update_experience: {e}")
         return jsonify({'error': 'Failed to update experience'}), 500
+
+# Get experiences with a specific tag
+@experiences.route('/tag/<int:tag_id>', methods=['GET'])
+def get_experiences_by_tag(tag_id):
+    try:
+        experiences = Experience.query.join(Experience.tags).filter(Tag.id == tag_id).all()
+        return jsonify({'experiences': [experience.to_dict() for experience in experiences]}), 200
+    except Exception as e:
+        print(f"Error in get_experiences_by_tag: {e}")
+        return jsonify({'error': 'Failed to fetch experiences'}), 500
