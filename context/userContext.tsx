@@ -35,7 +35,6 @@ const UserContext = createContext<ContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  console.log("user", user)
   // Helper function to store token
   const storeToken = async (token: string) => {
     if (Platform.OS === "web") {
@@ -71,7 +70,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (token) {
         try {
           const decoded = jwtDecode(token) as JwtPayload;
-          console.log("decoded", decoded)
           // Token is still valid
           setUser({
             email: decoded.sub,

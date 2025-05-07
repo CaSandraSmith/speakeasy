@@ -24,6 +24,27 @@ def generate_token(user):
     }
     return jwt.encode(payload, Config.SECRET_KEY, algorithm='HS256')
 
+@api.route('/current_user', methods=['GET'])
+def get_current_user():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({'error': 'Authorization header missing'}), 401
+
+    token = auth_header.split("Bearer ")[-1]  # Handles "Bearer <token>"
+
+    try:
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+        user_id = payload.get('user_id')
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+
+        return jsonify({'user': user.to_dict()}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token has expired'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Invalid token'}), 401
+
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()

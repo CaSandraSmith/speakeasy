@@ -1,8 +1,15 @@
-import React from 'react';
-import { Tabs, Stack } from 'expo-router';
+import { Tabs, Stack } from "expo-router";
+import { useUser } from "../../context/userContext";
+import { Redirect } from "expo-router";
 import TabBar from '../components/tabsNavigation/TabBar';
 
 export default function TabLayout() {
+  const { user } = useUser();
+
+  if (!user) {
+    return <Redirect href="/passcode" />;
+  }
+
   return (
     <Tabs
       tabBar={(props) => <TabBar {...props} />}
