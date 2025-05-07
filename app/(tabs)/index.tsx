@@ -25,12 +25,6 @@ import CategoryTabs from "../components/indexPage/CategoryTabs";
 import DestinationCard from "../components/indexPage/DestinationCard";
 import BackdropPhoto from "../components/indexPage/BackdropPhoto";
 
-// Constants
-import {
-  categories,
-  featuredExperiencesByCategory,
-  CategoryType,
-} from "../constants/featuredExperiences";
 import { Experience, Tag } from "../types";
 
 const { width, height } = Dimensions.get("screen");
@@ -134,7 +128,7 @@ export default function Index() {
       <View style={StyleSheet.absoluteFillObject}>
         {experiences.map((experience, index) => (
           <BackdropPhoto
-            key={experience.id}
+            key={`${selectedCategory?.id}-${experience.id}`} // ensures old ones fully unmount
             destination={{
               id: experience.id.toString(),
               name: experience.title,
