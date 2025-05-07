@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import { Experience } from '@/app/types';
 
 const {width} = Dimensions.get("screen");
 const _imageWidth = Platform.select({
@@ -10,16 +11,8 @@ const _imageWidth = Platform.select({
 });
 const _imageHeight = _imageWidth * 1.7; 
 
-interface Destination {
-  id: string;
-  name: string;
-  image: any;
-  rating?: number;
-  reviews?: number;
-}
-
 interface DestinationCardProps {
-  destination: Destination;
+  destination: Experience;
   index: number;
   scrollX: SharedValue<number>;
   onPress: () => void;
@@ -59,7 +52,7 @@ export default function DestinationCard({ destination, index, scrollX, onPress }
       activeOpacity={0.9}
     >
       <Animated.Image
-        source={destination.image}
+        source={{uri: destination.images?.[0].image_url}}
         style={[{ width: '100%', height: '100%' }, stylez]}
         resizeMode="cover"
       />
@@ -75,14 +68,14 @@ export default function DestinationCard({ destination, index, scrollX, onPress }
         <View className="flex-row items-center">
           <Ionicons name="location-outline" size={20} color="#DCD7C9" />
           <Text className="text-textPrimary font-montserrat-bold text-lg ml-2">
-            {destination.name}
+            {destination.title}
           </Text>
         </View>
-        {destination.rating && (
+        {destination.average_rating && (
           <View className="flex-row items-center mt-1">
             <Ionicons name="star" size={16} color="#D6BD98" />
             <Text className="text-textSecondary font-montserrat ml-1">
-              {destination.rating} ({destination.reviews} reviews)
+              {destination.average_rating} ({destination.reviews?.length} reviews)
             </Text>
           </View>
         )}

@@ -31,7 +31,7 @@ import {
   featuredExperiencesByCategory,
   CategoryType,
 } from "../constants/featuredExperiences";
-import { Tag } from "../types";
+import { Experience, Tag } from "../types";
 
 const { width, height } = Dimensions.get("screen");
 const _imageWidth = Platform.select({
@@ -44,9 +44,7 @@ export default function Index() {
   const [searchText, setSearchText] = useState("");
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Tag | null>(null);
-  const [experiences, setExperiences] = useState(
-    featuredExperiencesByCategory["Exclusive Access"]
-  );
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const router = useRouter();
   const authFetch = useAuthFetch();
 
@@ -85,10 +83,30 @@ export default function Index() {
   }, [tags]);
 
   // Update experiences when category changes
-  // useEffect(() => {
-  //   if (!selectedCategory) return
-  //   setExperiences(featuredExperiencesByCategory[selectedCategory]);
-  // }, [selectedCategory]);
+  useEffect(() => {
+    if (!selectedCategory) return
+    
+    const fetchExpereinces = async () => {
+      try {
+        const response = await authFetch(`${FLASK_URL}/experiences/tag/${selectedCategory.id}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setExperiences(data.experiences);
+        } else {
+          console.error("Failed to fetch:", response.status);
+        }
+      } catch (e) {
+        console.error("There was an error:", e);
+      }
+    };
+
+    fetchExpereinces();
+  }, [selectedCategory]);
 
   const handleSearch = () => {
     if (searchText.trim()) {
@@ -102,6 +120,8 @@ export default function Index() {
   const handleCategoryChange = (category: Tag) => {
     setSelectedCategory(category);
   };
+
+  console.log("expereinces", experiences)
 
   return (
     <View className="flex-1">
@@ -120,9 +140,7 @@ export default function Index() {
             destination={{
               id: experience.id.toString(),
               name: experience.title,
-              image: experience.image,
-              rating: experience.rating,
-              reviews: experience.reviews,
+              image: experience.images?.[0].image_url,
             }}
             index={index}
             scrollX={scrollX}
@@ -171,13 +189,7 @@ export default function Index() {
               renderItem={({ item, index }) => {
                 return (
                   <DestinationCard
-                    destination={{
-                      id: item.id.toString(),
-                      name: item.title,
-                      image: item.image,
-                      rating: item.rating,
-                      reviews: item.reviews,
-                    }}
+                    destination={item}
                     index={index}
                     scrollX={scrollX}
                     onPress={() => {

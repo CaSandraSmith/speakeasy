@@ -8,8 +8,6 @@ interface Destination {
   id: string;
   name: string;
   image: any;
-  rating?: number;
-  reviews?: number;
 }
 
 interface BackdropPhotoProps {
