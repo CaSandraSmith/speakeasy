@@ -119,6 +119,9 @@ class Experience(db.Model):
     tags = db.relationship('Tag', secondary=experience_tag, back_populates='experiences')
 
     def to_dict(self):
+        ratings = [review.rating for review in self.reviews if review.rating is not None]
+        avg_rating = round(sum(ratings) / len(ratings), 2) if ratings else None
+        
         return {
             'id': self.id,
             'title': self.title,
@@ -128,7 +131,8 @@ class Experience(db.Model):
             'images': [img.to_dict() for img in self.images],
             'schedule': self.schedule.to_dict() if self.schedule else None,
             'tags': [t.to_dict() for t in self.tags],
-            'reviews': [r.to_dict() for r in self.reviews]
+            'reviews': [r.to_dict() for r in self.reviews],
+            'average_rating': avg_rating
         }
 
 

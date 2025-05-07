@@ -8,6 +8,7 @@ export interface Experience {
   images?: ExperienceImage[];
   reviews?: Review[];
   tags?: Tag[];
+  average_rating: number | null
 }
 
 export interface User {

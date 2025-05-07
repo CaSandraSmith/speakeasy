@@ -1,10 +1,11 @@
+import { Tag } from '@/app/types';
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 interface CategoryTabsProps {
-  categories: string[];
-  selectedCategory: string;
-  onSelectCategory: (category: string) => void;
+  categories: Tag[];
+  selectedCategory: Tag | null;
+  onSelectCategory: (category: Tag) => void;
 }
 
 export default function CategoryTabs({ 
@@ -12,6 +13,7 @@ export default function CategoryTabs({
   selectedCategory, 
   onSelectCategory 
 }: CategoryTabsProps) {
+  if (!selectedCategory) return
   return (
     <View className="mb-6">
       <ScrollView 
@@ -21,20 +23,20 @@ export default function CategoryTabs({
       >
         {categories.map((category) => (
           <TouchableOpacity
-            key={category}
+            key={category.id}
             onPress={() => onSelectCategory(category)}
             className={`px-4 py-2 rounded-full ${
-              selectedCategory === category 
+              selectedCategory.id === category.id 
                 ? 'bg-textSecondary' 
                 : 'bg-textPrimary/10'
             }`}
           >
             <Text className={`font-montserrat ${
-              selectedCategory === category 
+              selectedCategory.id === category.id 
                 ? 'text-background' 
                 : 'text-textPrimary'
             }`}>
-              {category}
+              {category.name}
             </Text>
           </TouchableOpacity>
         ))}

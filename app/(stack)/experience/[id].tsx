@@ -10,7 +10,7 @@ import {
   Pressable,
   FlatList,
   TouchableOpacity,
-  Platform
+  Platform,
 } from "react-native";
 import Constants from "expo-constants";
 import { Experience } from "../../types";
@@ -18,7 +18,6 @@ import { COLORS } from "../../constants/colors";
 import ImageCaroselModal from "../../components/ImageCaroselModal/ImageCaroselModal";
 import { useAuthFetch } from "@/context/userContext";
 import { Ionicons } from "@expo/vector-icons";
-
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 const { width } = Dimensions.get("window");
@@ -49,7 +48,7 @@ export default function ShowExperience() {
     const fetchExperience = async () => {
       try {
         const response = await authFetch(`${FLASK_URL}/experiences/${id}`, {
-          method: "GET"
+          method: "GET",
         });
 
         if (response.ok) {
@@ -78,28 +77,32 @@ export default function ShowExperience() {
     if (experience) {
       router.push({
         pathname: "/(stack)/experience/createBooking",
-        params: { 
+        params: {
           id: experience.id.toString(),
           title: experience.title,
-          imageUrl: experience.images?.[0]?.image_url
-        }
+          imageUrl: experience.images?.[0]?.image_url,
+        },
       });
     }
   };
 
   return (
     <View style={styles.screen}>
-        {/* <TouchableOpacity
-          className="p-1"
-          onPress={() => router.back()}
-        >
-          <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
-        </TouchableOpacity> */}
       <FlatList
         data={experience.reviews}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={() => (
           <View>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={styles.backButton}
+            >
+              <Ionicons
+                name="chevron-back"
+                size={28}
+                color={COLORS.primaryText}
+              />
+            </TouchableOpacity>
             {experience.images?.[0] && (
               <Pressable
                 style={styles.imageWrapper}
@@ -187,14 +190,11 @@ export default function ShowExperience() {
       />
 
       <View style={styles.buttonContainer}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={styles.bookButton}
-          onPress={handleBookPress}
-        >
-          <Text style={styles.bookButtonText}>Book</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.bookButton} onPress={handleBookPress}>
+            <Text style={styles.bookButtonText}>Book</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -205,6 +205,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     justifyContent: "space-between",
+    position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    zIndex: 100,
+    top: 40,
+    left: 10,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 10,
+    borderRadius: "50%",  
   },
   buttonContainer: {
     position: "absolute",
