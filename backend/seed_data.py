@@ -159,7 +159,7 @@ experience_images = [
     ExperienceImage(experience_id=26, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477928/machu-picchu_y6l1pl.jpg'),
     ExperienceImage(experience_id=27, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746477926/lost-city_f3bfgi.jpg'),
     ExperienceImage(experience_id=28, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746480783/orient-express_jbhmjv.jpg'),
-    ExperienceImage(experience_id=29, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479293/submarine_picehi.jpg.jpg'),
+    ExperienceImage(experience_id=29, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479293/submarine_picehi.jpg'),
     ExperienceImage(experience_id=30, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479291/concorde_bwksjy.jpg'),
     ExperienceImage(experience_id=31, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746471086/art-studio_qic3i8.jpg'),
     ExperienceImage(experience_id=32, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1746479290/sistine-chapel_wsaf8b.jpg'),
