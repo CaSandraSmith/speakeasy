@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+import Constants from "expo-constants";
+import { useAuthFetch } from "@/context/userContext";
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
 // Components
 import Header from '../components/indexPage/Header';
@@ -25,6 +28,7 @@ import {
   featuredExperiencesByCategory, 
   CategoryType 
 } from '../constants/featuredExperiences';
+import { Tag } from '../types';
 
 const {width, height} = Dimensions.get("screen");
 const _imageWidth = Platform.select({
@@ -35,14 +39,40 @@ const _spacing = 12;
 
 export default function Index() {
   const [searchText, setSearchText] = useState('');
+  const [tags, setTags] = useState<Tag[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('Exclusive Access');
   const [experiences, setExperiences] = useState(featuredExperiencesByCategory['Exclusive Access']);
   const router = useRouter();
+  const authFetch = useAuthFetch()
 
   const scrollX = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler((e) => {
     scrollX.value = e.contentOffset.x / (_imageWidth + _spacing);
   });
+
+  // fetch all tags
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await authFetch(`${FLASK_URL}/tags/`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTags(data.tags)
+        } else {
+          console.error("Failed to fetch:", response.status);
+        }
+      } catch (e) {
+        console.error("There was an error:", e);
+      }
+    }
+
+    fetchTags()
+  }, []);
 
   // Update experiences when category changes
   useEffect(() => {
