@@ -1,5 +1,5 @@
 from datetime import datetime
-from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag
+from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag, Reservation
 
 users = [
     User(first_name='Red', last_name='Ruby', email='red@example.com', password_hash='password1', phone_number='1234567890', admin=False),
@@ -197,7 +197,23 @@ bookings = [
     Booking(user_id=1, experience_id=1, number_of_guests=2, confirmation_code='CONFIRM123'),
     Booking(user_id=2, experience_id=3, number_of_guests=1, confirmation_code='CONFIRM456'),
     Booking(user_id=3, experience_id=5, number_of_guests=3, confirmation_code='CONFIRM789'),
+
+    # Additional bookings with most for user_id=1
+    Booking(user_id=1, experience_id=4, number_of_guests=2, confirmation_code='CONFIRM111'),
+    Booking(user_id=1, experience_id=6, number_of_guests=1, confirmation_code='CONFIRM112'),
+    Booking(user_id=1, experience_id=8, number_of_guests=4, confirmation_code='CONFIRM113'),
+    Booking(user_id=1, experience_id=10, number_of_guests=2, confirmation_code='CONFIRM114'),
+    Booking(user_id=1, experience_id=12, number_of_guests=3, confirmation_code='CONFIRM115'),
+    Booking(user_id=1, experience_id=14, number_of_guests=2, confirmation_code='CONFIRM116'),
+    Booking(user_id=1, experience_id=16, number_of_guests=1, confirmation_code='CONFIRM117'),
+
+    Booking(user_id=2, experience_id=2, number_of_guests=2, confirmation_code='CONFIRM201'),
+    Booking(user_id=3, experience_id=7, number_of_guests=1, confirmation_code='CONFIRM202'),
+    Booking(user_id=2, experience_id=9, number_of_guests=4, confirmation_code='CONFIRM203'),
+    Booking(user_id=3, experience_id=11, number_of_guests=2, confirmation_code='CONFIRM204'),
+    Booking(user_id=1, experience_id=13, number_of_guests=3, confirmation_code='CONFIRM205'),
 ]
+
 
 reviews = [
     Review(user_id=1, experience_id=1, rating=5, comment='Amazing experience! Highly recommend.', timestamp=datetime.now()),
@@ -266,6 +282,30 @@ experience_schedules = [
     ExperienceSchedule(experience_id=53, start_date='2025-05-03', end_date='2025-05-03', recurring_pattern='None', days_of_week='Wednesday, Saturday', start_time='10:00:00', end_time='12:00:00'),
     ExperienceSchedule(experience_id=54, start_date='2025-05-04', end_date='2025-05-04', recurring_pattern='None', days_of_week='Monday, Friday', start_time='08:00:00', end_time='10:00:00'),
 ]
+
+reservations = [
+    # Fixed-date experiences
+    Reservation(booking_id=1, date='2025-07-15', time_slot='09:00:00', status='confirmed'),
+    Reservation(booking_id=4, date='2025-08-03', time_slot='14:00:00', status='confirmed'),
+    Reservation(booking_id=12, date='2025-06-25', time_slot='12:00:00', status='confirmed'),
+    Reservation(booking_id=6, date='2025-11-15', time_slot='13:00:00', status='confirmed'),
+
+    # Flexible or custom-pattern experiences
+    Reservation(booking_id=2, date='2025-01-21', time_slot='11:00:00', status='confirmed'),
+    Reservation(booking_id=3, date='2025-10-08', time_slot='15:30:00', status='confirmed'),
+    Reservation(booking_id=5, date='2025-04-30', time_slot='19:30:00', status='confirmed'),
+    Reservation(booking_id=7, date='2024-12-15', time_slot='17:00:00', status='confirmed'),
+    Reservation(booking_id=8, date='2025-10-06', time_slot='18:00:00', status='confirmed'),
+    Reservation(booking_id=9, date='2024-12-19', time_slot='10:00:00', status='confirmed'),
+    Reservation(booking_id=10, date='2025-07-20', time_slot='20:00:00', status='confirmed'),
+
+    # Scheduled (patterned) experiences
+    Reservation(booking_id=11, date='2025-10-02', time_slot='10:00:00', status='confirmed'),
+    Reservation(booking_id=13, date='2025-12-06', time_slot='14:00:00', status='confirmed'),
+    Reservation(booking_id=14, date='2025-01-02', time_slot='13:00:00', status='confirmed'),
+    Reservation(booking_id=15, date='2024-12-03', time_slot='19:00:00', status='confirmed'),
+]
+
 
 tags = [
     Tag(name='Exclusive Access', description='Access to normally restricted areas'), #1
