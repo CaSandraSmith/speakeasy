@@ -16,13 +16,6 @@ export default function StackLayout() {
           presentation: "modal",
         }}
       />
-      <Stack.Screen
-        name="bookings/[status]"
-        options={{
-          animation: "slide_from_bottom",
-          presentation: "modal",
-        }}
-      />
     </Stack>
   );
 }
