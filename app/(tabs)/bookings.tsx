@@ -24,7 +24,8 @@ export default function BookingsScreen() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("data", data);
+          setUpcomingBookings(data.current_bookings)
+          setPastBookings(data.past_bookings)
         } else {
           console.error("Failed to fetch:", response.status);
         }
@@ -40,7 +41,7 @@ export default function BookingsScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <BookingsList bookings={upcomingBookings} type={"future"} />
       <View style={styles.section}>
-        <BookingsList bookings={upcomingBookings.slice(0, 2)} type={"past"} />
+        <BookingsList bookings={pastBookings.slice(0, 2)} type={"past"} />
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.push("/(stack)/bookings/past")}
