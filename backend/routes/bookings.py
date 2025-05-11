@@ -22,9 +22,42 @@ def validate_reservation_fields(res_data):
 @require_auth
 def get_all_bookings():
     user = get_current_user()
-    bookings = Booking.query.filter_by(user_id=user.id).all()
-    return jsonify({'bookings': [booking.to_dict() for booking in bookings]}), 200
+    now = datetime.now(timezone.utc)
 
+    all_bookings = Booking.query.filter_by(user_id=user.id).all()
+
+    past_bookings = []
+    current_bookings = []
+
+    for booking in all_bookings:
+        is_current = False
+
+        for reservation in booking.reservations:
+            reservation_datetime = datetime.combine(reservation.date, reservation.time_slot).replace(tzinfo=timezone.utc)
+            experience_schedule = booking.experience.schedule
+
+            if experience_schedule and experience_schedule.end_time:
+                try:
+                    reservation_end = datetime.combine(reservation.date, experience_schedule.end_time).replace(tzinfo=timezone.utc)
+                except Exception:
+                    reservation_end = reservation_datetime
+            else:
+                reservation_end = reservation_datetime  # fallback to just start time
+
+            if reservation_end >= now:
+                is_current = True
+                break
+
+        if is_current:
+            current_bookings.append(booking.to_dict())
+        else:
+            past_bookings.append(booking.to_dict())
+            
+    return jsonify({
+        'past_bookings': past_bookings,
+        'current_bookings': current_bookings
+    }), 200
+    
 @bookings.route('/<int:booking_id>', methods=['GET'])
 @require_auth
 def get_booking(booking_id):
