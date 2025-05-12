@@ -5,7 +5,7 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring
+  withSpring,
 } from 'react-native-reanimated';
 
 interface TabBarButtonProps {
@@ -22,18 +22,11 @@ export default function TabBarButton(props: TabBarButtonProps) {
   const scale = useSharedValue(0);
 
   useEffect(() => {
-    scale.value = withSpring(
-      isFocused ? 1 : 0,
-      { damping: 15, stiffness: 150 }
-    );
+    scale.value = withSpring(isFocused ? 1 : 0, { damping: 15, stiffness: 150 });
   }, [scale, isFocused]);
 
   const animatedIconStyle = useAnimatedStyle(() => {
-    const scaleValue = interpolate(
-      scale.value,
-      [0, 1],
-      [1, 1.2]
-    );
+    const scaleValue = interpolate(scale.value, [0, 1], [1, 1.2]);
     return {
       transform: [{ scale: scaleValue }],
     };
@@ -52,8 +45,8 @@ export default function TabBarButton(props: TabBarButtonProps) {
       </Animated.View>
       <Text
         className={`text-xs ${
-          isFocused 
-            ? 'font-montserrat-bold text-textSecondary' 
+          isFocused
+            ? 'font-montserrat-bold text-textSecondary'
             : 'font-montserrat text-textPrimary/80'
         }`}
       >

@@ -72,6 +72,7 @@ export default function BookingInfo() {
   };
 
   return (
+    
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
       
