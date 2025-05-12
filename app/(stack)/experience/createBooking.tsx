@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  TextInput, 
-  ScrollView, 
-  Image, 
-  SafeAreaView, 
-  StatusBar,
-  Modal
-} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Image, SafeAreaView, StatusBar,
+  Modal, FlatList, Alert} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
+import CalendarPicker from 'react-native-calendar-picker';
+import { useAuthFetch } from "../../../context/userContext";
+import Constants from "expo-constants";
+
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
 export default function CreateBooking() {
   const router = useRouter();
   const { id, title, imageUrl, price } = useLocalSearchParams();
+  const authFetch = useAuthFetch();
   
   // State
   const [numberOfGuests, setNumberOfGuests] = useState('');
@@ -25,15 +22,16 @@ export default function CreateBooking() {
   const [specialRequests, setSpecialRequests] = useState('');
   const [showCustomYearPicker, setShowCustomYearPicker] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(false);
   
   // Get current year and create array of future years
   const currentYear = new Date().getFullYear();
-  const futureYears = Array.from({ length: 11 }, (_, i) => currentYear + i);
+  const futureYears = Array.from({ length: 4 }, (_, i) => currentYear + i);
   
   // Min and max dates
   const minDate = new Date();
   const maxDate = new Date();
-  maxDate.setFullYear(currentYear + 10);
+  maxDate.setFullYear(currentYear + 3);
 
   // Format date for display
   const formatDateDisplay = (date: Date | null) => {
@@ -70,29 +68,66 @@ export default function CreateBooking() {
   };
 
   // Handle booking submission
-  const handleBooking = () => {
-    // Here you would typically validate inputs and submit to your API
+  const handleBooking = async () => {
+    // Validate inputs
     if (!numberOfGuests) {
-      alert('Please enter the number of guests');
+      Alert.alert('Missing Information', 'Please enter the number of guests');
       return;
     }
     if (!selectedDate) {
-      alert('Please select a date');
+      Alert.alert('Missing Information', 'Please select a date');
       return;
     }
 
-    const bookingData = {
-      experienceId: id,
-      numberOfGuests: parseInt(numberOfGuests),
-      date: selectedDate.toISOString(),
-      specialRequests: specialRequests,
-      price: price
-    };
+    setIsLoading(true);
 
-    console.log('Booking data:', bookingData);
-    
-    // Navigate to payment methods
-    router.push('/(stack)/paymentMethods/all');
+    try {
+      // Prepare booking data
+      const bookingData = {
+        experience_id: parseInt(id as string),
+        number_of_guests: parseInt(numberOfGuests),
+        reservations: [{
+          date: selectedDate.toISOString(),
+          time_slot: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 10, 0, 0).toISOString() // Default to 10:00 AM
+        }],
+        special_requests: specialRequests
+      };
+
+      console.log('Creating booking with data:', bookingData);
+
+      // Create booking on backend
+      const response = await authFetch(`${FLASK_URL}/bookings/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create booking');
+      }
+
+      const newBooking = await response.json();
+      console.log('Booking created successfully:', newBooking);
+
+      // Navigate to booking info page with the new booking ID
+      router.push({
+        pathname: '/experience/bookingInfo',
+        params: { bookingId: newBooking.id }
+      });
+
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      Alert.alert(
+        'Booking Failed',
+        error instanceof Error ? error.message : 'Unable to create booking. Please try again.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const customDayHeaderStylesCallback = () => {
@@ -166,7 +201,6 @@ export default function CreateBooking() {
           </View>
           
           {/* Date Picker */}
-          {/* Date Picker */}
           <View className="mb-5">
             <Text className="text-base font-medium text-textPrimary mb-3 font-montserrat">
               Experience Date
@@ -182,16 +216,7 @@ export default function CreateBooking() {
                 {selectedDate ? formatDateDisplay(selectedDate) : 'Choose your experience date'}
               </Text>
             </TouchableOpacity>
-            
-            {/* Date Selection Button */}
-            <TouchableOpacity 
-              className="bg-white rounded-lg px-4 py-3 justify-center"
-              onPress={() => setShowDatePicker(true)}
-            >
-              <Text className="text-textPrimary font-montserrat">
-                {selectedDate ? 'Change Date' : 'Select Date'}
-              </Text>
-            </TouchableOpacity>
+
             
             {/* Calendar Modal */}
             <Modal
@@ -206,24 +231,7 @@ export default function CreateBooking() {
                     <Text className="text-lg font-bold text-textPrimary font-playfair-bold">
                       Select Experience Date
                     </Text>
-                    <TouchableOpacity onPress={() => setShowDatePicker(false)}>
-                      <Ionicons name="close" size={24} color={COLORS.primaryText} />
-                    </TouchableOpacity>
                   </View>
-                  
-                  <Text className="text-sm text-textSecondary text-center mb-4 font-montserrat">
-                    Choose when you'd like to experience this
-                  </Text>
-                  
-                  {/* Custom Year Selector */}
-                  <TouchableOpacity 
-                    className="bg-accent/20 rounded-lg px-4 py-2 mb-4 self-center"
-                    onPress={() => setShowCustomYearPicker(true)}
-                  >
-                    <Text className="text-textPrimary font-montserrat">
-                      {selectedYear} ›
-                    </Text>
-                  </TouchableOpacity>
                   
                   <CalendarPicker
                     startFromMonday={false}
@@ -364,11 +372,12 @@ export default function CreateBooking() {
         {/* Book Button */}
         <View className="p-5 pt-2">
           <TouchableOpacity 
-            className="bg-accent rounded-3xl py-4 items-center justify-center"
+            className={`bg-accent rounded-3xl py-4 items-center justify-center ${isLoading ? 'opacity-70' : ''}`}
             onPress={handleBooking}
+            disabled={isLoading}
           >
             <Text className="text-background text-lg font-semibold font-montserrat-bold">
-              Book Experience
+              {isLoading ? 'Creating Booking...' : 'Continue'}
             </Text>
           </TouchableOpacity>
         </View>

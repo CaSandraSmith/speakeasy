@@ -65,6 +65,13 @@ export default function BookingsList({ bookings, type, back }: Props) {
     return returned
   }
   
+  // Navigate to booking info page
+  const handleBookingPress = (bookingId: string | number) => {
+    router.push({
+      pathname: '/(stack)/experience/bookingInfo',
+      params: { bookingId: bookingId.toString() }
+    });
+  };
 
   return (
     <FlatList
@@ -95,7 +102,7 @@ export default function BookingsList({ bookings, type, back }: Props) {
         </View>
       )}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => handleBookingPress(item.id)}>
           {item.experience?.images?.[0] && (
             <Image
               source={{ uri: item.experience.images[0].image_url }}
