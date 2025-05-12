@@ -227,7 +227,7 @@ def days_ago(n):
 reviews = [
     Review(user_id=2, experience_id=1, rating=5, comment='One of the best adventures of my life.', timestamp=days_ago(5)),
     Review(user_id=3, experience_id=1, rating=4, comment='Truly breathtaking, but a bit pricey.', timestamp=days_ago(7)),
-    Review(user_id=4, experience_id=2, rating=5, comment='Felt like floating above Earth. Surreal.', timestamp=days_ago(8)),
+    Review(user_id=7, experience_id=2, rating=5, comment='Felt like floating above Earth. Surreal.', timestamp=days_ago(8)),
     Review(user_id=5, experience_id=2, rating=4, comment='Very cool but the prep took a while.', timestamp=days_ago(6)),
     Review(user_id=5, experience_id=3, rating=3, comment='Nice, but the group was too large.', timestamp=days_ago(3)),
     Review(user_id=6, experience_id=3, rating=4, comment='Great guide and views! Bring good shoes.', timestamp=days_ago(9)),
