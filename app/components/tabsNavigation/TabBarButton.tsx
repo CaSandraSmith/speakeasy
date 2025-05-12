@@ -1,12 +1,13 @@
-import { Pressable, Text } from 'react-native';
-import React, { useEffect } from 'react';
-import GetIcon, { IconName } from '../../../assets/icons';
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { Pressable, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import GetIcon, { IconName } from '../../../assets/icons';
+
 
 interface TabBarButtonProps {
   isFocused: boolean;
