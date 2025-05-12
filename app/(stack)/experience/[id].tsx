@@ -29,19 +29,21 @@ export default function ShowExperience() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const authFetch = useAuthFetch();
 
-  const formatTime = (time: string | undefined) => {
-    if (!time) return "";
-    // Convert the ISO 8601 time string (e.g., "14:30:00") into a 12-hour AM/PM format
-    const date = new Date(`1970-01-01T${time}Z`); // Use a fixed date to parse the time
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+  const formatTime = (timeStr: string | undefined) => {
+    if (!timeStr) return "";
+    // Normalize to HH:MM (ignore seconds if present)
+    const [hoursStr, minutesStr] = timeStr.split(":");
+    const hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr || "0", 10);
 
-    // Determine AM/PM and convert the hours to 12-hour format
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const hour12 = hours % 12 || 12; // Convert 0 to 12 for 12 AM
-    const minute = minutes < 10 ? `0${minutes}` : minutes; // Add leading zero if necessary
+    const period = hours >= 12 ? "PM" : "AM";
+    const displayHour = hours % 12 === 0 ? 12 : hours % 12;
 
-    return `${hour12}:${minute} ${ampm}`;
+    if (minutes === 0) {
+      return `${displayHour} ${period}`;
+    } else {
+      return `${displayHour}:${minutes.toString().padStart(2, "0")} ${period}`;
+    }
   };
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function ShowExperience() {
         if (response.ok) {
           const data = await response.json();
           setExperience(data.experience);
+          console.log(data.experience);
         } else {
           console.error("Failed to fetch experience:", response.status);
         }
@@ -84,6 +87,16 @@ export default function ShowExperience() {
         },
       });
     }
+  };
+
+  const formatToUSD = (amount: number | undefined): string => {
+    if (!amount) return "";
+    return amount.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
@@ -140,17 +153,20 @@ export default function ShowExperience() {
             <View style={styles.infoRow}>
               <Text style={styles.label}>Operating Hours:</Text>
               <Text style={styles.daysText}>
-                {experience.schedule?.days_of_week}
+                {experience.schedule?.days_of_week || "Every Day"}
               </Text>
-              <Text style={styles.timeText}>
-                {formatTime(experience.schedule?.start_time)} -{" "}
-                {formatTime(experience.schedule?.end_time)}
-              </Text>
+              {experience.schedule?.start_time &&
+                experience.schedule?.end_time && (
+                  <Text style={styles.timeText}>
+                    {formatTime(experience.schedule?.start_time)} -{" "}
+                    {formatTime(experience.schedule?.end_time)}
+                  </Text>
+                )}
             </View>
 
             <View style={styles.infoRow}>
               <Text style={styles.label}>Price:</Text>
-              <Text style={styles.value}>${experience.price}</Text>
+              <Text style={styles.value}>{formatToUSD(experience.price)}</Text>
             </View>
 
             <Text style={styles.reviewHeader}>Reviews</Text>
@@ -214,7 +230,7 @@ const styles = StyleSheet.create({
     left: 10,
     backgroundColor: "rgba(0,0,0,0.5)",
     padding: 10,
-    borderRadius: "50%",  
+    borderRadius: "50%",
   },
   buttonContainer: {
     position: "absolute",

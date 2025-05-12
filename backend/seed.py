@@ -1,4 +1,4 @@
-from seed_data import users, payment_methods, referrals, bundles, experiences, experience_images, bookings, reviews, experience_schedules, tags, experience_tags, bundle_experiences
+from seed_data import users, payment_methods, referrals, bundles, experiences, experience_images, bookings, reviews, experience_schedules, tags, experience_tags, bundle_experiences, reservations
 from extensions import db
 from app import app
 from models import *
@@ -13,6 +13,7 @@ with app.app_context():
     # Then drop dependent tables in reverse-dependency order
     db.session.execute(text("DROP TABLE IF EXISTS reviews CASCADE;"))
     db.session.execute(text("DROP TABLE IF EXISTS payments CASCADE;"))
+    db.session.execute(text("DROP TABLE IF EXISTS reservations CASCADE;"))
     db.session.execute(text("DROP TABLE IF EXISTS bookings CASCADE;"))
     db.session.execute(text("DROP TABLE IF EXISTS payment_methods CASCADE;"))
     db.session.execute(text("DROP TABLE IF EXISTS referrals CASCADE;"))
@@ -39,6 +40,7 @@ with app.app_context():
     db.session.add_all(experience_images)
     db.session.add_all(experience_schedules)
     db.session.add_all(bookings)
+    db.session.add_all(reservations)
     db.session.add_all(reviews)
     
     # Commit to save the base entities

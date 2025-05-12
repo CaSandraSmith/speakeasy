@@ -1,4 +1,4 @@
-import { Booking } from "@/app/types";
+import { Booking, Reservation } from "@/app/types";
 import {
   FlatList,
   Text,
@@ -9,18 +9,62 @@ import {
 } from "react-native";
 import { COLORS } from "@/app/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter, usePathname } from "expo-router";
+import { useRouter } from "expo-router";
 
 interface Props {
   bookings: Booking[];
   type: string;
+  back?: () => void
 }
 
-export default function BookingsList({ bookings, type }: Props) {
+export default function BookingsList({ bookings, type, back }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
-  const isStatusPage = pathname?.startsWith("/bookings/");
   const title = type === "past" ? "Past" : "Upcoming";
+
+  const formatDateWithSuffix = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const month = date.toLocaleString("en-US", { month: "long" });
+  
+    const getDaySuffix = (d: number): string => {
+      if (d >= 11 && d <= 13) return "th";
+      switch (d % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    };
+  
+    return `${month} ${day}${getDaySuffix(day)}, ${year}`;
+  }
+
+  const convertTimeToAmPm = (timeStr: string): string => {
+    const [hoursStr, minutesStr, secondsStr] = timeStr.split(":");
+    let hours = parseInt(hoursStr, 10);
+    const period = hours >= 12 ? "PM" : "AM";
+    
+    // Convert to 12-hour format
+    hours = hours % 12 || 12; // 0 becomes 12
+  
+    return `${hours}${period}`;
+  }
+
+  const timeMarkup = (reservation: Reservation) => {
+    let returned = ''
+
+    if (reservation.start_time) {
+      returned += ` · ${convertTimeToAmPm(reservation.start_time)}`
+
+      if (reservation.end_time) {
+        returned += ` - ${convertTimeToAmPm(reservation.end_time)}`
+      }
+    }
+
+    return returned
+  }
+  
 
   return (
     <FlatList
@@ -29,9 +73,9 @@ export default function BookingsList({ bookings, type }: Props) {
       scrollEnabled={false}
       ListHeaderComponent={() => (
         <View style={styles.headerWrapper}>
-          {isStatusPage ? (
+          {back ? (
             <TouchableOpacity
-              onPress={() => router.back()}
+              onPress={() => back()}
               style={styles.backButton}
             >
               <Ionicons
@@ -64,7 +108,9 @@ export default function BookingsList({ bookings, type }: Props) {
             <Text style={styles.code}>
               Confirmation Code: {item.confirmation_code}
             </Text>
-            <Text style={styles.date}>August 10th, 2025 · 2pm–5pm</Text>
+            <Text style={styles.date}>{formatDateWithSuffix(item.reservations[0].date)} 
+              {timeMarkup(item.reservations[0])}
+            </Text>
           </View>
         </TouchableOpacity>
       )}
@@ -97,6 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     color: COLORS.primaryText,
+    textAlign: "center"
   },
   card: {
     backgroundColor: COLORS.cardBg,

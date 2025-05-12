@@ -1,104 +1,80 @@
-import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Modal,
+} from "react-native";
 import { useEffect, useState } from "react";
 import BookingsList from "../components/BookingsList/BookingsList";
 import { Booking, User } from "../types";
 import { useRouter } from "expo-router";
+import { useAuthFetch } from "@/context/userContext";
+import Constants from "expo-constants";
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
 export default function BookingsScreen() {
   const [upcomingBookings, setUpcomingBookings] = useState<Booking[]>([]);
-  const router = useRouter()
+  const [pastBookings, setPastBookings] = useState<Booking[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const authFetch = useAuthFetch();
 
   useEffect(() => {
-    setUpcomingBookings([
-      {
-        id: 1,
-        user_id: 101,
-        number_of_guests: 2,
-        confirmation_code: "ABC123XYZ",
-        experience: {
-          id: 10,
-          title: "Sunset Kayaking Tour",
-          description: "Enjoy a peaceful kayak ride during golden hour.",
-          location: "Monterey Bay, CA",
-          price: 75.0,
-          images: [
-            {
-              id: 1,
-              image_url:
-                "https://media.istockphoto.com/id/1526986072/photo/airplane-flying-over-tropical-sea-at-sunset.jpg?s=612x612&w=0&k=20&c=Ccvg3BqlqsWTT0Mt0CvHlbwCuRjPAIWaCLMKSl3PCks=",
-            },
-          ],
-          tags: [
-            { id: 1, name: "Outdoor" },
-            { id: 2, name: "Adventure" },
-          ],
-          reviews: [],
-        },
-      },
-      {
-        id: 2,
-        user_id: 102,
-        number_of_guests: 1,
-        confirmation_code: "DEF456UVW",
-        experience: {
-          id: 12,
-          title: "Vineyard Wine Tasting",
-          description: "Sample award-winning wines in Napa Valley.",
-          location: "Napa Valley, CA",
-          price: 120.0,
-          images: [
-            {
-              id: 2,
-              image_url:
-                "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww",
-            },
-          ],
-          tags: [
-            { id: 3, name: "Relaxation" },
-            { id: 4, name: "Food & Drink" },
-          ],
-          reviews: [],
-        },
-      },
-      {
-        id: 3,
-        user_id: 103,
-        number_of_guests: 3,
-        confirmation_code: "GHI789RST",
-        experience: {
-          id: 14,
-          title: "Historical Walking Tour",
-          description: "Learn the rich history of the city on foot.",
-          location: "Boston, MA",
-          price: 40.0,
-          images: [
-            {
-              id: 3,
-              image_url:
-                "https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg",
-            },
-          ],
-          tags: [
-            { id: 5, name: "Educational" },
-            { id: 6, name: "Walking Tour" },
-          ],
-          reviews: [],
-        },
-      },
-    ]);
+    const fetchBookings = async () => {
+      try {
+        const response = await authFetch(`${FLASK_URL}/bookings/`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUpcomingBookings(data.current_bookings);
+          setPastBookings(data.past_bookings);
+          console.log(data)
+        } else {
+          console.error("Failed to fetch:", response.status);
+        }
+      } catch (e) {
+        console.error("There was an error:", e);
+      }
+    };
+
+    fetchBookings();
   }, []);
+
+  const handleClose = () => {
+    console.log("close button pressed");
+    setModalOpen(false);
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <BookingsList bookings={upcomingBookings} type={"future"} />
       <View style={styles.section}>
-        <BookingsList bookings={upcomingBookings.slice(0, 2)} type={"past"} />
+        <BookingsList bookings={pastBookings.slice(0, 2)} type={"past"} />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/(stack)/bookings/past")}
+          onPress={() => setModalOpen(true)}
         >
           <Text style={styles.buttonText}>View All Past Bookings</Text>
         </TouchableOpacity>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalOpen}
+          onRequestClose={handleClose}
+        >
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.content}
+          >
+            <BookingsList bookings={pastBookings} type={"past"} back={() => handleClose()} />
+          </ScrollView>
+        </Modal>
       </View>
     </ScrollView>
   );
@@ -115,7 +91,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   section: {
-    marginTop: 10,
+    // marginTop: 5,
   },
   button: {
     marginTop: 12,

@@ -75,7 +75,7 @@ export default function DestinationCard({ destination, index, scrollX, onPress }
           <View className="flex-row items-center mt-1">
             <Ionicons name="star" size={16} color="#D6BD98" />
             <Text className="text-textSecondary font-montserrat ml-1">
-              {destination.average_rating} ({destination.reviews?.length} reviews)
+              {destination.average_rating} ({destination.reviews?.length} review{destination.reviews?.length && destination.reviews?.length > 1 && "s"})
             </Text>
           </View>
         )}

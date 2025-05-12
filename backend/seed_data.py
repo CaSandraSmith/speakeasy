@@ -1,10 +1,17 @@
-from datetime import datetime
-from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag
+from datetime import datetime, timedelta
+from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag, Reservation
 
 users = [
     User(first_name='Red', last_name='Ruby', email='red@example.com', password_hash='password1', phone_number='1234567890', admin=False),
     User(first_name='Blue', last_name='Sapphire', email='blue@example.com', password_hash='password2', phone_number='0987654321', admin=False),
     User(first_name='Green', last_name='Emerald', email='green@example.com', password_hash='password3', phone_number='1122334455', admin=False),
+    User(first_name='Purple', last_name='Amethyst', email='purple@example.com', password_hash='password4', phone_number='2233445566', admin=False),
+    User(first_name='Yellow', last_name='Topaz', email='yellow@example.com', password_hash='password5', phone_number='3344556677', admin=False),
+    User(first_name='Orange', last_name='Citrine', email='orange@example.com', password_hash='password6', phone_number='4455667788', admin=False),
+    User(first_name='Pink', last_name='Morganite', email='pink@example.com', password_hash='password7', phone_number='5566778899', admin=False),
+    User(first_name='Black', last_name='Onyx', email='black@example.com', password_hash='password8', phone_number='6677889900', admin=True),
+    User(first_name='White', last_name='Opal', email='white@example.com', password_hash='password9', phone_number='7788990011', admin=False),
+    User(first_name='Gray', last_name='Moonstone', email='gray@example.com', password_hash='password10', phone_number='8899001122', admin=False),
 ]
 
 payment_methods = [
@@ -197,12 +204,85 @@ bookings = [
     Booking(user_id=1, experience_id=1, number_of_guests=2, confirmation_code='CONFIRM123'),
     Booking(user_id=2, experience_id=3, number_of_guests=1, confirmation_code='CONFIRM456'),
     Booking(user_id=3, experience_id=5, number_of_guests=3, confirmation_code='CONFIRM789'),
+
+    # Additional bookings with most for user_id=1
+    Booking(user_id=1, experience_id=4, number_of_guests=2, confirmation_code='CONFIRM111'),
+    Booking(user_id=1, experience_id=6, number_of_guests=1, confirmation_code='CONFIRM112'),
+    Booking(user_id=1, experience_id=8, number_of_guests=4, confirmation_code='CONFIRM113'),
+    Booking(user_id=1, experience_id=10, number_of_guests=2, confirmation_code='CONFIRM114'),
+    Booking(user_id=1, experience_id=12, number_of_guests=3, confirmation_code='CONFIRM115'),
+    Booking(user_id=1, experience_id=14, number_of_guests=2, confirmation_code='CONFIRM116'),
+    Booking(user_id=1, experience_id=16, number_of_guests=1, confirmation_code='CONFIRM117'),
+
+    Booking(user_id=2, experience_id=2, number_of_guests=2, confirmation_code='CONFIRM201'),
+    Booking(user_id=3, experience_id=7, number_of_guests=1, confirmation_code='CONFIRM202'),
+    Booking(user_id=2, experience_id=9, number_of_guests=4, confirmation_code='CONFIRM203'),
+    Booking(user_id=3, experience_id=11, number_of_guests=2, confirmation_code='CONFIRM204'),
+    Booking(user_id=1, experience_id=13, number_of_guests=3, confirmation_code='CONFIRM205'),
 ]
 
+def days_ago(n):
+    return datetime.now() - timedelta(days=n)
+
 reviews = [
-    Review(user_id=1, experience_id=1, rating=5, comment='Amazing experience! Highly recommend.', timestamp=datetime.now()),
-    Review(user_id=2, experience_id=3, rating=4, comment='Great hike but a bit challenging.', timestamp=datetime.now()),
-    Review(user_id=3, experience_id=5, rating=3, comment='Nice cruise but could be better.', timestamp=datetime.now()),
+    Review(user_id=2, experience_id=1, rating=5, comment='One of the best adventures of my life.', timestamp=days_ago(5)),
+    Review(user_id=3, experience_id=1, rating=4, comment='Truly breathtaking, but a bit pricey.', timestamp=days_ago(7)),
+    Review(user_id=7, experience_id=2, rating=5, comment='Felt like floating above Earth. Surreal.', timestamp=days_ago(8)),
+    Review(user_id=5, experience_id=2, rating=4, comment='Very cool but the prep took a while.', timestamp=days_ago(6)),
+    Review(user_id=5, experience_id=3, rating=3, comment='Nice, but the group was too large.', timestamp=days_ago(3)),
+    Review(user_id=6, experience_id=3, rating=4, comment='Great guide and views! Bring good shoes.', timestamp=days_ago(9)),
+    Review(user_id=7, experience_id=4, rating=5, comment='Scuba through ruins was unforgettable.', timestamp=days_ago(12)),
+    Review(user_id=8, experience_id=4, rating=4, comment='Awesome views but the descent was tough.', timestamp=days_ago(10)),
+    Review(user_id=9, experience_id=5, rating=4, comment='Smooth sailing and beautiful sunsets.', timestamp=days_ago(11)),
+    Review(user_id=10, experience_id=5, rating=5, comment='Felt like royalty the whole time.', timestamp=days_ago(13)),
+    Review(user_id=4, experience_id=2, rating=5, comment='Absolutely out of this world! A dream come true.', timestamp=datetime.now() - timedelta(days=10)),
+    Review(user_id=5, experience_id=4, rating=4, comment='Fascinating dive! A bit claustrophobic but worth it.', timestamp=datetime.now() - timedelta(days=8)),
+    Review(user_id=6, experience_id=6, rating=5, comment='The underwater view was magical. Incredible food too!', timestamp=datetime.now() - timedelta(days=15)),
+    Review(user_id=7, experience_id=7, rating=3, comment='Cold but beautiful. Expected more adventure.', timestamp=datetime.now() - timedelta(days=12)),
+    Review(user_id=8, experience_id=8, rating=5, comment='Penguins were adorable. Once in a lifetime!', timestamp=datetime.now() - timedelta(days=6)),
+    Review(user_id=9, experience_id=9, rating=4, comment='Cozy and scenic. The ice suite was surreal.', timestamp=datetime.now() - timedelta(days=4)),
+    Review(user_id=10, experience_id=10, rating=5, comment='Helicopter ride was thrilling and views were unmatched.', timestamp=datetime.now() - timedelta(days=20)),
+    Review(user_id=1, experience_id=11, rating=4, comment='Volcano descent was intense! Guides were pros.', timestamp=days_ago(18)),
+    Review(user_id=2, experience_id=12, rating=5, comment='Breaking the sound barrier was unforgettable!', timestamp=days_ago(25)),
+    Review(user_id=3, experience_id=13, rating=5, comment='The Louvre at night felt like a movie. Priceless.', timestamp=days_ago(30)),
+    Review(user_id=4, experience_id=14, rating=3, comment='Very informative but not as exclusive as expected.', timestamp=days_ago(2)),
+    Review(user_id=5, experience_id=15, rating=4, comment='The archives tour was mysterious and amazing.', timestamp=days_ago(11)),
+    Review(user_id=6, experience_id=17, rating=5, comment='The tigers and scenery were breathtaking.', timestamp=days_ago(14)),
+    Review(user_id=7, experience_id=19, rating=5, comment='Every meal was perfection. World-class chefs!', timestamp=days_ago(7)),
+    Review(user_id=8, experience_id=21, rating=4, comment='Tasting underwater wine? Yes, please.', timestamp=days_ago(5)),
+    Review(user_id=9, experience_id=23, rating=5, comment='Driving an F1 car was my childhood dream. Loved it.', timestamp=days_ago(3)),
+    Review(user_id=10, experience_id=26, rating=4, comment='Private Machu Picchu tour was magical.', timestamp=days_ago(9)),
+    Review(user_id=1, experience_id=28, rating=5, comment='Luxury on rails. Couldn’t stop staring out the window.', timestamp=days_ago(13)),
+    Review(user_id=2, experience_id=30, rating=3, comment='Cool but shorter than I hoped.', timestamp=days_ago(6)),
+    Review(user_id=3, experience_id=35, rating=5, comment='NASA control center was beyond inspiring.', timestamp=days_ago(1)),
+    Review(user_id=6, experience_id=7, rating=5, comment="Polar bears, ice fields, and champagne. Unreal.", timestamp=days_ago(10)),
+    Review(user_id=7, experience_id=9, rating=3, comment="Beautiful views but hotel was too cold for me.", timestamp=days_ago(15)),
+    Review(user_id=8, experience_id=11, rating=4, comment="Adrenaline rush like no other. Volcano was intense.", timestamp=days_ago(1)),
+    Review(user_id=9, experience_id=12, rating=5, comment="Flying a fighter jet was a dream. Instructors were excellent.", timestamp=days_ago(3)),
+    Review(user_id=10, experience_id=14, rating=5, comment="Deep dive into Chinese history. Loved the access.", timestamp=days_ago(7)),
+    Review(user_id=1, experience_id=15, rating=4, comment="The archives were fascinating, but I wanted more time.", timestamp=days_ago(9)),
+    Review(user_id=2, experience_id=17, rating=5, comment="Tiger conservation up close! Felt meaningful and luxurious.", timestamp=days_ago(4)),
+    Review(user_id=3, experience_id=18, rating=3, comment="Whales were hard to spot. Crew tried their best.", timestamp=days_ago(8)),
+    Review(user_id=4, experience_id=20, rating=5, comment="Truffle dinner was exquisite. Truly magical.", timestamp=days_ago(11)),
+    Review(user_id=5, experience_id=21, rating=4, comment="Unique underwater tasting. Would love to do it again.", timestamp=days_ago(6)),
+    Review(user_id=6, experience_id=22, rating=5, comment="Walking a movie set was unreal. A-list treatment!", timestamp=days_ago(14)),
+    Review(user_id=7, experience_id=23, rating=5, comment="Fastest I've ever gone. Insane experience!", timestamp=days_ago(20)),
+    Review(user_id=8, experience_id=24, rating=5, comment="Private concert with my favorite artist. I'm still crying.", timestamp=days_ago(18)),
+    Review(user_id=9, experience_id=26, rating=4, comment="Perfect sunrise. Peaceful and moving.", timestamp=days_ago(12)),
+    Review(user_id=10, experience_id=28, rating=5, comment="Orient Express is like stepping back in time. Luxurious.", timestamp=days_ago(16)),
+    Review(user_id=1, experience_id=29, rating=4, comment="Submarine tour was fascinating. A bit cramped though.", timestamp=days_ago(19)),
+    Review(user_id=2, experience_id=31, rating=5, comment="Painting with the masters blew my mind. 100% recommended.", timestamp=days_ago(22)),
+    Review(user_id=3, experience_id=32, rating=5, comment="Actually helping restore history was incredible.", timestamp=days_ago(25)),
+    Review(user_id=4, experience_id=33, rating=4, comment="The Hermitage after dark is pure romance and awe.", timestamp=days_ago(23)),
+    Review(user_id=5, experience_id=34, rating=4, comment="Fascinating physics! Could've used more interactive time.", timestamp=days_ago(17)),
+    Review(user_id=6, experience_id=35, rating=5, comment="Mission Control during a launch was next-level!", timestamp=days_ago(13)),
+    Review(user_id=7, experience_id=36, rating=5, comment="Deep sea life is mind-blowing. Felt like a scientist!", timestamp=days_ago(21)),
+    Review(user_id=8, experience_id=37, rating=5, comment="I was literally royalty for a week. Unreal.", timestamp=days_ago(24)),
+    Review(user_id=9, experience_id=38, rating=4, comment="Versailles dinner was regal but service a bit slow.", timestamp=days_ago(26)),
+    Review(user_id=10, experience_id=39, rating=5, comment="GP from the prince's yacht... No words.", timestamp=days_ago(28)),
+    Review(user_id=1, experience_id=41, rating=4, comment="Jet ride was loud but fast and slick.", timestamp=days_ago(29)),
+    Review(user_id=2, experience_id=43, rating=5, comment="Life-changing retreat. Gained deep inner peace.", timestamp=days_ago(30)),
+    Review(user_id=3, experience_id=45, rating=4, comment="Healing, relaxing. Not much nightlife.", timestamp=days_ago(27)),
 ]
 
 experience_schedules = [
@@ -266,6 +346,30 @@ experience_schedules = [
     ExperienceSchedule(experience_id=53, start_date='2025-05-03', end_date='2025-05-03', recurring_pattern='None', days_of_week='Wednesday, Saturday', start_time='10:00:00', end_time='12:00:00'),
     ExperienceSchedule(experience_id=54, start_date='2025-05-04', end_date='2025-05-04', recurring_pattern='None', days_of_week='Monday, Friday', start_time='08:00:00', end_time='10:00:00'),
 ]
+
+reservations = [
+    # Fixed-date experiences
+    Reservation(booking_id=1, date='2025-07-15', time_slot='09:00:00', status='confirmed'),
+    Reservation(booking_id=4, date='2025-08-03', time_slot='14:00:00', status='confirmed'),
+    Reservation(booking_id=12, date='2025-06-25', time_slot='12:00:00', status='confirmed'),
+    Reservation(booking_id=6, date='2025-11-15', time_slot='13:00:00', status='confirmed'),
+
+    # Flexible or custom-pattern experiences
+    Reservation(booking_id=2, date='2025-01-21', time_slot='11:00:00', status='confirmed'),
+    Reservation(booking_id=3, date='2025-10-08', time_slot='15:30:00', status='confirmed'),
+    Reservation(booking_id=5, date='2025-04-30', time_slot='19:30:00', status='confirmed'),
+    Reservation(booking_id=7, date='2024-12-15', time_slot='17:00:00', status='confirmed'),
+    Reservation(booking_id=8, date='2025-10-06', time_slot='18:00:00', status='confirmed'),
+    Reservation(booking_id=9, date='2024-12-19', time_slot='10:00:00', status='confirmed'),
+    Reservation(booking_id=10, date='2025-07-20', time_slot='20:00:00', status='confirmed'),
+
+    # Scheduled (patterned) experiences
+    Reservation(booking_id=11, date='2025-10-02', time_slot='10:00:00', status='confirmed'),
+    Reservation(booking_id=13, date='2025-12-06', time_slot='14:00:00', status='confirmed'),
+    Reservation(booking_id=14, date='2025-01-02', time_slot='13:00:00', status='confirmed'),
+    Reservation(booking_id=15, date='2024-12-03', time_slot='19:00:00', status='confirmed'),
+]
+
 
 tags = [
     Tag(name='Exclusive Access', description='Access to normally restricted areas'), #1
