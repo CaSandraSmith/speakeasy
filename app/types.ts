@@ -81,7 +81,10 @@ export interface Booking {
   experience?: Experience;
   number_of_guests: number;
   confirmation_code: string;
-  bundle?: Bundle;
+  bundle_id?: number;
+  status?: string;
+  created_at?: string;
+  reservations: Reservation[];
 }
 
 export interface Payment {
@@ -91,4 +94,13 @@ export interface Payment {
   amount: number;
   payment_method_id: number;
   status: string;
+}
+
+export interface Reservation {
+  id: number;
+  booking_id: number;
+  date: string;
+  timeslot?: string;
+  status?: string;
+  created_at?: string;
 }
