@@ -71,7 +71,7 @@ export default function BookingsScreen() {
             style={styles.container}
             contentContainerStyle={styles.content}
           >
-            <BookingsList bookings={pastBookings} type={"past"} />
+            <BookingsList bookings={pastBookings} type={"past"} back={() => handleClose()} />
           </ScrollView>
         </Modal>
       </View>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   section: {
-    marginTop: 10,
+    // marginTop: 5,
   },
   button: {
     marginTop: 12,

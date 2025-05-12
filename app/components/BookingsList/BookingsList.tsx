@@ -9,17 +9,16 @@ import {
 } from "react-native";
 import { COLORS } from "@/app/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter, usePathname } from "expo-router";
+import { useRouter } from "expo-router";
 
 interface Props {
   bookings: Booking[];
   type: string;
+  back?: () => void
 }
 
-export default function BookingsList({ bookings, type }: Props) {
+export default function BookingsList({ bookings, type, back }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
-  const isStatusPage = pathname?.startsWith("/bookings/");
   const title = type === "past" ? "Past" : "Upcoming";
 
   return (
@@ -29,9 +28,9 @@ export default function BookingsList({ bookings, type }: Props) {
       scrollEnabled={false}
       ListHeaderComponent={() => (
         <View style={styles.headerWrapper}>
-          {isStatusPage ? (
+          {back ? (
             <TouchableOpacity
-              onPress={() => router.back()}
+              onPress={() => back()}
               style={styles.backButton}
             >
               <Ionicons
@@ -97,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     color: COLORS.primaryText,
+    textAlign: "center"
   },
   card: {
     backgroundColor: COLORS.cardBg,
