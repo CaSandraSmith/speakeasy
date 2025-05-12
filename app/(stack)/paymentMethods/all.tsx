@@ -5,36 +5,93 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import { PaymentMethod } from "../../types";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { COLORS } from "@/app/constants/colors";
+import { COLORS } from "../../constants/colors";
+import { API_URL } from "../../constants/api";
 
 export default function AllPaymentMethods() {
   const router = useRouter();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const response = await fetch(`${API_URL}/payment_methods`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch payment methods');
+      }
+
+      const data = await response.json();
+      setPaymentMethods(data.payment_methods);
+    } catch (error) {
+      console.error('Error fetching payment methods:', error);
+      Alert.alert('Error', 'Failed to load payment methods');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    Alert.alert(
+      'Delete Payment Method',
+      'Are you sure you want to delete this payment method?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await fetch(`${API_URL}/payment_methods/${id}`, {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to delete payment method');
+              }
+
+              setPaymentMethods(methods => methods.filter(method => method.id !== id));
+              Alert.alert('Success', 'Payment method deleted successfully');
+            } catch (error) {
+              console.error('Error deleting payment method:', error);
+              Alert.alert('Error', 'Failed to delete payment method');
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const handleEdit = (id: number) => {
+    router.push(`/paymentMethods/edit/${id}`);
+  };
 
   useEffect(() => {
-    setPaymentMethods([
-      {
-        id: 1,
-        card_number: "**** **** **** 1234",
-        billing_zip: "90210",
-        exp_month: 12,
-        exp_year: 2025,
-        user_id: 101,
-      },
-      {
-        id: 2,
-        card_number: "**** **** **** 5678",
-        billing_zip: "10001",
-        exp_month: 6,
-        exp_year: 2024,
-        user_id: 101,
-      },
-    ]);
+    fetchPaymentMethods();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.centered]}>
+        <Text style={styles.loadingText}>Loading payment methods...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -70,16 +127,29 @@ export default function AllPaymentMethods() {
               </Text>
             </View>
             <View style={styles.cardButtons}>
-              <TouchableOpacity style={styles.iconButton}>
+              <TouchableOpacity 
+                style={styles.iconButton}
+                onPress={() => handleEdit(item.id)}
+              >
                 <Ionicons name="create-outline" size={24} color="#444" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
+              <TouchableOpacity 
+                style={styles.iconButton}
+                onPress={() => handleDelete(item.id)}
+              >
                 <Ionicons name="trash-outline" size={24} color="red" />
               </TouchableOpacity>
             </View>
           </View>
         )}
       />
+      <TouchableOpacity 
+        style={styles.addButton}
+        onPress={() => router.push('/paymentMethods/add')}
+      >
+        <Ionicons name="add" size={24} color={COLORS.primaryText} />
+        <Text style={styles.addButtonText}>Add Payment Method</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -90,6 +160,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#1A3636",
     padding: 20,
     paddingTop: 70
+  },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: COLORS.primaryText,
+    fontSize: 16,
   },
   headerWrapper: {
     flexDirection: "row",
@@ -108,13 +186,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.primaryText,
     letterSpacing: 0.5,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "600",
-    color: "#DCD7C9",
-    marginBottom: 20,
-    letterSpacing: 0.8,
   },
   listContent: {
     paddingBottom: 40,
@@ -165,5 +236,26 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 6,
     borderRadius: 6,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: COLORS.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  addButtonText: {
+    color: COLORS.primaryText,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
 });

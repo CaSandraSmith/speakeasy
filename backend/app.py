@@ -11,6 +11,7 @@ from routes.schedules import schedules
 from routes.bookings import bookings
 from routes.tags import tags
 from routes.search import search
+from routes.payments import payments
 
 
 db.init_app(app)
@@ -23,6 +24,7 @@ app.register_blueprint(reviews_bp, url_prefix='/reviews')
 app.register_blueprint(bookings, url_prefix='/bookings')
 app.register_blueprint(tags, url_prefix='/tags')
 app.register_blueprint(search, url_prefix='/search')
+app.register_blueprint(payments, url_prefix='/payments')
 
 
 with app.app_context():
