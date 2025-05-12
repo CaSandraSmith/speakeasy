@@ -225,9 +225,16 @@ def days_ago(n):
     return datetime.now() - timedelta(days=n)
 
 reviews = [
-    Review(user_id=1, experience_id=1, rating=5, comment='Amazing experience! Highly recommend.', timestamp=datetime.now()),
-    Review(user_id=2, experience_id=3, rating=4, comment='Great hike but a bit challenging.', timestamp=datetime.now()),
-    Review(user_id=3, experience_id=5, rating=3, comment='Nice cruise but could be better.', timestamp=datetime.now()),
+    Review(user_id=2, experience_id=1, rating=5, comment='One of the best adventures of my life.', timestamp=days_ago(5)),
+    Review(user_id=3, experience_id=1, rating=4, comment='Truly breathtaking, but a bit pricey.', timestamp=days_ago(7)),
+    Review(user_id=4, experience_id=2, rating=5, comment='Felt like floating above Earth. Surreal.', timestamp=days_ago(8)),
+    Review(user_id=5, experience_id=2, rating=4, comment='Very cool but the prep took a while.', timestamp=days_ago(6)),
+    Review(user_id=5, experience_id=3, rating=3, comment='Nice, but the group was too large.', timestamp=days_ago(3)),
+    Review(user_id=6, experience_id=3, rating=4, comment='Great guide and views! Bring good shoes.', timestamp=days_ago(9)),
+    Review(user_id=7, experience_id=4, rating=5, comment='Scuba through ruins was unforgettable.', timestamp=days_ago(12)),
+    Review(user_id=8, experience_id=4, rating=4, comment='Awesome views but the descent was tough.', timestamp=days_ago(10)),
+    Review(user_id=9, experience_id=5, rating=4, comment='Smooth sailing and beautiful sunsets.', timestamp=days_ago(11)),
+    Review(user_id=10, experience_id=5, rating=5, comment='Felt like royalty the whole time.', timestamp=days_ago(13)),
     Review(user_id=4, experience_id=2, rating=5, comment='Absolutely out of this world! A dream come true.', timestamp=datetime.now() - timedelta(days=10)),
     Review(user_id=5, experience_id=4, rating=4, comment='Fascinating dive! A bit claustrophobic but worth it.', timestamp=datetime.now() - timedelta(days=8)),
     Review(user_id=6, experience_id=6, rating=5, comment='The underwater view was magical. Incredible food too!', timestamp=datetime.now() - timedelta(days=15)),
