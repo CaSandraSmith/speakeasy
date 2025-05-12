@@ -79,7 +79,7 @@ export default function ShowExperience() {
   const handleBookPress = () => {
     if (experience) {
       router.push({
-        pathname: "/(stack)/experience/createBooking",
+        pathname: "/experience/createBooking",
         params: {
           id: experience.id.toString(),
           title: experience.title,

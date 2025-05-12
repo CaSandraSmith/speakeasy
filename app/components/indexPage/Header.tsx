@@ -17,15 +17,6 @@ export default function Header() {
       >
         Let's Discover
       </Text>
-      
-      <TouchableOpacity 
-        onPress={() => router.push('/profile')}
-        className="bg-background/20 rounded-full w-12 h-12 items-center justify-center"
-      >
-        <Text className="text-textPrimary font-montserrat-medium text-sm">
-          Profile
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
