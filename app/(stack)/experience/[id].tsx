@@ -84,6 +84,7 @@ export default function ShowExperience() {
           id: experience.id.toString(),
           title: experience.title,
           imageUrl: experience.images?.[0]?.image_url,
+          price: experience.price
         },
       });
     }
