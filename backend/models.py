@@ -299,16 +299,6 @@ class Review(db.Model):
     user = db.relationship('User', back_populates='reviews')
     experience = db.relationship('Experience', back_populates='reviews')
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_name': f"{self.user.first_name} {self.user.last_name}",
-            'experience_id': self.experience_id,
-            'rating': self.rating,
-            'comment': self.comment,
-            'timestamp': self.timestamp.isoformat() if self.timestamp else None
-        }
-
 
     def to_dict(self, user_id=None):
         return {
@@ -316,6 +306,7 @@ class Review(db.Model):
             "rating": self.rating,
             "comment": self.comment,
             "timestamp": self.timestamp.isoformat(),
+            'user_name': f"{self.user.first_name} {self.user.last_name}",
             "user_id": self.user_id,
             "experience_id": self.experience_id,
             # Python has a weird way of setting up ternary operators compared to JS or Ruby.
