@@ -103,4 +103,6 @@ export interface Reservation {
   timeslot?: string;
   status?: string;
   created_at?: string;
+  start_time?: string;
+  end_time?: string;
 }

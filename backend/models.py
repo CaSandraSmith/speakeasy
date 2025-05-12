@@ -253,6 +253,8 @@ class Reservation(db.Model):
             'booking_id': self.booking_id,
             'date': self.date.isoformat() if self.date else None,
             'time_slot': self.time_slot.isoformat() if self.time_slot else None,
+            'start_time': self.booking.experience.schedule.start_time.isoformat() if self.booking.experience.schedule.start_time else None,
+            'end_time': self.booking.experience.schedule.end_time.isoformat() if self.booking.experience.schedule.end_time else None,
             'status': self.status,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }

@@ -34,6 +34,7 @@ export default function BookingsScreen() {
           const data = await response.json();
           setUpcomingBookings(data.current_bookings);
           setPastBookings(data.past_bookings);
+          console.log(data)
         } else {
           console.error("Failed to fetch:", response.status);
         }
