@@ -1,3 +1,4 @@
+import React from "react";
 import { useAuthFetch, useUser } from "@/context/userContext";
 import {
   StyleSheet,
@@ -100,6 +101,12 @@ export default function Profile() {
         onPress={() => router.push("(stack)/paymentMethods/all")}
       >
         <Text style={styles.buttonText}>Payment Methods</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("(stack)/payments/history")}
+      >
+        <Text style={styles.buttonText}>Payment History</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
