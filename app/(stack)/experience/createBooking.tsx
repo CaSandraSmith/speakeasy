@@ -1,71 +1,143 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  TextInput, 
-  ScrollView, 
-  Image, 
-  SafeAreaView, 
-  StatusBar,
-  Modal
-} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Image, SafeAreaView, StatusBar,
+  Modal, FlatList, Alert} from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
+import CalendarPicker from 'react-native-calendar-picker';
+import { useAuthFetch } from "../../../context/userContext";
+import Constants from "expo-constants";
 
-export default function createBooking() {
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
+
+export default function CreateBooking() {
   const router = useRouter();
-  const { id, title, imageUrl } = useLocalSearchParams();
+  const { id, title, imageUrl, price } = useLocalSearchParams();
+  const authFetch = useAuthFetch();
   
   // State
   const [numberOfGuests, setNumberOfGuests] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [specialRequests, setSpecialRequests] = useState('');
-  const [formattedDate, setFormattedDate] = useState('');
+  const [showCustomYearPicker, setShowCustomYearPicker] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Get current year and create array of future years
+  const currentYear = new Date().getFullYear();
+  const futureYears = Array.from({ length: 4 }, (_, i) => currentYear + i);
+  
+  // Min and max dates
+  const minDate = new Date();
+  const maxDate = new Date();
+  maxDate.setFullYear(currentYear + 3);
 
-  useEffect(() => {
-    // Format the date for display
-    const formatDate = (date: Date) => {
-      const options: Intl.DateTimeFormatOptions = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      };
-      return date.toLocaleDateString('en-US', options);
+  // Format date for display
+  const formatDateDisplay = (date: Date | null) => {
+    if (!date) return '';
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'short', 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
     };
-    
-    setFormattedDate(formatDate(date));
-  }, [date]);
+    return date.toLocaleDateString('en-US', options);
+  };
 
-  // Handle date change
-  const onChangeDate = (selectedDate: Date) => {
-    setDate(selectedDate);
-    setShowDatePicker(false);
+  // Handle date change from calendar
+  const onDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  // Handle year selection
+  const handleYearSelect = (year: number) => {
+    setSelectedYear(year);
+    setShowCustomYearPicker(false);
+    
+    // Update the calendar to show the selected year
+    const newDate = new Date();
+    newDate.setFullYear(year);
+    newDate.setMonth(0); // January
+    
+    // If selected year is current year, make sure we don't go to past months
+    if (year === currentYear) {
+      const currentMonth = new Date().getMonth();
+      newDate.setMonth(currentMonth);
+    }
   };
 
   // Handle booking submission
-  const handleBooking = () => {
-    // Here you would typically validate inputs and submit to your API
+  const handleBooking = async () => {
+    // Validate inputs
     if (!numberOfGuests) {
-      alert('Please enter the number of guests');
+      Alert.alert('Missing Information', 'Please enter the number of guests');
+      return;
+    }
+    if (!selectedDate) {
+      Alert.alert('Missing Information', 'Please select a date');
       return;
     }
 
-    // Mock booking data
-    const bookingData = {
-      experienceId: id,
-      numberOfGuests: parseInt(numberOfGuests),
-      date: date.toISOString(),
-      specialRequests: specialRequests
-    };
+    setIsLoading(true);
 
-    console.log('Booking data:', bookingData);
-    
-    // Navigate to bookings tab
-    router.push('/bookings');
+    try {
+      // Prepare booking data
+      const bookingData = {
+        experience_id: parseInt(id as string),
+        number_of_guests: parseInt(numberOfGuests),
+        reservations: [{
+          date: selectedDate.toISOString(),
+          time_slot: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 10, 0, 0).toISOString() // Default to 10:00 AM
+        }],
+        special_requests: specialRequests
+      };
+
+      console.log('Creating booking with data:', bookingData);
+
+      // Create booking on backend
+      const response = await authFetch(`${FLASK_URL}/bookings/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create booking');
+      }
+
+      const newBooking = await response.json();
+      console.log('Booking created successfully:', newBooking);
+
+      // Navigate to booking info page with the new booking ID
+      router.push({
+        pathname: '/experience/bookingInfo',
+        params: { bookingId: newBooking.id }
+      });
+
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      Alert.alert(
+        'Booking Failed',
+        error instanceof Error ? error.message : 'Unable to create booking. Please try again.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const customDayHeaderStylesCallback = () => {
+    return {
+      textStyle: {
+        color: COLORS.accent,
+        fontSize: 12,
+        fontFamily: 'Montserrat-Regular',
+      }
+    };
   };
 
   return (
@@ -92,6 +164,9 @@ export default function createBooking() {
             <Text className="text-lg font-bold text-textPrimary font-playfair-bold">
               {title || 'Experience Title'}
             </Text>
+            <Text className="text-lg text-accent font-montserrat-bold mt-1">
+              ${price || '0'} per person
+            </Text>
           </View>
           <View className="w-20 h-20 rounded-lg overflow-hidden bg-gray-400">
             {imageUrl ? (
@@ -107,7 +182,7 @@ export default function createBooking() {
             )}
           </View>
         </View>
-        
+
         {/* Booking Form */}
         <View className="bg-textPrimary/5 rounded-xl p-5">
           {/* Number of Guests */}
@@ -127,119 +202,140 @@ export default function createBooking() {
           
           {/* Date Picker */}
           <View className="mb-5">
-            <Text className="text-base font-medium text-textPrimary mb-2 font-montserrat">
-              Date
+            <Text className="text-base font-medium text-textPrimary mb-3 font-montserrat">
+              Experience Date
             </Text>
+            
+            {/* Date Display */}
             <TouchableOpacity 
-              className="bg-white rounded-lg px-4 py-3 justify-center"
+              className="bg-white rounded-lg px-4 py-3 mb-3"
               onPress={() => setShowDatePicker(true)}
             >
-              <Text className={formattedDate ? "text-base text-gray-800" : "text-base text-gray-400"}>
-                {formattedDate || 'Select a date'}
+              <Text className="text-xs text-gray-600 mb-1">Select Date</Text>
+              <Text className={selectedDate ? "text-sm text-gray-800 font-montserrat" : "text-sm text-gray-400"}>
+                {selectedDate ? formatDateDisplay(selectedDate) : 'Choose your experience date'}
               </Text>
             </TouchableOpacity>
+
             
-            {showDatePicker && (
-              <Modal
-                transparent={true}
-                animationType="slide"
-                visible={showDatePicker}
-                onRequestClose={() => setShowDatePicker(false)}
-              >
-                <View className="flex-1 justify-center items-center bg-black/50">
-                  <View className="w-4/5 bg-background rounded-xl p-5 border border-accent">
-                    <View className="flex-row justify-between items-center mb-5 border-b border-textSecondary/30 pb-2">
-                      <Text className="text-lg font-bold text-textPrimary">
-                        Select Date
-                      </Text>
-                      <TouchableOpacity onPress={() => setShowDatePicker(false)}>
-                        <Text className="text-base text-textSecondary">
-                          Cancel
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    
-                    {/* Date Selector - Improved Version */}
-                    <View className="flex-row justify-around mb-5">
-                      {/* Month Selector */}
-                      <View className="flex-1 mr-2">
-                        <Text className="text-textPrimary font-bold text-center mb-2">Month</Text>
-                        <ScrollView className="max-h-40" showsVerticalScrollIndicator={true}>
-                          {Array.from({ length: 12 }, (_, i) => {
-                            const monthDate = new Date();
-                            monthDate.setMonth(monthDate.getMonth() + i);
-                            const monthName = monthDate.toLocaleString('default', { month: 'long' });
-                            const monthYear = monthDate.getFullYear();
-                            const isSelected = date.getMonth() === monthDate.getMonth() && 
-                                              date.getFullYear() === monthDate.getFullYear();
-                            
-                            return (
-                              <TouchableOpacity 
-                                key={`month-${i}`}
-                                className={`p-2 my-1 rounded-lg items-center ${isSelected ? 'bg-accent' : ''}`}
-                                onPress={() => {
-                                  const newDate = new Date(date);
-                                  newDate.setMonth(monthDate.getMonth());
-                                  newDate.setFullYear(monthDate.getFullYear());
-                                  setDate(newDate);
-                                }}
-                              >
-                                <Text className={`text-base ${isSelected ? 'text-background font-bold' : 'text-textPrimary'}`}>
-                                  {monthName} {monthYear !== new Date().getFullYear() ? monthYear : ''}
-                                </Text>
-                              </TouchableOpacity>
-                            );
-                          })}
-                        </ScrollView>
-                      </View>
-                      
-                      {/* Day Selector */}
-                      <View className="flex-1 ml-2">
-                        <Text className="text-textPrimary font-bold text-center mb-2">Day</Text>
-                        <ScrollView className="max-h-40" showsVerticalScrollIndicator={true}>
-                          {Array.from({ length: 31 }, (_, i) => {
-                            const day = i + 1;
-                            const isSelected = date.getDate() === day;
-                            
-                            // Create a date to check if this day is valid for the selected month
-                            const checkDate = new Date(date);
-                            checkDate.setDate(day);
-                            
-                            // Skip rendering if the day doesn't exist in current month
-                            if (checkDate.getMonth() !== date.getMonth()) return null;
-                            
-                            return (
-                              <TouchableOpacity 
-                                key={`day-${day}`}
-                                className={`p-2 my-1 rounded-lg items-center ${isSelected ? 'bg-accent' : ''}`}
-                                onPress={() => {
-                                  const newDate = new Date(date);
-                                  newDate.setDate(day);
-                                  setDate(newDate);
-                                }}
-                              >
-                                <Text className={`text-base ${isSelected ? 'text-background font-bold' : 'text-textPrimary'}`}>
-                                  {day}
-                                </Text>
-                              </TouchableOpacity>
-                            );
-                          })}
-                        </ScrollView>
-                      </View>
-                    </View>
-                    
-                    <TouchableOpacity 
-                      className="bg-accent rounded-lg p-3 items-center"
-                      onPress={() => onChangeDate(date)}
-                    >
-                      <Text className="text-background text-base font-bold">
-                        Confirm
-                      </Text>
+            {/* Calendar Modal */}
+            <Modal
+              visible={showDatePicker}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={() => setShowDatePicker(false)}
+            >
+              <View className="flex-1 justify-center items-center bg-black/50">
+                <View className="w-11/12 bg-background rounded-xl p-4 max-h-[80%]">
+                  <View className="flex-row justify-between items-center mb-4">
+                    <Text className="text-lg font-bold text-textPrimary font-playfair-bold">
+                      Select Experience Date
+                    </Text>
+                  </View>
+                  
+                  <CalendarPicker
+                    startFromMonday={false}
+                    allowRangeSelection={false}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    initialDate={new Date(selectedYear, new Date().getMonth(), 1)}
+                    todayBackgroundColor={`${COLORS.accent}33`}
+                    selectedDayColor={COLORS.accent}
+                    selectedDayTextColor={COLORS.background}
+                    onDateChange={onDateChange}
+                    textStyle={{
+                      fontFamily: 'Montserrat-Regular',
+                      color: COLORS.primaryText,
+                    }}
+                    weekdays={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
+                    months={[
+                      'January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December'
+                    ]}
+                    previousTitle="‹"
+                    nextTitle="›"
+                    previousTitleStyle={{
+                      color: COLORS.accent,
+                      fontSize: 22,
+                    }}
+                    nextTitleStyle={{
+                      color: COLORS.accent,
+                      fontSize: 22,
+                    }}
+                    monthTitleStyle={{
+                      color: COLORS.primaryText,
+                      fontSize: 18,
+                      fontFamily: 'Montserrat-Bold',
+                    }}
+                    dayLabelsWrapper={{
+                      borderBottomWidth: 0,
+                      borderTopWidth: 0,
+                      paddingBottom: 10,
+                      borderColor: `${COLORS.accent}33`,
+                    }}
+                    customDayHeaderStyles={customDayHeaderStylesCallback}
+                    selectedStartDate={selectedDate}
+                    disabledDatesTextStyle={{
+                      color: '#666666',
+                      textDecorationLine: 'line-through',
+                    }}
+                    restrictMonthNavigation={true}
+                    width={320}
+                    height={350}
+                  />
+                  
+                  <TouchableOpacity 
+                    className="bg-accent rounded-lg py-3 mt-4 items-center"
+                    onPress={() => setShowDatePicker(false)}
+                  >
+                    <Text className="text-background text-base font-bold font-montserrat">
+                      Confirm Date
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            
+            {/* Custom Year Picker Modal */}
+            <Modal
+              visible={showCustomYearPicker}
+              transparent={true}
+              animationType="fade"
+              onRequestClose={() => setShowCustomYearPicker(false)}
+            >
+              <View className="flex-1 justify-center items-center bg-black/50">
+                <View className="w-3/4 bg-background rounded-xl p-4 max-h-[50%]">
+                  <View className="flex-row justify-between items-center mb-4">
+                    <Text className="text-lg font-bold text-textPrimary">
+                      Select Year
+                    </Text>
+                    <TouchableOpacity onPress={() => setShowCustomYearPicker(false)}>
+                      <Ionicons name="close" size={24} color={COLORS.primaryText} />
                     </TouchableOpacity>
                   </View>
+                  
+                  <FlatList
+                    data={futureYears}
+                    keyExtractor={(item) => item.toString()}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        className={`py-3 px-4 rounded-lg mb-2 ${
+                          item === selectedYear ? 'bg-accent' : 'bg-accent/20'
+                        }`}
+                        onPress={() => handleYearSelect(item)}
+                      >
+                        <Text className={`text-center font-montserrat ${
+                          item === selectedYear ? 'text-background font-bold' : 'text-textPrimary'
+                        }`}>
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                  />
                 </View>
-              </Modal>
-            )}
+              </View>
+            </Modal>
           </View>
           
           {/* Special Requests */}
@@ -261,16 +357,30 @@ export default function createBooking() {
         </View>
       </ScrollView>
       
-      {/* Book Button */}
-      <View className="p-5 bg-background border-t border-textSecondary/20">
-        <TouchableOpacity 
-          className="bg-accent rounded-3xl py-4 items-center justify-center"
-          onPress={handleBooking}
-        >
-          <Text className="text-white text-lg font-semibold font-montserrat-bold">
-            Book
-          </Text>
-        </TouchableOpacity>
+      {/* Book Button and Total Price */}
+      <View className="bg-background border-t border-textSecondary/20">
+        {/* Total Price Display */}
+        {numberOfGuests && price && (
+          <View className="px-5 py-3 flex-row justify-between items-center">
+            <Text className="text-textPrimary font-montserrat">Total Price:</Text>
+            <Text className="text-xl text-accent font-montserrat-bold">
+              ${parseInt(numberOfGuests) * parseInt(price as string || '0')}
+            </Text>
+          </View>
+        )}
+        
+        {/* Book Button */}
+        <View className="p-5 pt-2">
+          <TouchableOpacity 
+            className={`bg-accent rounded-3xl py-4 items-center justify-center ${isLoading ? 'opacity-70' : ''}`}
+            onPress={handleBooking}
+            disabled={isLoading}
+          >
+            <Text className="text-background text-lg font-semibold font-montserrat-bold">
+              {isLoading ? 'Creating Booking...' : 'Continue'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

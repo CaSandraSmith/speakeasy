@@ -79,11 +79,12 @@ export default function ShowExperience() {
   const handleBookPress = () => {
     if (experience) {
       router.push({
-        pathname: "/(stack)/experience/createBooking",
+        pathname: "/experience/createBooking",
         params: {
           id: experience.id.toString(),
           title: experience.title,
           imageUrl: experience.images?.[0]?.image_url,
+          price: experience.price
         },
       });
     }
