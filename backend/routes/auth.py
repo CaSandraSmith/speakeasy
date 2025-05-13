@@ -43,6 +43,12 @@ def is_admin():
         return False
     return user.admin
 
+def is_authorized(resource_user_id):
+    user = get_current_user()
+    if not user:
+        return False
+    return user.id == resource_user_id or user.admin
+
 # Decorator for general authentication
 def require_auth(func):
     @wraps(func)
