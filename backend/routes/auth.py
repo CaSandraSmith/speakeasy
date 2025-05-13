@@ -75,3 +75,7 @@ def require_review_ownership(func):
 
         return func(*args, **kwargs)
     return check_ownership
+
+def is_authorized(resource_user_id):
+    return resource_user_id == get_current_user().id
+

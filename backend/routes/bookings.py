@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from extensions import db
 from datetime import datetime, timezone
-from routes.auth import require_auth, get_current_user
+from routes.auth import require_auth, get_current_user, is_authorized
 from models import Booking, Reservation, Experience
 import uuid
 import logging
@@ -11,9 +11,6 @@ bookings = Blueprint('bookings', __name__)
 
 def generate_confirmation_code():
     return str(uuid.uuid4())[:8].upper()
-
-def is_authorized(resource_user_id):
-    return resource_user_id == get_current_user().id
 
 def validate_reservation_fields(res_data):
     return all(key in res_data for key in ['date', 'time_slot'])
