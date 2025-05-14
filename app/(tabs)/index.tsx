@@ -147,7 +147,7 @@ export default function Index() {
       >
         <View className="flex-1">
           {/* Fixed Header Section */}
-          <View>
+          <View className="mx-4">
             <Header />
             <SearchBar
               value={searchText}

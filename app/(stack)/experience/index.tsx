@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -12,7 +11,6 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
 
 // Get screen dimensions for responsive layout
 const { width } = Dimensions.get('window');
@@ -90,157 +88,110 @@ export default function ExperienceIndex() {
 
     return (
       <TouchableOpacity
+        className="overflow-hidden"
         style={[
-          styles.card,
           {
             width: cardWidth,
-            height: cardHeight
+            height: cardHeight,
+            borderRadius: 15,
           }
         ]}
         onPress={handleExperienceClick}
       >
         <Image
           source={{ uri: item.image_url }}
-          style={styles.media}
+          className="w-full h-full absolute"
+          resizeMode="cover"
         />
-        <View style={styles.overlay}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.location}</Text>
+        <View className="absolute bottom-0 left-0 right-0 p-4">
+          <Text 
+            className="text-white font-montserrat-bold text-xl"
+            style={{
+              textShadowColor: 'rgba(0, 0, 0, 0.8)',
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 2,
+            }}
+          >
+            {item.title}
+          </Text>
+          <Text 
+            className="text-textPrimary font-montserrat text-base"
+            style={{
+              textShadowColor: 'rgba(0, 0, 0, 0.8)',
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 3,
+            }}
+          >
+            {item.location}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+    <SafeAreaView className="flex-1 bg-background">
+      <StatusBar barStyle="light-content" />
 
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          {destination.charAt(0).toUpperCase() + destination.slice(1)}
-        </Text>
+      <View className="flex-row items-center pt-6 pb-4 px-5">
         <TouchableOpacity
-          style={styles.backButton}
+          className="absolute left-5 z-10"
           onPress={() => router.back()}
         >
-          <Ionicons name="chevron-back" size={28} color="black" />
+          <Ionicons name="arrow-back" size={24} color="#DCD7C9" />
         </TouchableOpacity>
+        <Text className="flex-1 text-center text-textPrimary font-montserrat-bold text-3xl">
+          {destination.charAt(0).toUpperCase() + destination.slice(1)}
+        </Text>
       </View>
 
       {/* Main Content - Grid Layout */}
       <ScrollView
-        contentContainerStyle={styles.content}
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
         showsVerticalScrollIndicator={false}
       >
         {experiences.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>No experiences found</Text>
+          <View className="flex-1 justify-center items-center py-20">
+            <Text className="text-textSecondary font-montserrat text-base text-center">
+              No experiences found
+            </Text>
           </View>
         ) : (
           <>
             {/* First row - Large card */}
-            <View style={styles.row}>
+            <View className="mb-2">
               {experiences.slice(0, 1).map(item => (
                 <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
               ))}
             </View>
 
             {/* Second row - Medium cards */}
-            <View style={styles.row}>
+            <View className="flex-row justify-between mb-2">
               {experiences.slice(1, 3).map(item => (
                 <ExperienceCard key={item.id} item={{...item, size: 'medium'}} />
               ))}
             </View>
 
             {/* Third row - Small cards */}
-            <View style={styles.row}>
+            <View className="flex-row justify-between mb-2">
               {experiences.slice(3, 5).map(item => (
                 <ExperienceCard key={item.id} item={{...item, size: 'small'}} />
               ))}
             </View>
 
             {/* Fourth row - Large card */}
-            <View style={styles.row}>
-              {experiences.slice(5, 6).map(item => (
-                <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
-              ))}
-            </View>
+            {experiences.length > 5 && (
+              <View className="mb-2">
+                {experiences.slice(5, 6).map(item => (
+                  <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
+                ))}
+              </View>
+            )}
           </>
         )}
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    position: 'relative',
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  backButton: {
-    position: 'absolute',
-    left: 20,
-  },
-  content: {
-    padding: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  card: {
-    borderRadius: 15,
-    overflow: 'hidden',
-    marginBottom: 10,
-    backgroundColor: COLORS.cardBg,
-  },
-  media: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  overlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: 'white',
-    opacity: 0.9,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  emptyStateText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-  }
-});
