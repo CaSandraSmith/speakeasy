@@ -13,8 +13,9 @@ import { PaymentMethod } from "../../types";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { COLORS } from "../../constants/colors";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import { useAuthFetch } from "@/context/userContext";
+import Toast from "react-native-toast-message";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
@@ -27,12 +28,12 @@ export default function AllPaymentMethods() {
   const fetchPaymentMethods = async () => {
     try {
       const response = await authFetch(`${FLASK_URL}/payment_methods/`);
-      if (!response.ok) throw new Error('Failed to fetch payment methods');
+      if (!response.ok) throw new Error("Failed to fetch payment methods");
       const data = await response.json();
       setPaymentMethods(data.payment_methods);
     } catch (error) {
-      console.error('Error fetching payment methods:', error);
-      Alert.alert('Error', 'Failed to load payment methods');
+      console.error("Error fetching payment methods:", error);
+      Alert.alert("Error", "Failed to load payment methods");
     } finally {
       setLoading(false);
     }
@@ -40,27 +41,34 @@ export default function AllPaymentMethods() {
 
   const handleDelete = async (id: number) => {
     Alert.alert(
-      'Delete Payment Method',
-      'Are you sure you want to delete this payment method?',
+      "Delete Payment Method",
+      "Are you sure you want to delete this payment method?",
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: "Cancel", style: "cancel" },
         {
-          text: 'Delete',
-          style: 'destructive',
+          text: "Delete",
+          style: "destructive",
           onPress: async () => {
             try {
-              const response = await fetch(`${FLASK_URL}/payment_methods/${id}`, {
-                method: 'DELETE',
-                headers: {
-                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+              const response = await authFetch(
+                `${FLASK_URL}/payment_methods/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (!response.ok)
+                throw new Error("Failed to delete payment method");
+              setPaymentMethods((methods) =>
+                methods.filter((method) => method.id !== id)
+              );
+              Toast.show({
+                type: "error",
+                text1: "Payment method removed",
+                position: "bottom",
               });
-              if (!response.ok) throw new Error('Failed to delete payment method');
-              setPaymentMethods(methods => methods.filter(method => method.id !== id));
-              Alert.alert('Deleted', 'Payment method removed');
             } catch (err) {
               console.error(err);
-              Alert.alert('Error', 'Could not delete payment method');
+              Alert.alert("Error", "Could not delete payment method");
             }
           },
         },
@@ -93,7 +101,10 @@ export default function AllPaymentMethods() {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
           <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Your Payment Methods</Text>
@@ -107,18 +118,36 @@ export default function AllPaymentMethods() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.cardTopRow}>
-              <Ionicons name="card-outline" size={20} color={COLORS.background} />
-              <Text style={styles.cardNumber}>{maskCardNumber(item.card_number)}</Text>
+              <Ionicons
+                name="card-outline"
+                size={20}
+                color={COLORS.background}
+              />
+              <Text style={styles.cardNumber}>
+                {maskCardNumber(item.card_number)}
+              </Text>
             </View>
             <View style={styles.cardDetails}>
-              <Text style={styles.detail}>Expires {item.exp_month}/{item.exp_year}</Text>
+              <Text style={styles.detail}>
+                Expires {item.exp_month}/{item.exp_year}
+              </Text>
               <Text style={styles.detail}>ZIP {item.billing_zip}</Text>
             </View>
             <View style={styles.cardButtons}>
-              <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.iconButton}>
-                <Ionicons name="create-outline" size={22} color={COLORS.background} />
+              <TouchableOpacity
+                onPress={() => handleEdit(item.id)}
+                style={styles.iconButton}
+              >
+                <Ionicons
+                  name="create-outline"
+                  size={22}
+                  color={COLORS.background}
+                />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.iconButton}>
+              <TouchableOpacity
+                onPress={() => handleDelete(item.id)}
+                style={styles.iconButton}
+              >
                 <Ionicons name="trash-outline" size={22} color="red" />
               </TouchableOpacity>
             </View>
@@ -128,7 +157,7 @@ export default function AllPaymentMethods() {
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => router.push('/paymentMethods/add')}
+        onPress={() => router.push("/paymentMethods/add")}
       >
         <Ionicons name="add" size={22} color={COLORS.background} />
         <Text style={styles.addButtonText}>Add Payment Method</Text>
@@ -145,8 +174,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     marginTop: 12,

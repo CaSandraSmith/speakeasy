@@ -13,6 +13,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from "expo-constants";
 import { COLORS } from "../../../constants/colors";
 import { useAuthFetch } from "@/context/userContext";
+import Toast from "react-native-toast-message";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
@@ -78,7 +79,12 @@ export default function EditPaymentMethod() {
 
       if (!res.ok) throw new Error("Update failed");
 
-      Alert.alert("Success", "Payment method updated successfully.");
+      Toast.show({
+        type: "success",
+        text1: "Payment method updated!",
+        position: "bottom",
+      });
+
       router.push("/paymentMethods/all");
     } catch (error) {
       console.error(error);

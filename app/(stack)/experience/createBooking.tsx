@@ -19,6 +19,7 @@ import CalendarPicker from "react-native-calendar-picker";
 import { useAuthFetch } from "../../../context/userContext";
 import Constants from "expo-constants";
 import SelectPaymentMethod from "../paymentMethods/select";
+import Toast from "react-native-toast-message";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
@@ -83,11 +84,21 @@ export default function CreateBooking() {
   const handleContinuePress = () => {
     // Validate inputs
     if (!numberOfGuests) {
-      Alert.alert("Missing Information", "Please enter the number of guests");
+      // Alert.alert("Missing Information", "Please enter the number of guests");
+      Toast.show({
+        type: "error",
+        text1: "Please enter the number of guests",
+        position: "bottom",
+      });
       return;
     }
     if (!selectedDate) {
-      Alert.alert("Missing Information", "Please select a date");
+      // Alert.alert("Missing Information", "Please select a date");
+      Toast.show({
+        type: "error",
+        text1: "Please select a date",
+        position: "bottom",
+      });
       return;
     }
 
@@ -98,13 +109,24 @@ export default function CreateBooking() {
   // Handle booking submission
   const handleBooking = async (paymentMethodId: number) => {
     if (!numberOfGuests) {
-      Alert.alert("Missing Information", "Please enter the number of guests");
+      // Alert.alert("Missing Information", "Please enter the number of guests");
+      Toast.show({
+        type: "error",
+        text1: "Please enter the number of guests",
+        position: "bottom",
+      });
       return;
     }
     if (!selectedDate) {
-      Alert.alert("Missing Information", "Please select a date");
+      // Alert.alert("Missing Information", "Please select a date");
+      Toast.show({
+        type: "error",
+        text1: "Please select a date",
+        position: "bottom",
+      });
       return;
     }
+
 
     try {
       // Prepare booking data
@@ -452,6 +474,7 @@ export default function CreateBooking() {
           handleBooking={handleBooking}
         />
       )}
+      <Toast />
     </SafeAreaView>
   );
 }
