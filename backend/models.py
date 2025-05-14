@@ -70,17 +70,6 @@ class PaymentMethod(db.Model):
         }
 
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_number': self.card_number,
-            'billing_zip': self.billing_zip,
-            'exp_month': self.exp_month,
-            'exp_year': self.exp_year,
-            'user_id': self.user_id
-        }
-
-
 class Referral(db.Model):
     __tablename__ = 'referrals'
 

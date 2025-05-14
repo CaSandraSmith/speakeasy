@@ -1,3 +1,4 @@
+// AllPaymentMethods.tsx
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -6,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { PaymentMethod } from "../../types";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -20,21 +22,14 @@ export default function AllPaymentMethods() {
   const router = useRouter();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
-  const authFetch = useAuthFetch()
+  const authFetch = useAuthFetch();
 
   const fetchPaymentMethods = async () => {
     try {
-      const response = await authFetch(`${FLASK_URL}/payment_methods/`, {
-        method: "GET",
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch payment methods');
-      }
-
+      const response = await authFetch(`${FLASK_URL}/payment_methods/`);
+      if (!response.ok) throw new Error('Failed to fetch payment methods');
       const data = await response.json();
       setPaymentMethods(data.payment_methods);
-      console.log(data)
     } catch (error) {
       console.error('Error fetching payment methods:', error);
       Alert.alert('Error', 'Failed to load payment methods');
@@ -48,10 +43,7 @@ export default function AllPaymentMethods() {
       'Delete Payment Method',
       'Are you sure you want to delete this payment method?',
       [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
+        { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
           style: 'destructive',
@@ -63,20 +55,16 @@ export default function AllPaymentMethods() {
                   'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
               });
-
-              if (!response.ok) {
-                throw new Error('Failed to delete payment method');
-              }
-
+              if (!response.ok) throw new Error('Failed to delete payment method');
               setPaymentMethods(methods => methods.filter(method => method.id !== id));
-              Alert.alert('Success', 'Payment method deleted successfully');
-            } catch (error) {
-              console.error('Error deleting payment method:', error);
-              Alert.alert('Error', 'Failed to delete payment method');
+              Alert.alert('Deleted', 'Payment method removed');
+            } catch (err) {
+              console.error(err);
+              Alert.alert('Error', 'Could not delete payment method');
             }
           },
         },
-      ],
+      ]
     );
   };
 
@@ -88,9 +76,15 @@ export default function AllPaymentMethods() {
     fetchPaymentMethods();
   }, []);
 
+  const maskCardNumber = (cardNumber: string): string => {
+    const visibleDigits = cardNumber.slice(-4);
+    return `**** **** **** ${visibleDigits}`;
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, styles.centered]}>
+        <ActivityIndicator size="large" color={COLORS.primaryText} />
         <Text style={styles.loadingText}>Loading payment methods...</Text>
       </View>
     );
@@ -99,58 +93,44 @@ export default function AllPaymentMethods() {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Your Payment Methods</Text>
         <View style={{ width: 36 }} />
       </View>
+
       <FlatList
         data={paymentMethods}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Ionicons name="card-outline" size={22} color="#1A3636" />
-              <Text style={styles.cardNumber}>{item.card_number}</Text>
+            <View style={styles.cardTopRow}>
+              <Ionicons name="card-outline" size={20} color={COLORS.background} />
+              <Text style={styles.cardNumber}>{maskCardNumber(item.card_number)}</Text>
             </View>
             <View style={styles.cardDetails}>
-              <Text style={styles.detail}>
-                Expires{" "}
-                <Text style={styles.detailValue}>
-                  {item.exp_month}/{item.exp_year}
-                </Text>
-              </Text>
-              <Text style={styles.detail}>
-                ZIP <Text style={styles.detailValue}>{item.billing_zip}</Text>
-              </Text>
+              <Text style={styles.detail}>Expires {item.exp_month}/{item.exp_year}</Text>
+              <Text style={styles.detail}>ZIP {item.billing_zip}</Text>
             </View>
             <View style={styles.cardButtons}>
-              <TouchableOpacity 
-                style={styles.iconButton}
-                onPress={() => handleEdit(item.id)}
-              >
-                <Ionicons name="create-outline" size={24} color="#444" />
+              <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.iconButton}>
+                <Ionicons name="create-outline" size={22} color={COLORS.background} />
               </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.iconButton}
-                onPress={() => handleDelete(item.id)}
-              >
-                <Ionicons name="trash-outline" size={24} color="red" />
+              <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.iconButton}>
+                <Ionicons name="trash-outline" size={22} color="red" />
               </TouchableOpacity>
             </View>
           </View>
         )}
       />
-      <TouchableOpacity 
+
+      <TouchableOpacity
         style={styles.addButton}
         onPress={() => router.push('/paymentMethods/add')}
       >
-        <Ionicons name="add" size={24} color={COLORS.primaryText} />
+        <Ionicons name="add" size={22} color={COLORS.background} />
         <Text style={styles.addButtonText}>Add Payment Method</Text>
       </TouchableOpacity>
     </View>
@@ -160,17 +140,19 @@ export default function AllPaymentMethods() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1A3636",
-    padding: 20,
-    paddingTop: 70
+    backgroundColor: COLORS.background,
+    paddingTop: 70,
+    paddingHorizontal: 20,
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   loadingText: {
+    marginTop: 12,
     color: COLORS.primaryText,
-    fontSize: 16,
+    fontFamily: "Montserrat-Regular",
+    fontSize: 14,
   },
   headerWrapper: {
     flexDirection: "row",
@@ -185,69 +167,57 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     textAlign: "center",
-    fontSize: 24,
-    fontWeight: "600",
+    fontSize: 20,
+    fontFamily: "PlayfairDisplay-Bold",
     color: COLORS.primaryText,
-    letterSpacing: 0.5,
   },
   listContent: {
     paddingBottom: 40,
   },
   card: {
-    backgroundColor: "#FFF5FB",
-    borderRadius: 16,
-    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
   },
-  cardHeader: {
+  cardTopRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
     gap: 8,
+    marginBottom: 8,
   },
   cardNumber: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#1A3636",
-    letterSpacing: 1.2,
+    fontSize: 16,
+    color: COLORS.background,
+    fontFamily: "Montserrat-Bold",
   },
   cardDetails: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 4,
   },
   detail: {
-    fontSize: 16,
-    color: "#6A5D4D",
-    fontWeight: "500",
-  },
-  detailValue: {
-    fontWeight: "600",
-    color: "#1A3636",
+    fontSize: 14,
+    fontFamily: "Montserrat-Regular",
+    color: COLORS.background,
   },
   cardButtons: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: 16,
-    gap: 12,
+    marginTop: 12,
+    gap: 16,
   },
   iconButton: {
-    padding: 6,
-    borderRadius: 6,
+    padding: 4,
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
+    backgroundColor: COLORS.primaryText,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -256,9 +226,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   addButtonText: {
-    color: COLORS.primaryText,
+    color: COLORS.background,
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: "Montserrat-Bold",
     marginLeft: 8,
   },
 });
