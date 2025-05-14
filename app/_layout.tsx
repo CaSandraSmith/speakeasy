@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-
+import Toast from "react-native-toast-message";
 import { useColorScheme } from "react-native";
 import { UserProvider, useUser } from "../context/userContext";
 import "./globals.css";
@@ -47,6 +47,7 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <Stacks />
+      <Toast />
     </UserProvider>
   );
 }

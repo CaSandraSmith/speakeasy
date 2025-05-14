@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag, Reservation
+from models import User, PaymentMethod, Referral, Bundle, Experience, ExperienceImage, Booking, Review, ExperienceSchedule, Tag, Reservation, Payment
 
 users = [
     User(first_name='Red', last_name='Ruby', email='red@example.com', password_hash='password1', phone_number='1234567890', admin=False),
@@ -16,6 +16,8 @@ users = [
 
 payment_methods = [
     PaymentMethod(user_id=1, card_number='4111111111111111', cvv='123', billing_zip='90210', exp_month='12', exp_year='2025'),
+    PaymentMethod(user_id=1, card_number='2222222222222222', cvv='222', billing_zip='75321', exp_month='10', exp_year='2027'),
+    PaymentMethod(user_id=1, card_number='3333333333333333', cvv='333', billing_zip='75321', exp_month='10', exp_year='2027'),
     PaymentMethod(user_id=2, card_number='4242424242424242', cvv='456', billing_zip='10001', exp_month='06', exp_year='2026'),
     PaymentMethod(user_id=3, card_number='4000056655665556', cvv='789', billing_zip='60601', exp_month='11', exp_year='2024'),
 ]
@@ -44,6 +46,26 @@ bundles = [
     Bundle(name='LA Experience', description='Discover the glamour and beauty of Los Angeles.', total_price=399.99),
     Bundle(name='Windy City Wonders', description='Experience the charm and culture of Chicago.', total_price=249.99),
 ]
+
+payments = [
+    Payment(booking_id=1, user_id=1, amount=24999.99, payment_method_id=1, status='Confirmed'),
+    Payment(booking_id=2, user_id=2, amount=15000.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=3, user_id=3, amount=18000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=4, user_id=1, amount=250000.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=5, user_id=1, amount=3500.00, payment_method_id=3, status='Confirmed'),
+    Payment(booking_id=6, user_id=1, amount=45000.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=7, user_id=1, amount=7500.00, payment_method_id=1, status='Confirmed'),
+    Payment(booking_id=8, user_id=1, amount=15000.00, payment_method_id=3, status='Confirmed'),
+    Payment(booking_id=9, user_id=1, amount=8500.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=10, user_id=1, amount=50000.00, payment_method_id=1, status='Confirmed'),
+
+    Payment(booking_id=11, user_id=2, amount=450000.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=12, user_id=3, amount=35000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=13, user_id=2, amount=2800.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=14, user_id=3, amount=15000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=15, user_id=1, amount=12000.00, payment_method_id=2, status='Confirmed'),
+]
+
 
 experiences = [
     # Space & Aviation

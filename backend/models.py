@@ -53,6 +53,7 @@ class PaymentMethod(db.Model):
     billing_zip = db.Column(db.String(100), nullable=False)
     exp_month = db.Column(db.Integer, nullable=False)
     exp_year = db.Column(db.Integer, nullable=False)
+    hidden = db.Column(db.Boolean, default=False)
 
     # Relationships with back_populates
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -66,17 +67,7 @@ class PaymentMethod(db.Model):
             'billing_zip': self.billing_zip,
             'exp_month': self.exp_month,
             'exp_year': self.exp_year,
-            'user_id': self.user_id
-        }
-
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_number': self.card_number,
-            'billing_zip': self.billing_zip,
-            'exp_month': self.exp_month,
-            'exp_year': self.exp_year,
+            'cvv': self.cvv,
             'user_id': self.user_id
         }
 
@@ -217,7 +208,7 @@ class Booking(db.Model):
     user = db.relationship('User', back_populates='bookings')
     experience = db.relationship('Experience', back_populates='bookings')
     bundle = db.relationship('Bundle', back_populates='bookings')
-    payments = db.relationship('Payment', back_populates='booking')
+    payment = db.relationship('Payment', back_populates='booking', cascade='all, delete-orphan')
     reservations = db.relationship('Reservation', back_populates='booking', cascade='all, delete-orphan')
 
 
@@ -264,14 +255,14 @@ class Payment(db.Model):
     __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
-    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     amount = db.Column(db.Numeric, nullable=False)
     payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False)
 
     # Relationships with back_populates
-    booking = db.relationship('Booking', back_populates='payments')
+    booking = db.relationship('Booking', back_populates='payment')
     user = db.relationship('User', foreign_keys=[user_id])
     payment_method = db.relationship('PaymentMethod', back_populates='payments')
 

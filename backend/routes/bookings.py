@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from extensions import db
 from datetime import datetime, timezone
 from routes.auth import require_auth, get_current_user
-from models import Booking, Reservation, Experience
+from models import Booking, Reservation, Experience, PaymentMethod, Payment
 import uuid
 import logging
 
@@ -71,15 +71,20 @@ def get_booking(booking_id):
 def create_booking():
     user = get_current_user()
     data = request.get_json()
-
-    if not all(key in data for key in ['experience_id', 'number_of_guests']):
+    
+    if not all(key in data for key in ['experience_id', 'number_of_guests', 'payment_method_id']):
         return jsonify({'error': 'Missing required fields'}), 400
+
+    payment_method = PaymentMethod.query.get_or_404(data['payment_method_id'])
+    if not is_authorized(payment_method.user_id):
+        return jsonify({'error': 'Not authorized to use this payment'}), 403
 
     experience = Experience.query.get(data['experience_id'])
     if not experience:
         return jsonify({'error': 'Experience not found'}), 404
 
     try:
+        experience = Experience.query.get_or_404(data['experience_id'])
         new_booking = Booking(
             user_id=user.id,
             experience_id=data['experience_id'],
@@ -91,6 +96,18 @@ def create_booking():
         )
 
         db.session.add(new_booking)
+        db.session.flush()
+        
+        price = experience.price * data['number_of_guests']
+        
+        payment = Payment(
+            user_id=user.id,
+            booking_id=new_booking.id,
+            amount=price,
+            payment_method_id=data['payment_method_id'],
+            status="Confirmed"
+        )
+        db.session.add(payment)
         db.session.flush()
 
         if 'reservations' in data:
