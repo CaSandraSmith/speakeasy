@@ -8,10 +8,12 @@ def get_experience_suggestions(query, experiences):
     suggestions = []
     for experience in experiences:
         if query.lower() in experience.title.lower():
-            suggestions.append(experience.title)
+            suggestions.append({
+                'id': experience.id,
+                'title': experience.title
+            })
 
-    suggestions = list(set(suggestions))
-    suggestions.sort()
+    suggestions.sort(key=lambda x: x['title'])
     return suggestions[0:5]
 
 @search.route('', methods=['GET'])

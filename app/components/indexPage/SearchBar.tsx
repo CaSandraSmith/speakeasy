@@ -9,10 +9,15 @@ interface SearchBarProps {
   onSubmit?: () => void;
 }
 
+interface Suggestion {
+  id: number;
+  title: string;
+}
+
 export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarProps) {
   const router = useRouter();
   const searchBarRef = useRef<View>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
@@ -47,10 +52,12 @@ export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarPr
     }
   };
 
-  const handleSuggestionPress = (suggestion: string) => {
+  const handleSuggestionPress = (suggestion: Suggestion) => {
     setShowSuggestions(false);
-    handleSearch(suggestion);
-    onChangeText(suggestion);
+    router.push({
+      pathname: `/(stack)/experience/${suggestion.id}`,
+      params: { id: suggestion.id },
+    });
   };
 
   const measureSearchBar = () => {
@@ -120,7 +127,7 @@ export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarPr
           >
             <FlatList
               data={suggestions}
-              keyExtractor={(item) => item}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() => handleSuggestionPress(item)}
@@ -130,7 +137,7 @@ export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarPr
                     borderBottomColor: '#f0f0f0',
                   }}
                 >
-                  <Text style={{ color: '#1A1A1A', fontFamily: 'Montserrat' }}>{item}</Text>
+                  <Text style={{ color: '#1A1A1A', fontFamily: 'Montserrat' }}>{item.title}</Text>
                 </Pressable>
               )}
             />
