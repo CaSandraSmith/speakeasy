@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
   StatusBar,
-  ImageSourcePropType
+  StyleSheet
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { COLORS } from '@/app/constants/colors';
 
 // Get screen dimensions for responsive layout
 const { width } = Dimensions.get('window');
@@ -24,78 +23,59 @@ type ExperienceSize = 'large' | 'medium' | 'small';
 interface ExperienceItem {
   id: string;
   title: string;
-  subtitle: string;
-  source: ImageSourcePropType;
-  size: ExperienceSize;
+  description: string;
+  location: string;
+  price: number | null;
+  match_score: number;
+  match_type: string;
+  size?: ExperienceSize;
+  image_url: string;
 }
-
-// Updated sample data for Japan experiences (all images)
-const japanExperiences: ExperienceItem[] = [
-  {
-    id: '1',
-    title: 'Mount Fuji',
-    subtitle: 'Iconic volcano',
-    source: require('../../../assets/images/mount-fuji.jpg'),
-    size: 'large'  // Takes up full width in the first row
-  },
-  {
-    id: '2',
-    title: 'Tokyo Streets',
-    subtitle: 'Urban adventure',
-    source: require('../../../assets/images/tokyo-thumbnail.jpg'),
-    size: 'medium'  // Takes up half width in the second row
-  },
-  {
-    id: '3',
-    title: 'Kyoto Temples',
-    subtitle: 'Cultural heritage',
-    source: require('../../../assets/images/kyoto.jpg'),
-    size: 'medium'  // Takes up half width in the second row
-  },
-  {
-    id: '4',
-    title: 'Osaka Food',
-    subtitle: 'Culinary delights',
-    source: require('../../../assets/images/osaka.jpg'),
-    size: 'small'  // Takes up half width in the third row
-  },
-  {
-    id: '5',
-    title: 'Cherry Blossoms',
-    subtitle: 'Seasonal beauty',
-    source: require('../../../assets/images/sakura-thumbnail.jpg'),
-    size: 'small'  // Takes up half width in the third row
-  },
-  {
-    id: '6',
-    title: 'Bullet Train',
-    subtitle: 'Modern transport',
-    source: require('../../../assets/images/shinkansen-thumbnail.jpg'),
-    size: 'large'  // Takes up full width in the fourth row
-  },
-];
 
 export default function ExperienceIndex() {
   const router = useRouter();
-  const { destination } = useLocalSearchParams();
+  const { search } = useLocalSearchParams();
+  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
+  const [destination, setDestination] = useState<string>('');
+
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      if (typeof search === 'string') {
+        try {
+          const response = await fetch(`http://localhost:5001/search?q=${encodeURIComponent(search.trim())}`);
+          const data = await response.json();
+          setDestination(search);
+          setExperiences(data.experiences);
+        } catch (error) {
+          console.error('Error fetching experiences:', error);
+          setExperiences([]);
+        }
+      } else {
+        setDestination('Discover');
+        setExperiences([]);
+      }
+    };
+
+    fetchExperiences();
+  }, [search]);
 
   // Card component for images
   const ExperienceCard = ({ item }: { item: ExperienceItem }) => {
     // Determine card width based on size
     let cardWidth: number = 0;
     let cardHeight: number = 0;
-    
+
     switch(item.size) {
       case 'large':
-        cardWidth = width - 40; // Full width minus padding
+        cardWidth = width - 40;
         cardHeight = 300;
         break;
       case 'medium':
-        cardWidth = (width - 50) / 2; // Half width with spacing
+        cardWidth = (width - 50) / 2;
         cardHeight = 200;
         break;
       case 'small':
-        cardWidth = (width - 50) / 2; // Half width with spacing
+        cardWidth = (width - 50) / 2;
         cardHeight = 150;
         break;
       default:
@@ -104,91 +84,115 @@ export default function ExperienceIndex() {
         break;
     }
 
-    const handleExprienceClick = () => {
+    const handleExperienceClick = () => {
       router.push(`/experience/${item.id}`);
     }
-    
+
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
+        className="overflow-hidden"
         style={[
-          styles.card, 
-          { 
-            width: cardWidth, 
-            height: cardHeight
+          {
+            width: cardWidth,
+            height: cardHeight,
+            borderRadius: 15,
           }
         ]}
-        onPress={handleExprienceClick}
+        onPress={handleExperienceClick}
       >
-        <Image source={item.source} style={styles.media} />
-        <View style={styles.overlay}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
+        <Image
+          source={{ uri: item.image_url }}
+          className="w-full h-full absolute"
+          resizeMode="cover"
+        />
+        <View className="absolute bottom-0 left-0 right-0 p-4">
+          <Text 
+            className="text-white font-montserrat-bold text-xl"
+            style={{
+              textShadowColor: 'rgba(0, 0, 0, 0.8)',
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 2,
+            }}
+          >
+            {item.title}
+          </Text>
+          <Text 
+            className="text-textPrimary font-montserrat text-base"
+            style={{
+              textShadowColor: 'rgba(0, 0, 0, 0.8)',
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 3,
+            }}
+          >
+            {item.location}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      
+    <SafeAreaView className="flex-1 bg-background">
+      <StatusBar barStyle="light-content" />
+
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          {typeof destination === 'string' ? destination : 'Japan'}
-        </Text>
-        <TouchableOpacity 
-          style={styles.backButton}
+      <View className="flex-row items-center pt-6 pb-4 px-5">
+        <TouchableOpacity
+          className="absolute left-5 z-10"
           onPress={() => router.back()}
         >
-          <Ionicons name="chevron-back" size={28} color="black" />
+          <Ionicons name="arrow-back" size={24} color="#DCD7C9" />
         </TouchableOpacity>
+        <Text className="flex-1 text-center text-textPrimary font-montserrat-bold text-3xl">
+          {destination.charAt(0).toUpperCase() + destination.slice(1)}
+        </Text>
       </View>
-      
+
       {/* Main Content - Grid Layout */}
-      <ScrollView 
-        contentContainerStyle={styles.content}
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* First row - Large card */}
-        <View style={styles.row}>
-          {japanExperiences
-            .filter(item => item.size === 'large' && item.id === '1')
-            .map(item => (
-              <ExperienceCard key={item.id} item={item} />
-            ))
-          }
-        </View>
-        
-        {/* Second row - Medium cards */}
-        <View style={styles.row}>
-          {japanExperiences
-            .filter(item => item.size === 'medium')
-            .map(item => (
-              <ExperienceCard key={item.id} item={item} />
-            ))
-          }
-        </View>
-        
-        {/* Third row - Small cards */}
-        <View style={styles.row}>
-          {japanExperiences
-            .filter(item => item.size === 'small')
-            .map(item => (
-              <ExperienceCard key={item.id} item={item} />
-            ))
-          }
-        </View>
-        
-        {/* Fourth row - Large card */}
-        <View style={styles.row}>
-          {japanExperiences
-            .filter(item => item.size === 'large' && item.id === '6')
-            .map(item => (
-              <ExperienceCard key={item.id} item={item} />
-            ))
-          }
-        </View>
+        {experiences.length === 0 ? (
+          <View className="flex-1 justify-center items-center py-20">
+            <Text className="text-textSecondary font-montserrat text-base text-center">
+              No experiences found
+            </Text>
+          </View>
+        ) : (
+          <>
+            {/* First row - Large card */}
+            <View className="mb-2">
+              {experiences.slice(0, 1).map(item => (
+                <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
+              ))}
+            </View>
+
+            {/* Second row - Medium cards */}
+            <View className="flex-row justify-between mb-2">
+              {experiences.slice(1, 3).map(item => (
+                <ExperienceCard key={item.id} item={{...item, size: 'medium'}} />
+              ))}
+            </View>
+
+            {/* Third row - Small cards */}
+            <View className="flex-row justify-between mb-2">
+              {experiences.slice(3, 5).map(item => (
+                <ExperienceCard key={item.id} item={{...item, size: 'small'}} />
+              ))}
+            </View>
+
+            {/* Fourth row - Large card */}
+            {experiences.length > 5 && (
+              <View className="mb-2">
+                {experiences.slice(5, 6).map(item => (
+                  <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
+                ))}
+              </View>
+            )}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -197,7 +201,7 @@ export default function ExperienceIndex() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: 'row',
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'black',
+    color: COLORS.primaryText,
   },
   backButton: {
     position: 'absolute',
@@ -252,5 +256,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
     opacity: 0.9,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   }
 });

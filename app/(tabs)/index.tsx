@@ -79,7 +79,7 @@ export default function Index() {
   // Update experiences when category changes
   useEffect(() => {
     if (!selectedCategory) return
-    
+
     const fetchExpereinces = async () => {
       try {
         const response = await authFetch(`${FLASK_URL}/experiences/tag/${selectedCategory.id}`, {
@@ -145,9 +145,9 @@ export default function Index() {
         className="flex-1"
         style={{ backgroundColor: "transparent" }}
       >
-        <View className="flex-1 px-5">
+        <View className="flex-1">
           {/* Fixed Header Section */}
-          <View>
+          <View className="mx-4">
             <Header />
             <SearchBar
               value={searchText}
@@ -164,7 +164,7 @@ export default function Index() {
           {/* Carousel Container - adjusted spacing */}
           <View
             className="flex-1"
-            style={{ paddingTop: 20, justifyContent: "flex-start" }}
+            style={{ paddingTop: 20, justifyContent: "flex-start", zIndex: 0 }}
           >
             <Animated.FlatList
               data={experiences}

@@ -8,16 +8,16 @@ interface CategoryTabsProps {
   onSelectCategory: (category: Tag) => void;
 }
 
-export default function CategoryTabs({ 
-  categories, 
-  selectedCategory, 
-  onSelectCategory 
+export default function CategoryTabs({
+  categories,
+  selectedCategory,
+  onSelectCategory
 }: CategoryTabsProps) {
-  if (!selectedCategory) return
+  if (!selectedCategory) return;
   return (
-    <View className="mb-6">
-      <ScrollView 
-        horizontal 
+    <View className="mb-6" style={{ zIndex: 1 }}>
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerClassName="gap-4"
       >
@@ -26,14 +26,14 @@ export default function CategoryTabs({
             key={category.id}
             onPress={() => onSelectCategory(category)}
             className={`px-4 py-2 rounded-full ${
-              selectedCategory.id === category.id 
-                ? 'bg-textSecondary' 
+              selectedCategory.id === category.id
+                ? 'bg-textSecondary'
                 : 'bg-textPrimary/10'
             }`}
           >
             <Text className={`font-montserrat ${
-              selectedCategory.id === category.id 
-                ? 'text-background' 
+              selectedCategory.id === category.id
+                ? 'text-background'
                 : 'text-textPrimary'
             }`}>
               {category.name}

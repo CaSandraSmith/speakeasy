@@ -220,6 +220,20 @@ experience_images = [
     ExperienceImage(experience_id=17, image_url='https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhdmVsfGVufDB8fDB8fHww'),
     ExperienceImage(experience_id=19, image_url='https://media.self.com/photos/5f0885ffef7a10ffa6640daa/1:1/w_3929,h_3929,c_limit/travel_plane_corona.jpeg'),
     ExperienceImage(experience_id=19, image_url='https://static.vecteezy.com/system/resources/thumbnails/037/248/582/small/ai-generated-travelling-to-thailand-advertisment-background-with-copy-space-free-photo.jpg'),
+    
+    # More space flight
+    ExperienceImage(experience_id=2, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196051/space-flight-2_mmkti4.jpg'),
+    ExperienceImage(experience_id=2, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/space-flight-3_dx9fr8.jpg'),
+    
+    # More Submarine
+    ExperienceImage(experience_id=4, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/titanic-sub-2_knmly8.jpg'),
+    ExperienceImage(experience_id=4, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/titanic-sub-4_xipoc6.jpg'),
+    ExperienceImage(experience_id=4, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/titanic-sub-3_xrvvwg.jpg'),
+    
+    # More penguins
+    ExperienceImage(experience_id=8, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/emperor-penguins-3_n6ap3p.jpg'),
+    ExperienceImage(experience_id=8, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196050/emperor-penguins-2_e4okcr.jpg'),
+    ExperienceImage(experience_id=8, image_url='https://res.cloudinary.com/dr1k9hles/image/upload/v1747196051/emperor-penguins-4_afyd8p.jpg'),
 ]
 
 bookings = [

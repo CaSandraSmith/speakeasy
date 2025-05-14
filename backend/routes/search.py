@@ -8,10 +8,12 @@ def get_experience_suggestions(query, experiences):
     suggestions = []
     for experience in experiences:
         if query.lower() in experience.title.lower():
-            suggestions.append(experience.title)
+            suggestions.append({
+                'id': experience.id,
+                'title': experience.title
+            })
 
-    suggestions = list(set(suggestions))
-    suggestions.sort()
+    suggestions.sort(key=lambda x: x['title'])
     return suggestions[0:5]
 
 @search.route('', methods=['GET'])
@@ -59,7 +61,8 @@ def search_all():
                         'location': exp.location,
                         'price': float(exp.price) if exp.price else None,
                         'match_score': score,
-                        'match_type': 'title'
+                        'match_type': 'title',
+                        'image_url': exp.images[0].image_url if exp.images else None
                     })
                     break
 
