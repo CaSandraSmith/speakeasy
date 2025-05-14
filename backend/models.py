@@ -264,14 +264,14 @@ class Payment(db.Model):
     __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
-    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     amount = db.Column(db.Numeric, nullable=False)
     payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False)
 
     # Relationships with back_populates
-    booking = db.relationship('Booking', back_populates='payment', nullable=False, unique=True)
+    booking = db.relationship('Booking', back_populates='payment')
     user = db.relationship('User', foreign_keys=[user_id])
     payment_method = db.relationship('PaymentMethod', back_populates='payments')
 
