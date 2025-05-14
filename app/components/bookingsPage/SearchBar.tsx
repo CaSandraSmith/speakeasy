@@ -8,23 +8,21 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ 
+export default function SearchBar({ 
   value, 
   onChangeText, 
-  placeholder = "Search bookings..." 
-}) => {
+  placeholder = "Search experiences..." 
+}: SearchBarProps) {
   return (
-    <View className="flex-row items-center bg-textPrimary/10 rounded-full px-5 py-3 mx-2 mb-6">
-      <Ionicons name="search" size={22} color="#8A8A8A" style={{ marginRight: 8 }} />
+    <View className="flex-row items-center bg-textPrimary/10 rounded-full px-4 py-3 mx-8 mb-6">
       <TextInput
-        className="flex-1 text-textPrimary text-base font-montserrat"
+        className="flex-1 text-textPrimary text-base font-montserrat mr-3"
         placeholder={placeholder}
         placeholderTextColor="#8A8A8A"
         value={value}
         onChangeText={onChangeText}
       />
+      <Ionicons name="search" size={22} color="#DCD7C9" />
     </View>
   );
-};
-
-export default SearchBar;
+}
