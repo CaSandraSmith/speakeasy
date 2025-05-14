@@ -1,4 +1,4 @@
-from seed_data import users, payment_methods, referrals, bundles, experiences, experience_images, bookings, reviews, experience_schedules, tags, experience_tags, bundle_experiences, reservations
+from seed_data import users, payment_methods, referrals, bundles, experiences, experience_images, bookings, reviews, experience_schedules, tags, experience_tags, bundle_experiences, reservations, payments
 from extensions import db
 from app import app
 from models import *
@@ -42,6 +42,7 @@ with app.app_context():
     db.session.add_all(bookings)
     db.session.add_all(reservations)
     db.session.add_all(reviews)
+    db.session.add_all(payments)
     
     # Commit to save the base entities
     db.session.commit()

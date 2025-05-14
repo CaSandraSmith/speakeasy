@@ -47,6 +47,26 @@ bundles = [
     Bundle(name='Windy City Wonders', description='Experience the charm and culture of Chicago.', total_price=249.99),
 ]
 
+payments = [
+    Payment(booking_id=1, user_id=1, amount=24999.99, payment_method_id=1, status='Confirmed'),
+    Payment(booking_id=2, user_id=2, amount=15000.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=3, user_id=3, amount=18000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=4, user_id=1, amount=250000.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=5, user_id=1, amount=3500.00, payment_method_id=3, status='Confirmed'),
+    Payment(booking_id=6, user_id=1, amount=45000.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=7, user_id=1, amount=7500.00, payment_method_id=1, status='Confirmed'),
+    Payment(booking_id=8, user_id=1, amount=15000.00, payment_method_id=3, status='Confirmed'),
+    Payment(booking_id=9, user_id=1, amount=8500.00, payment_method_id=2, status='Confirmed'),
+    Payment(booking_id=10, user_id=1, amount=50000.00, payment_method_id=1, status='Confirmed'),
+
+    Payment(booking_id=11, user_id=2, amount=450000.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=12, user_id=3, amount=35000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=13, user_id=2, amount=2800.00, payment_method_id=4, status='Confirmed'),
+    Payment(booking_id=14, user_id=3, amount=15000.00, payment_method_id=5, status='Confirmed'),
+    Payment(booking_id=15, user_id=1, amount=12000.00, payment_method_id=2, status='Confirmed'),
+]
+
+
 experiences = [
     # Space & Aviation
     Experience(title='Zero Gravity Space Training', description='Experience astronaut training and zero gravity flight with Space Adventures', location='Star City, Russia', price=24999.99),  # ID: 1
