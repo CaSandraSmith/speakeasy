@@ -5,8 +5,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
   Modal,
+  ActivityIndicator,
   Dimensions,
 } from "react-native";
 import { PaymentMethod } from "../../types";
@@ -22,7 +22,7 @@ const SCREEN_HEIGHT = Dimensions.get("window").height;
 interface Props {
   visibility: boolean;
   setVisibility: Dispatch<SetStateAction<boolean>>;
-  handleBooking: (n: number) => void;
+  handleBooking: (paymentMethodId: number) => void;
 }
 
 export default function SelectPaymentMethod({
@@ -40,124 +40,111 @@ export default function SelectPaymentMethod({
 
   const fetchPaymentMethods = async () => {
     try {
-      const response = await authFetch(`${FLASK_URL}/payment_methods/`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch payment methods");
+      const response = await authFetch(`${FLASK_URL}/payment_methods/`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setPaymentMethods(data.payment_methods);
+      } else {
+        console.error("Failed to fetch payment methods:", response.status);
       }
-
-      const data = await response.json();
-      setPaymentMethods(data.payment_methods);
-    } catch (error) {
-      console.error("Error fetching payment methods:", error);
-      Alert.alert("Error", "Failed to load payment methods");
+    } catch (err) {
+      console.error("Error fetching payment methods:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateBookingClick = () => {
-    console.log("selectedPayment", selectedPayment);
-    if (!selectedPayment) {
-      Alert.alert("Missing Information", "Please select a payment method");
-      return;
-    } else {
-      handleBooking(selectedPayment.id);
-    }
-  };
-
   useEffect(() => {
-    fetchPaymentMethods();
-  }, []);
+    if (visibility) {
+      fetchPaymentMethods();
+    }
+  }, [visibility]);
 
-  const closeModal = () => setVisibility(false);
+  const handleConfirm = () => {
+    if (!selectedPayment) return;
+    handleBooking(selectedPayment.id);
+  };
 
   const maskCardNumber = (cardNumber: string): string => {
     const visibleDigits = cardNumber.slice(-4);
-    return `•••• •••• •••• ${visibleDigits}`;
+    return `**** **** **** ${visibleDigits}`;
   };
 
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={visibility}
-      onRequestClose={closeModal}
+      onRequestClose={() => setVisibility(false)}
     >
-      {/* Backdrop to dismiss modal */}
-      <TouchableOpacity
-        style={styles.backdrop}
-        activeOpacity={1}
-        onPress={closeModal}
-      />
-
-      {/* Bottom drawer modal content */}
-      <View style={styles.bottomSheet}>
-        <View style={styles.headerWrapper}>
-          <TouchableOpacity onPress={closeModal} style={styles.backButton}>
-            <Ionicons
-              name="chevron-back"
-              size={28}
-              color={COLORS.primaryText}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Your Payment Methods</Text>
-          <View style={{ width: 36 }} />
-        </View>
-
-        {loading ? (
-          <View style={styles.centered}>
-            <Text style={styles.loadingText}>Loading payment methods...</Text>
+      <View style={styles.overlay}>
+        <View style={styles.modalContainer}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => setVisibility(false)}
+              style={styles.backButton}
+            >
+              <Ionicons name="close" size={24} color={COLORS.primaryText} />
+            </TouchableOpacity>
+            <Text style={styles.title}>Select Payment Method</Text>
+            <View style={{ width: 24 }} />
           </View>
-        ) : (
-          <FlatList
-            data={paymentMethods}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.listContent}
-            renderItem={({ item }) => {
-              const isSelected = selectedPayment?.id === item.id;
 
-              return (
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={COLORS.primaryText} />
+              <Text style={styles.loadingText}>Loading payment methods...</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={paymentMethods}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.listContainer}
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => setSelectedPayment(item)}
-                  style={[styles.card, isSelected && styles.cardSelected]}
-                  activeOpacity={0.8}
+                  style={[
+                    styles.card,
+                    selectedPayment?.id === item.id && styles.cardSelected,
+                  ]}
                 >
-                  <View style={styles.cardHeader}>
-                    <Ionicons
-                      name={isSelected ? "checkmark-circle" : "ellipse-outline"}
-                      size={24}
-                      color={isSelected ? COLORS.primary : "#B0B0B0"} // Select color or gray
-                    />
-                    <Text style={styles.cardNumber}>{maskCardNumber(item.card_number)}</Text>
-                  </View>
-                  <View style={styles.cardDetails}>
-                    <Text style={styles.detail}>
-                      Expires{" "}
-                      <Text style={styles.detailValue}>
-                        {item.exp_month}/{item.exp_year}
+                  <View style={styles.cardContent}>
+                    <View>
+                      <Text style={styles.cardTitle}>
+                        {maskCardNumber(item.card_number)}
                       </Text>
-                    </Text>
-                    <Text style={styles.detail}>
-                      ZIP{" "}
-                      <Text style={styles.detailValue}>{item.billing_zip}</Text>
-                    </Text>
+                      <Text style={styles.cardDetails}>
+                        Expires {item.exp_month}/{item.exp_year}
+                      </Text>
+                    </View>
+                    <Ionicons
+                      name={
+                        selectedPayment?.id === item.id
+                          ? "checkmark-circle"
+                          : "ellipse-outline"
+                      }
+                      size={24}
+                      color={
+                        selectedPayment?.id === item.id
+                          ? COLORS.accent
+                          : COLORS.background
+                      }
+                    />
                   </View>
                 </TouchableOpacity>
-              );
-            }}
-          />
-        )}
-        <View className="p-5 pt-2">
+              )}
+            />
+          )}
+
+          {/* Confirm Button */}
           <TouchableOpacity
-            className={`bg-accent rounded-3xl py-4 items-center justify-center`}
-            onPress={() => handleCreateBookingClick()}
+            onPress={handleConfirm}
+            disabled={!selectedPayment}
+            style={styles.confirmButton}
           >
-            <Text className="text-background text-lg font-semibold font-montserrat-bold">
-              Create Booking
-            </Text>
+            <Text style={styles.confirmButtonText}>Create Booking</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -166,93 +153,88 @@ export default function SelectPaymentMethod({
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
+  overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end",
   },
-  bottomSheet: {
+  modalContainer: {
+    backgroundColor: COLORS.background,
     position: "absolute",
     bottom: 0,
     width: "100%",
     height: SCREEN_HEIGHT * 0.92,
-    backgroundColor: "#1A3636",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
     paddingTop: 30,
   },
-  centered: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-  loadingText: {
-    color: COLORS.primaryText,
-    fontSize: 16,
-  },
-  headerWrapper: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 16,
   },
   backButton: {
-    width: 36,
-    alignItems: "flex-start",
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 24,
-    fontWeight: "600",
+  title: {
+    fontSize: 22,
+    fontFamily: "PlayfairDisplay-Bold",
     color: COLORS.primaryText,
-    letterSpacing: 0.5,
   },
-  listContent: {
-    paddingBottom: 40,
+  loadingContainer: {
+    alignItems: "center",
+    marginTop: 40,
+  },
+  loadingText: {
+    marginTop: 12,
+    color: COLORS.primaryText,
+    fontFamily: "Montserrat-Regular",
+    fontSize: 14,
+  },
+  listContainer: {
+    paddingBottom: 20,
   },
   card: {
-    backgroundColor: "#FFF5FB",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "white",
+    padding: 18,
+    borderRadius: 12,
     marginBottom: 12,
-    gap: 8,
   },
-  cardNumber: {
+  cardSelected: {
+    borderColor: COLORS.accent,
+  },
+  cardTitle: {
+    color: COLORS.background,
     fontSize: 20,
-    fontWeight: "600",
-    color: "#1A3636",
-    letterSpacing: 1.2,
+    fontFamily: "Montserrat-Bold",
+    marginBottom: 4,
   },
   cardDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 4,
-  },
-  detail: {
+    color: COLORS.background,
     fontSize: 16,
-    color: "#6A5D4D",
-    fontWeight: "500",
+    fontFamily: "Montserrat-Regular",
   },
-  detailValue: {
-    fontWeight: "600",
-    color: "#1A3636",
+  confirmButton: {
+    marginTop: 10,
+    backgroundColor: COLORS.primaryText,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
   },
-cardSelected: {
-  borderColor: COLORS.primary,
-  shadowColor: COLORS.primary,
-  shadowOpacity: 0.4,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 6,
-},
+  confirmButtonText: {
+    color: COLORS.background,
+    fontSize: 18,
+    fontFamily: "Montserrat-Bold",
+  },
+  cardContent: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+}
+
 });

@@ -98,10 +98,12 @@ def create_booking():
         db.session.add(new_booking)
         db.session.flush()
         
+        price = experience.price * data['number_of_guests']
+        
         payment = Payment(
             user_id=user.id,
             booking_id=new_booking.id,
-            amount=experience.price,
+            amount=price,
             payment_method_id=data['payment_method_id'],
             status="Confirmed"
         )

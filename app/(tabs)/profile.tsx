@@ -104,12 +104,6 @@ export default function Profile() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("(stack)/payments/history")}
-      >
-        <Text style={styles.buttonText}>Payment History</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
         onPress={handleLogOut}
       >
         <Text style={styles.buttonText}>Log out</Text>
