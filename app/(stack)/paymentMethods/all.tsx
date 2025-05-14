@@ -102,7 +102,7 @@ export default function AllPaymentMethods() {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.push("/profile")}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />

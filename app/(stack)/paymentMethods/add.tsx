@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -8,66 +8,43 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from "expo-constants";
-import { COLORS } from "../../../constants/colors";
+import { COLORS } from "../../constants/colors";
 import { useAuthFetch } from "@/context/userContext";
 import Toast from "react-native-toast-message";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
-export default function EditPaymentMethod() {
-  const { id } = useLocalSearchParams(); // payment method ID
+export default function CreatePaymentMethod() {
   const router = useRouter();
   const authFetch = useAuthFetch();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
   const [billingZip, setBillingZip] = useState("");
   const [expMonth, setExpMonth] = useState("");
   const [expYear, setExpYear] = useState("");
   const [cvv, setCvv] = useState("");
 
-  useEffect(() => {
-    const fetchPaymentMethod = async () => {
-      try {
-        const res = await authFetch(`${FLASK_URL}/payment_methods/${id}`, {
-          method: "GET",
-        });
-
-        if (!res.ok) throw new Error("Failed to load payment method");
-        const data = await res.json();
-
-        // Format card number with dashes
-        setCardNumber(formatCardNumberForDisplay(data.card_number));
-        setBillingZip(data.billing_zip);
-        setExpMonth(data.exp_month.toString());
-        setExpYear(data.exp_year.toString());
-        setCvv(data.cvv);
-      } catch (error) {
-        console.error(error);
-        Alert.alert("Error", "Unable to load payment method.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPaymentMethod();
-  }, [id]);
-
-  const handleUpdate = async () => {
+  const handleCreate = async () => {
     if (!cardNumber || !billingZip || !expMonth || !expYear || !cvv) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Toast.show({
+        type: "error",
+        text1: "Please fill in all fields",
+        position: "bottom",
+      });
+
       return;
     }
 
-    // Remove dashes from card number before sending to database
     const cardNumberWithoutDashes = cardNumber.replace(/-/g, "");
+    setLoading(true);
 
     try {
-      const res = await authFetch(`${FLASK_URL}/payment_methods/${id}`, {
-        method: "PUT",
+      const res = await authFetch(`${FLASK_URL}/payment_methods/`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -80,52 +57,30 @@ export default function EditPaymentMethod() {
         }),
       });
 
-      if (!res.ok) throw new Error("Update failed");
+      if (!res.ok) throw new Error("Creation failed");
 
       Toast.show({
         type: "success",
-        text1: "Payment method updated!",
+        text1: "Payment method added!",
         position: "bottom",
       });
 
       router.push("/paymentMethods/all");
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to update payment method.");
+      Alert.alert("Error", "Failed to add payment method.");
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const formatCardNumberForDisplay = (cardNumber: string) => {
-    // Remove non-numeric characters
-    let formattedValue = cardNumber.replace(/\D/g, "");
-
-    // Add dashes every 4 digits
-    if (formattedValue.length > 4) {
-      formattedValue = formattedValue.replace(/(\d{4})(?=\d)/g, "$1-");
-    }
-
-    return formattedValue;
   };
 
   const formatCardNumber = (value: string) => {
-    // Remove non-numeric characters
     let formattedValue = value.replace(/\D/g, "");
-
-    // Add dashes every 4 digits
     if (formattedValue.length > 4) {
       formattedValue = formattedValue.replace(/(\d{4})(?=\d)/g, "$1-");
     }
-
     setCardNumber(formattedValue);
   };
-
-  if (loading) {
-    return (
-      <View style={[styles.container, styles.center]}>
-        <ActivityIndicator size="large" color={COLORS.primaryText} />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -137,7 +92,7 @@ export default function EditPaymentMethod() {
           <Ionicons name="chevron-back" size={28} color={COLORS.primaryText} />
         </TouchableOpacity>
 
-        <Text style={styles.title}>Edit Payment Method</Text>
+        <Text style={styles.title}>Add Payment Method</Text>
 
         <Text style={styles.label}>Card Number</Text>
         <TextInput
@@ -198,9 +153,18 @@ export default function EditPaymentMethod() {
           </View>
         </View>
       </View>
+
       <View>
-        <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
-          <Text style={styles.saveButtonText}>Update</Text>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleCreate}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={COLORS.background} />
+          ) : (
+            <Text style={styles.saveButtonText}>Add Payment Method</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -217,10 +181,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
-  },
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
   },
   backButton: {
     marginBottom: 20,

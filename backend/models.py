@@ -67,6 +67,7 @@ class PaymentMethod(db.Model):
             'billing_zip': self.billing_zip,
             'exp_month': self.exp_month,
             'exp_year': self.exp_year,
+            'cvv': self.cvv,
             'user_id': self.user_id
         }
 
