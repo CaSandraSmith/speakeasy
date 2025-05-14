@@ -176,7 +176,7 @@ export default function ExperienceIndex() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: 'row',
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'black',
+    color: COLORS.primaryText,
   },
   backButton: {
     position: 'absolute',
