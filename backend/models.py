@@ -217,7 +217,7 @@ class Booking(db.Model):
     user = db.relationship('User', back_populates='bookings')
     experience = db.relationship('Experience', back_populates='bookings')
     bundle = db.relationship('Bundle', back_populates='bookings')
-    payments = db.relationship('Payment', back_populates='booking')
+    payment = db.relationship('Payment', back_populates='booking', cascade='all, delete-orphan')
     reservations = db.relationship('Reservation', back_populates='booking', cascade='all, delete-orphan')
 
 
@@ -271,7 +271,7 @@ class Payment(db.Model):
     status = db.Column(db.String(50), nullable=False)
 
     # Relationships with back_populates
-    booking = db.relationship('Booking', back_populates='payments')
+    booking = db.relationship('Booking', back_populates='payment', nullable=False, unique=True)
     user = db.relationship('User', foreign_keys=[user_id])
     payment_method = db.relationship('PaymentMethod', back_populates='payments')
 
