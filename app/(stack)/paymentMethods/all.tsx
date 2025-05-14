@@ -12,6 +12,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { COLORS } from "../../constants/colors";
 import Constants from 'expo-constants';
+import { useAuthFetch } from "@/context/userContext";
 
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
@@ -19,13 +20,12 @@ export default function AllPaymentMethods() {
   const router = useRouter();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
+  const authFetch = useAuthFetch()
 
   const fetchPaymentMethods = async () => {
     try {
-      const response = await fetch(`${FLASK_URL}/payment_methods`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
+      const response = await authFetch(`${FLASK_URL}/payment_methods/`, {
+        method: "GET",
       });
       
       if (!response.ok) {
@@ -34,6 +34,7 @@ export default function AllPaymentMethods() {
 
       const data = await response.json();
       setPaymentMethods(data.payment_methods);
+      console.log(data)
     } catch (error) {
       console.error('Error fetching payment methods:', error);
       Alert.alert('Error', 'Failed to load payment methods');
