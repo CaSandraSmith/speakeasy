@@ -16,6 +16,8 @@ users = [
 
 payment_methods = [
     PaymentMethod(user_id=1, card_number='4111111111111111', cvv='123', billing_zip='90210', exp_month='12', exp_year='2025'),
+    PaymentMethod(user_id=1, card_number='2222222222222222', cvv='222', billing_zip='75321', exp_month='10', exp_year='2027'),
+    PaymentMethod(user_id=1, card_number='3333333333333333', cvv='333', billing_zip='75321', exp_month='10', exp_year='2027'),
     PaymentMethod(user_id=2, card_number='4242424242424242', cvv='456', billing_zip='10001', exp_month='06', exp_year='2026'),
     PaymentMethod(user_id=3, card_number='4000056655665556', cvv='789', billing_zip='60601', exp_month='11', exp_year='2024'),
 ]
