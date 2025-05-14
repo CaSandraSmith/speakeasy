@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +9,6 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
-  ImageSourcePropType
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,30 +58,6 @@ export default function ExperienceIndex() {
 
     fetchExperiences();
   }, [search]);
-  const { search } = useLocalSearchParams();
-  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
-  const [destination, setDestination] = useState<string>('');
-
-  useEffect(() => {
-    const fetchExperiences = async () => {
-      if (typeof search === 'string') {
-        try {
-          const response = await fetch(`http://localhost:5001/search?q=${encodeURIComponent(search.trim())}`);
-          const data = await response.json();
-          setDestination(search);
-          setExperiences(data.experiences);
-        } catch (error) {
-          console.error('Error fetching experiences:', error);
-          setExperiences([]);
-        }
-      } else {
-        setDestination('Discover');
-        setExperiences([]);
-      }
-    };
-
-    fetchExperiences();
-  }, [search]);
 
   // Card component for images
   const ExperienceCard = ({ item }: { item: ExperienceItem }) => {
@@ -91,20 +65,16 @@ export default function ExperienceIndex() {
     let cardWidth: number = 0;
     let cardHeight: number = 0;
 
-
     switch(item.size) {
       case 'large':
-        cardWidth = width - 40;
         cardWidth = width - 40;
         cardHeight = 300;
         break;
       case 'medium':
         cardWidth = (width - 50) / 2;
-        cardWidth = (width - 50) / 2;
         cardHeight = 200;
         break;
       case 'small':
-        cardWidth = (width - 50) / 2;
         cardWidth = (width - 50) / 2;
         cardHeight = 150;
         break;
@@ -115,25 +85,18 @@ export default function ExperienceIndex() {
     }
 
     const handleExperienceClick = () => {
-    const handleExperienceClick = () => {
       router.push(`/experience/${item.id}`);
     }
 
-
     return (
       <TouchableOpacity
-      <TouchableOpacity
         style={[
-          styles.card,
-          {
-            width: cardWidth,
           styles.card,
           {
             width: cardWidth,
             height: cardHeight
           }
         ]}
-        onPress={handleExperienceClick}
         onPress={handleExperienceClick}
       >
         <Image
@@ -142,7 +105,6 @@ export default function ExperienceIndex() {
         />
         <View style={styles.overlay}>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.subtitle}>{item.location}</Text>
           <Text style={styles.subtitle}>{item.location}</Text>
         </View>
       </TouchableOpacity>
@@ -153,14 +115,11 @@ export default function ExperienceIndex() {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>
           {destination.charAt(0).toUpperCase() + destination.slice(1)}
-          {destination.charAt(0).toUpperCase() + destination.slice(1)}
         </Text>
-        <TouchableOpacity
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
@@ -169,48 +128,11 @@ export default function ExperienceIndex() {
         </TouchableOpacity>
       </View>
 
-
       {/* Main Content - Grid Layout */}
-      <ScrollView
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {experiences.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>No experiences found</Text>
-          </View>
-        ) : (
-          <>
-            {/* First row - Large card */}
-            <View style={styles.row}>
-              {experiences.slice(0, 1).map(item => (
-                <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
-              ))}
-            </View>
-
-            {/* Second row - Medium cards */}
-            <View style={styles.row}>
-              {experiences.slice(1, 3).map(item => (
-                <ExperienceCard key={item.id} item={{...item, size: 'medium'}} />
-              ))}
-            </View>
-
-            {/* Third row - Small cards */}
-            <View style={styles.row}>
-              {experiences.slice(3, 5).map(item => (
-                <ExperienceCard key={item.id} item={{...item, size: 'small'}} />
-              ))}
-            </View>
-
-            {/* Fourth row - Large card */}
-            <View style={styles.row}>
-              {experiences.slice(5, 6).map(item => (
-                <ExperienceCard key={item.id} item={{...item, size: 'large'}} />
-              ))}
-            </View>
-          </>
-        )}
         {experiences.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>No experiences found</Text>
@@ -309,17 +231,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
     opacity: 0.9,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  emptyStateText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
   },
   emptyState: {
     flex: 1,

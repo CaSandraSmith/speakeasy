@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, FlatList, Text, Pressable, Dimensions, Platform } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, TouchableOpacity, FlatList, Text, Pressable, Dimensions, Platform, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { createPortal } from 'react-dom';
 
 interface SearchBarProps {
   value: string;
@@ -18,23 +15,6 @@ export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarPr
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
-
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (value.trim().length > 0) {
-        try {
-          console.log('Fetching suggestions for:', value.trim());
-          const response = await fetch(`http://localhost:5001/search?q=${encodeURIComponent(value.trim())}`);
-          const data = await response.json();
-          console.log('Received suggestions:', data.suggestions);
-          setSuggestions(data.suggestions);
-          setShowSuggestions(true);
-        } catch (error) {
-          console.error('Error fetching suggestions:', error);
-        }
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0, width: 0 });
 
   useEffect(() => {
     const fetchSuggestions = async () => {
