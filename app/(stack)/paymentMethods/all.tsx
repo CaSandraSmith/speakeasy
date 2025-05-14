@@ -12,7 +12,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { COLORS } from "../../constants/colors";
 import Constants from 'expo-constants';
-
 const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
 export default function AllPaymentMethods() {

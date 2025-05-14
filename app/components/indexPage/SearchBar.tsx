@@ -87,11 +87,11 @@ export default function SearchBar({ value, onChangeText, onSubmit }: SearchBarPr
       <View
         style={{
           position: 'fixed',
-          top: searchBarPosition.y + 60,
+          top: searchBarPosition.y - 90,
           left: searchBarPosition.x,
           width: searchBarPosition.width,
           backgroundColor: 'white',
-          borderRadius: 12,
+          borderRadius: 10,
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
           maxHeight: 240,
           zIndex: 999999,
