@@ -145,9 +145,9 @@ export default function Index() {
         className="flex-1"
         style={{ backgroundColor: "transparent" }}
       >
-        <View className="flex-1 px-5">
+        <View className="flex-1">
           {/* Fixed Header Section */}
-          <View>
+          <View className="mx-4">
             <Header />
             <SearchBar
               value={searchText}
