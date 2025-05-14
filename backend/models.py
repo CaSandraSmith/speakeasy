@@ -53,6 +53,7 @@ class PaymentMethod(db.Model):
     billing_zip = db.Column(db.String(100), nullable=False)
     exp_month = db.Column(db.Integer, nullable=False)
     exp_year = db.Column(db.Integer, nullable=False)
+    hidden = db.Column(db.Boolean, default=False)
 
     # Relationships with back_populates
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

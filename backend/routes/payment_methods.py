@@ -9,7 +9,7 @@ payment_methods = Blueprint('payment_methods', __name__)
 @require_auth
 def get_payment_methods():
     user = get_current_user()
-    methods = PaymentMethod.query.filter_by(user_id=user.id).all()
+    methods = PaymentMethod.query.filter_by(user_id=user.id, hidden=False).all()
     return jsonify({'payment_methods': [method.to_dict() for method in methods]}), 200
 
 @payment_methods.route('/<int:method_id>', methods=['GET'])
@@ -85,9 +85,10 @@ def delete_payment_method(method_id):
         return jsonify({'error': 'Not authorized to delete this payment method'}), 403
 
     try:
-        db.session.delete(method)
+        method.hidden = True
+        db.session.add(method)
         db.session.commit()
-        return jsonify({'message': 'Payment method deleted successfully'}), 200
+        return jsonify({'message': 'Payment method successfully hidden'}), 200
 
     except Exception as e:
         db.session.rollback()
