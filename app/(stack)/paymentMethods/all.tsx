@@ -11,7 +11,8 @@ import { PaymentMethod } from "../../types";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { COLORS } from "../../constants/colors";
-import { API_URL } from "../../constants/api";
+import Constants from 'expo-constants';
+const FLASK_URL = Constants.expoConfig?.extra?.FLASK_URL;
 
 export default function AllPaymentMethods() {
   const router = useRouter();
@@ -20,12 +21,12 @@ export default function AllPaymentMethods() {
 
   const fetchPaymentMethods = async () => {
     try {
-      const response = await fetch(`${API_URL}/payment_methods`, {
+      const response = await fetch(`${FLASK_URL}/payment_methods`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch payment methods');
       }
@@ -54,7 +55,7 @@ export default function AllPaymentMethods() {
           style: 'destructive',
           onPress: async () => {
             try {
-              const response = await fetch(`${API_URL}/payment_methods/${id}`, {
+              const response = await fetch(`${FLASK_URL}/payment_methods/${id}`, {
                 method: 'DELETE',
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -127,13 +128,13 @@ export default function AllPaymentMethods() {
               </Text>
             </View>
             <View style={styles.cardButtons}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => handleEdit(item.id)}
               >
                 <Ionicons name="create-outline" size={24} color="#444" />
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => handleDelete(item.id)}
               >
@@ -143,7 +144,7 @@ export default function AllPaymentMethods() {
           </View>
         )}
       />
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.addButton}
         onPress={() => router.push('/paymentMethods/add')}
       >

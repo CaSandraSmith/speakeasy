@@ -30,6 +30,7 @@ interface ExperienceItem {
   match_score: number;
   match_type: string;
   size?: ExperienceSize;
+  image_url: string;
 }
 
 export default function ExperienceIndex() {
@@ -100,7 +101,7 @@ export default function ExperienceIndex() {
         onPress={handleExperienceClick}
       >
         <Image
-          source={require('../../../assets/images/mount-fuji.jpg')}
+          source={{ uri: item.image_url }}
           style={styles.media}
         />
         <View style={styles.overlay}>

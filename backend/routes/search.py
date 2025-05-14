@@ -59,7 +59,8 @@ def search_all():
                         'location': exp.location,
                         'price': float(exp.price) if exp.price else None,
                         'match_score': score,
-                        'match_type': 'title'
+                        'match_type': 'title',
+                        'image_url': exp.images[0].image_url if exp.images else None
                     })
                     break
 
