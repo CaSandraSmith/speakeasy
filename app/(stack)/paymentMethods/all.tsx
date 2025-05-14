@@ -27,7 +27,7 @@ export default function AllPaymentMethods() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch payment methods');
       }
@@ -129,13 +129,13 @@ export default function AllPaymentMethods() {
               </Text>
             </View>
             <View style={styles.cardButtons}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => handleEdit(item.id)}
               >
                 <Ionicons name="create-outline" size={24} color="#444" />
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => handleDelete(item.id)}
               >
@@ -145,7 +145,7 @@ export default function AllPaymentMethods() {
           </View>
         )}
       />
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.addButton}
         onPress={() => router.push('/paymentMethods/add')}
       >
